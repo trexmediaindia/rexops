@@ -1,0 +1,118 @@
+- generic [ref=f3e1]:
+  - generic [ref=f3e621]:
+    - complementary [ref=f3e622]:
+      - generic [ref=f3e623]:
+        - generic [ref=f3e624]: R
+        - generic [ref=f3e625]: RexOps
+        - button "Collapse sidebar" [expanded] [ref=f3e626] [cursor=pointer]
+      - generic [ref=f3e630]:
+        - img "T-Rex Media" [ref=f3e631]: TR
+        - generic [ref=f3e632]:
+          - strong [ref=f3e633]: T-Rex Media
+          - generic [ref=f3e634]: Agency workspace
+      - navigation "Agency navigation" [ref=f3e637]:
+        - generic [ref=f3e638]: Operate
+        - link "Dashboard" [ref=f3e639] [cursor=pointer]:
+          - /url: /agency/dashboard
+        - link "Clients" [ref=f3e644] [cursor=pointer]:
+          - /url: /agency/clients
+        - link "Projects" [ref=f3e650] [cursor=pointer]:
+          - /url: /agency/projects
+        - link "Work" [ref=f3e654] [cursor=pointer]:
+          - /url: /agency/work
+        - link "Review queue" [ref=f3e666] [cursor=pointer]:
+          - /url: /agency/review
+        - link "Inbox" [ref=f3e671] [cursor=pointer]:
+          - /url: /agency/inbox
+        - generic [ref=f3e676]: Manage
+        - link "Team" [ref=f3e677] [cursor=pointer]:
+          - /url: /agency/team
+        - link "Review pipelines" [ref=f3e684] [cursor=pointer]:
+          - /url: /agency/settings/pipelines
+        - link "Automation" [ref=f3e689] [cursor=pointer]:
+          - /url: /agency/settings
+      - generic [ref=f3e694]:
+        - generic [ref=f3e695]:
+          - generic [ref=f3e696]: Storage
+          - generic [ref=f3e697]: 18.4 / 100 GB
+        - button "Manas — agency owner Manas agency owner" [ref=f3e701] [cursor=pointer]:
+          - img "Manas — agency owner" [ref=f3e702]: M
+          - generic [ref=f3e703]:
+            - strong [ref=f3e704]: Manas
+            - generic [ref=f3e705]: agency owner
+    - main [ref=f3e708]:
+      - generic [ref=f3e709]:
+        - button "Search anything K" [ref=f3e710] [cursor=pointer]:
+          - generic [ref=f3e714]: Search anything
+          - generic [ref=f3e715]: K
+        - generic [ref=f3e718]:
+          - generic [ref=f3e719]:
+            - generic [ref=f3e720]: Live
+            - generic [ref=f3e721]: "1"
+          - link "0 unread notifications" [ref=f3e723] [cursor=pointer]:
+            - /url: /agency/inbox
+          - button "Create new" [ref=f3e728] [cursor=pointer]
+      - generic [ref=f3e730]:
+        - generic [ref=f3e731]:
+          - link "Projects" [ref=f3e732] [cursor=pointer]:
+            - /url: /agency/projects
+          - generic [ref=f3e735]: /
+          - generic [ref=f3e736]: June Content Retainer
+        - generic [ref=f3e737]:
+          - generic [ref=f3e738]:
+            - text: Social Media Retainer
+            - heading "June Content Retainer" [level=1] [ref=f3e739]
+            - paragraph [ref=f3e740]: Imperial Living · 0 of 0 deliverables approved
+          - button "New deliverable" [ref=f3e741] [cursor=pointer]
+        - generic [ref=f3e743]:
+          - generic [ref=f3e744]: Due —
+          - generic [ref=f3e747]:
+            - generic [ref=f3e748]: Status
+            - combobox "Status" [ref=f3e749]:
+              - option "draft"
+              - option "active"
+              - option "in progress" [selected]
+              - option "waiting for client"
+              - option "completed"
+              - option "archived"
+        - generic [ref=f3e750]:
+          - heading "No deliverables yet" [level=2] [ref=f3e751]
+          - paragraph [ref=f3e752]: Add the first deliverable — versions, review, and approval all hang off it.
+        - generic [ref=f3e762]:
+          - button "Close New deliverable" [ref=f3e763]
+          - dialog [ref=f3e764]:
+            - generic [ref=f3e765]:
+              - strong [ref=f3e766]: New deliverable
+              - button "Close" [ref=f3e767]
+            - generic [ref=f3e771]: Deliverables carry the versions that go through review.
+            - generic [ref=f3e772]:
+              - generic [ref=f3e773]:
+                - generic [ref=f3e774]: Title *
+                - textbox "Title *" [active] [ref=f3e775]:
+                  - /placeholder: Beach Vibe Reel
+              - generic [ref=f3e776]:
+                - generic [ref=f3e777]: Description
+                - textbox "Description" [ref=f3e778]
+              - generic [ref=f3e779]:
+                - generic [ref=f3e780]: Content type
+                - combobox "Content type" [ref=f3e781]:
+                  - option "Motion"
+                  - option "Static"
+                  - option "Other" [selected]
+              - generic [ref=f3e782]:
+                - generic [ref=f3e783]: Priority
+                - combobox "Priority" [ref=f3e784]:
+                  - option "low"
+                  - option "medium" [selected]
+                  - option "high"
+                  - option "urgent"
+              - generic [ref=f3e785]:
+                - generic [ref=f3e786]: Due date
+                - textbox "Due date" [ref=f3e787]
+              - generic [ref=f3e788]:
+                - button "Cancel" [ref=f3e789] [cursor=pointer]
+                - button "Create deliverable" [disabled] [ref=f3e790]
+  - generic [ref=f3e226]:
+    - link "Liveblocks" [ref=f3e227] [cursor=pointer]:
+      - /url: https://lblcks.io/badge
+    - button [ref=f3e236] [cursor=pointer]

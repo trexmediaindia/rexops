@@ -1,0 +1,16 @@
+import type { Principal } from "@rexops/core";
+import { ForbiddenError, assertWritablePrincipal, can } from "@rexops/core";
+
+export async function list{{pascalCase name}}(principal: Principal) {
+  if (!can(principal, "read", "project")) throw new ForbiddenError();
+  // Query the already-defined Drizzle table through tenant + record rules.
+  return [];
+}
+
+export async function create{{pascalCase name}}(principal: Principal, input: unknown) {
+  if (!can(principal, "create", "project")) throw new ForbiddenError();
+  assertWritablePrincipal(principal);
+  void input;
+  // Write the domain row and its outbox event in one db.transaction().
+  return { id: crypto.randomUUID(), agencyId: principal.agencyId };
+}

@@ -1,0 +1,124 @@
+- generic [ref=f8e3]:
+  - complementary [ref=f8e4]:
+    - generic [ref=f8e5]:
+      - generic [ref=f8e6]: R
+      - generic [ref=f8e7]: RexOps
+      - button "Collapse sidebar" [expanded] [ref=f8e8] [cursor=pointer]
+    - generic [ref=f8e12]:
+      - img "T-Rex Media" [ref=f8e13]: TR
+      - generic [ref=f8e14]:
+        - strong [ref=f8e15]: T-Rex Media
+        - generic [ref=f8e16]: Agency workspace
+    - navigation "Agency navigation" [ref=f8e19]:
+      - generic [ref=f8e20]: Operate
+      - link "Dashboard" [ref=f8e21] [cursor=pointer]:
+        - /url: /agency/dashboard
+      - link "Clients" [ref=f8e26] [cursor=pointer]:
+        - /url: /agency/clients
+      - link "Projects" [ref=f8e32] [cursor=pointer]:
+        - /url: /agency/projects
+      - link "Work" [ref=f8e36] [cursor=pointer]:
+        - /url: /agency/work
+      - link "Review queue 1" [ref=f8e48] [cursor=pointer]:
+        - /url: /agency/review
+        - generic [ref=f8e52]: Review queue
+        - emphasis [ref=f8e53]: "1"
+      - link "Inbox" [ref=f8e54] [cursor=pointer]:
+        - /url: /agency/inbox
+      - generic [ref=f8e59]: Manage
+      - link "Team" [ref=f8e60] [cursor=pointer]:
+        - /url: /agency/team
+      - link "Review pipelines" [ref=f8e67] [cursor=pointer]:
+        - /url: /agency/settings/pipelines
+      - link "Automation" [ref=f8e72] [cursor=pointer]:
+        - /url: /agency/settings
+    - generic [ref=f8e77]:
+      - generic [ref=f8e78]:
+        - generic [ref=f8e79]: Storage
+        - generic [ref=f8e80]: 18.4 / 100 GB
+      - button "Manas — agency owner Manas agency owner" [ref=f8e84] [cursor=pointer]:
+        - img "Manas — agency owner" [ref=f8e85]: M
+        - generic [ref=f8e86]:
+          - strong [ref=f8e87]: Manas
+          - generic [ref=f8e88]: agency owner
+  - main [ref=f8e91]:
+    - generic [ref=f8e92]:
+      - button "Search anything K" [ref=f8e93] [cursor=pointer]:
+        - generic [ref=f8e97]: Search anything
+        - generic [ref=f8e98]: K
+      - generic [ref=f8e101]:
+        - generic [ref=f8e102]:
+          - generic [ref=f8e103]: Fallback
+          - generic [ref=f8e104]: "1"
+        - link "0 unread notifications" [ref=f8e106] [cursor=pointer]:
+          - /url: /agency/inbox
+        - button "Create new" [ref=f8e111] [cursor=pointer]
+    - generic [ref=f8e113]:
+      - generic [ref=f8e114]:
+        - generic [ref=f8e115]:
+          - text: Thursday 20 August
+          - heading "Good evening, Manas." [level=1] [ref=f8e116]
+          - paragraph [ref=f8e117]: 1 item need a decision before the client sees them.
+        - generic [ref=f8e118]: Live
+      - region "Agency status overview" [ref=f8e120]:
+        - generic [ref=f8e121]:
+          - generic [ref=f8e122]: Active work
+          - strong [ref=f8e125]: —
+          - text: Across the visible slate
+        - generic [ref=f8e126]:
+          - generic [ref=f8e127]: Waiting on client
+          - strong [ref=f8e130]: —
+          - text: Client decision gate
+        - generic [ref=f8e131]:
+          - generic [ref=f8e132]: Revision rounds
+          - strong [ref=f8e135]: —
+          - text: Recorded decisions
+        - generic [ref=f8e136]:
+          - generic [ref=f8e137]: Avg. turnaround
+          - strong [ref=f8e140]: —
+          - text: Submit to approval
+        - generic [ref=f8e141]:
+          - generic [ref=f8e142]: On-time
+          - strong [ref=f8e145]: —
+          - text: 0 overdue
+      - generic [ref=f8e146]:
+        - generic [ref=f8e147]:
+          - generic [ref=f8e148]:
+            - generic [ref=f8e149]:
+              - text: Signal log
+              - heading "Recent activity" [level=2] [ref=f8e150]
+            - link "View all" [ref=f8e151] [cursor=pointer]:
+              - /url: /agency/inbox
+          - article [ref=f8e156]:
+            - generic [ref=f8e161]:
+              - strong [ref=f8e162]: Client Northstar Foods created
+              - generic [ref=f8e163]: Manas
+            - time [ref=f8e167]: 8/20/2026, 8:00:39 PM
+        - generic [ref=f8e168]:
+          - generic [ref=f8e169]:
+            - generic [ref=f8e170]:
+              - text: Your queue
+              - heading "Review before release" [level=2] [ref=f8e171]
+            - link "01" [ref=f8e172] [cursor=pointer]:
+              - /url: /agency/review
+          - article [ref=f8e173]:
+            - generic [ref=f8e179]:
+              - generic [ref=f8e180]: Internal review
+              - heading "Beach Vibe Reel" [level=3] [ref=f8e182]
+              - paragraph [ref=f8e183]: June Content Retainer
+              - generic [ref=f8e184]: no due date
+            - link "Open Beach Vibe Reel" [ref=f8e189] [cursor=pointer]:
+              - /url: /agency/deliverables/gf26ozrpfjg8fafatoz95uxo
+      - generic [ref=f8e193]:
+        - generic [ref=f8e195]:
+          - text: Portfolio
+          - heading "Client roll-up" [level=2] [ref=f8e196]
+        - table "Client roll-up" [ref=f8e197]:
+          - rowgroup [ref=f8e198]:
+            - row [ref=f8e199]:
+              - columnheader "Client" [ref=f8e200]
+              - columnheader "Active projects" [ref=f8e201]
+              - columnheader "In production" [ref=f8e202]
+              - columnheader "Waiting" [ref=f8e203]
+              - columnheader "Health" [ref=f8e204]
+          - rowgroup

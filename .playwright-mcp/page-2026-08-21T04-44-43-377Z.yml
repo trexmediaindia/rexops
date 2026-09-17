@@ -1,0 +1,61 @@
+- generic [ref=f16e3]:
+  - complementary [ref=f16e4]:
+    - generic [ref=f16e5]:
+      - generic [ref=f16e6]: R
+      - generic [ref=f16e7]: RexOps
+      - button "Collapse sidebar" [expanded] [ref=f16e8] [cursor=pointer]
+    - generic [ref=f16e12]:
+      - img "T-Rex Media" [ref=f16e13]: TR
+      - generic [ref=f16e14]:
+        - strong [ref=f16e15]: T-Rex Media
+        - generic [ref=f16e16]: Agency workspace
+    - navigation "Agency navigation" [ref=f16e19]:
+      - generic [ref=f16e20]: Operate
+      - link "Dashboard" [ref=f16e21] [cursor=pointer]:
+        - /url: /agency/dashboard
+      - link "Clients" [ref=f16e26] [cursor=pointer]:
+        - /url: /agency/clients
+      - link "Projects" [ref=f16e32] [cursor=pointer]:
+        - /url: /agency/projects
+      - generic [ref=f16e36]: Manage
+      - link "Team" [ref=f16e37] [cursor=pointer]:
+        - /url: /agency/team
+    - generic [ref=f16e44]:
+      - generic [ref=f16e45]:
+        - generic [ref=f16e46]: Storage
+        - generic [ref=f16e47]: —
+      - button "Signed out — signed out Signed out signed out" [ref=f16e50] [cursor=pointer]:
+        - img "Signed out — signed out" [ref=f16e51]: SO
+        - generic [ref=f16e52]:
+          - strong [ref=f16e53]: Signed out
+          - generic [ref=f16e54]: signed out
+  - main [ref=f16e57]:
+    - generic [ref=f16e58]:
+      - button "Search anything K" [ref=f16e59] [cursor=pointer]:
+        - generic [ref=f16e63]: Search anything
+        - generic [ref=f16e64]: K
+      - generic [ref=f16e67]:
+        - link "Notifications" [ref=f16e68] [cursor=pointer]:
+          - /url: /agency/inbox
+        - button "Create new" [ref=f16e73] [cursor=pointer]
+    - generic [ref=f16e75]:
+      - generic [ref=f16e76]:
+        - generic [ref=f16e77]:
+          - text: Relationships
+          - heading "Clients" [level=1] [ref=f16e78]
+          - paragraph [ref=f16e79]: Every project, decision, and client-facing version starts here.
+        - button "Add client" [ref=f16e80] [cursor=pointer]
+      - generic [ref=f16e82]:
+        - textbox "Search clients" [ref=f16e87]
+        - button "Active only" [ref=f16e88]
+      - generic [ref=f16e91]: Loading clients…
+      - table [ref=f16e93]:
+        - rowgroup [ref=f16e94]:
+          - row "Client Company Projects Status Actions" [ref=f16e95]:
+            - columnheader "Client" [ref=f16e96]
+            - columnheader "Company" [ref=f16e97]
+            - columnheader "Projects" [ref=f16e98]
+            - columnheader "Status" [ref=f16e99]
+            - columnheader "Actions"
+        - rowgroup
+      - generic [ref=f16e101]: 0 clients shown · 0 active projects

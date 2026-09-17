@@ -1,0 +1,11 @@
+import { describe, expect, test } from "bun:test";
+
+describe("{{name}} module contract", () => {
+  test.todo("happy path", () => {});
+  test.todo("validation returns 422", () => {});
+  test.todo("unauthenticated returns 401", () => {});
+  test.todo("cross-tenant id guess returns 404", () => {});
+  test("keeps the generated test matrix visible", () => {
+    expect(["happy", "validation", "authN", "tenancy"]).toHaveLength(4);
+  });
+});

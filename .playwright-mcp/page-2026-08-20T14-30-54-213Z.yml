@@ -1,0 +1,95 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e464]:
+    - complementary [ref=f3e465]:
+      - generic [ref=f3e466]:
+        - generic [ref=f3e467]: R
+        - generic [ref=f3e468]: RexOps
+        - button "Collapse sidebar" [expanded] [ref=f3e469] [cursor=pointer]
+      - generic [ref=f3e473]:
+        - img "T-Rex Media" [ref=f3e474]: TR
+        - generic [ref=f3e475]:
+          - strong [ref=f3e476]: T-Rex Media
+          - generic [ref=f3e477]: Agency workspace
+      - navigation "Agency navigation" [ref=f3e480]:
+        - generic [ref=f3e481]: Operate
+        - link "Dashboard" [ref=f3e482] [cursor=pointer]:
+          - /url: /agency/dashboard
+        - link "Clients" [ref=f3e487] [cursor=pointer]:
+          - /url: /agency/clients
+        - link "Projects" [ref=f3e493] [cursor=pointer]:
+          - /url: /agency/projects
+        - link "Work" [ref=f3e497] [cursor=pointer]:
+          - /url: /agency/work
+        - link "Review queue" [ref=f3e509] [cursor=pointer]:
+          - /url: /agency/review
+        - link "Inbox" [ref=f3e514] [cursor=pointer]:
+          - /url: /agency/inbox
+        - generic [ref=f3e519]: Manage
+        - link "Team" [ref=f3e520] [cursor=pointer]:
+          - /url: /agency/team
+        - link "Review pipelines" [ref=f3e527] [cursor=pointer]:
+          - /url: /agency/settings/pipelines
+        - link "Automation" [ref=f3e532] [cursor=pointer]:
+          - /url: /agency/settings
+      - generic [ref=f3e537]:
+        - generic [ref=f3e538]:
+          - generic [ref=f3e539]: Storage
+          - generic [ref=f3e540]: 18.4 / 100 GB
+        - button "Manas — agency owner Manas agency owner" [ref=f3e544] [cursor=pointer]:
+          - img "Manas — agency owner" [ref=f3e545]: M
+          - generic [ref=f3e546]:
+            - strong [ref=f3e547]: Manas
+            - generic [ref=f3e548]: agency owner
+    - main [ref=f3e551]:
+      - generic [ref=f3e552]:
+        - button "Search anything K" [ref=f3e553] [cursor=pointer]:
+          - generic [ref=f3e557]: Search anything
+          - generic [ref=f3e558]: K
+        - generic [ref=f3e561]:
+          - generic [ref=f3e562]:
+            - generic [ref=f3e563]: Live
+            - generic [ref=f3e564]: "1"
+          - link "0 unread notifications" [ref=f3e566] [cursor=pointer]:
+            - /url: /agency/inbox
+          - button "Create new" [ref=f3e571] [cursor=pointer]
+      - generic [ref=f3e573]:
+        - generic [ref=f3e574]:
+          - generic [ref=f3e575]:
+            - text: Production slate
+            - heading "Projects" [level=1] [ref=f3e576]
+            - paragraph [ref=f3e577]: Bodies of work for Imperial Living.
+          - button "New project" [ref=f3e578] [cursor=pointer]
+        - generic [ref=f3e580]:
+          - button "All active" [ref=f3e581]
+          - button "Due date" [ref=f3e583]
+          - button "Clear client filter" [ref=f3e586]
+        - generic [ref=f3e587]:
+          - article [ref=f3e588]:
+            - generic [ref=f3e589]:
+              - generic [ref=f3e590]: DUE
+              - strong [ref=f3e591]: —
+            - generic [ref=f3e592]:
+              - generic [ref=f3e593]: In progress
+              - heading "June Content Retainer" [level=2] [ref=f3e595]
+              - paragraph [ref=f3e596]: Imperial Living
+            - generic [ref=f3e598]:
+              - generic [ref=f3e599]: Deliverables
+              - generic [ref=f3e600]: 0 / 0
+            - button "Open project" [ref=f3e602] [cursor=pointer]
+          - article [ref=f3e603]:
+            - generic [ref=f3e604]:
+              - generic [ref=f3e605]: DUE
+              - strong [ref=f3e606]: —
+            - generic [ref=f3e607]:
+              - generic [ref=f3e608]: In progress
+              - heading "Reels" [level=2] [ref=f3e610]
+              - paragraph [ref=f3e611]: Imperial Living
+            - generic [ref=f3e613]:
+              - generic [ref=f3e614]: Deliverables
+              - generic [ref=f3e615]: 0 / 1
+            - button "Open project" [ref=f3e617] [cursor=pointer]
+        - generic [ref=f3e618]: 2 projects shown
+  - generic [ref=f3e226]:
+    - link "Liveblocks" [ref=f3e227] [cursor=pointer]:
+      - /url: https://lblcks.io/badge
+    - button [ref=f3e236] [cursor=pointer]

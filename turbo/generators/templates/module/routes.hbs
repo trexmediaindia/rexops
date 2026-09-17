@@ -1,0 +1,20 @@
+import { Elysia, t } from "elysia";
+import { authGuard, requirePrincipal } from "../../plugins/auth-guard";
+import { create{{pascalCase name}}, list{{pascalCase name}} } from "./{{name}}.service";
+
+export const {{camelCase name}}Routes = new Elysia({ prefix: "/api/{{name}}" })
+  .use(authGuard)
+  .get("/", ({ principal, set }) => {
+    const actor = requirePrincipal(principal, set);
+    if (!actor) return { error: "UNAUTHORIZED" };
+    return list{{pascalCase name}}(actor);
+  })
+  .post(
+    "/",
+    ({ body, principal, set }) => {
+      const actor = requirePrincipal(principal, set);
+      if (!actor) return { error: "UNAUTHORIZED" };
+      return create{{pascalCase name}}(actor, body);
+    },
+    { body: t.Object({ name: t.String({ minLength: 2 }) }) },
+  );

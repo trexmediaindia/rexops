@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "types": ["bun"],
+    "baseUrl": "../..",
+    "paths": {
+      "@rexops/config": ["packages/config/src/index.ts"],
+      "@rexops/config/*": ["packages/config/src/*"],
+      "@rexops/validators": ["packages/validators/src/index.ts"],
+      "@rexops/core": ["packages/core/src/index.ts"],
+      "@rexops/db": ["packages/db/src/index.ts"],
+      "@rexops/auth": ["packages/auth/src/index.ts"],
+      "@rexops/jobs": ["packages/jobs/src/index.ts"],
+      "@rexops/ui": ["packages/ui/src/index.ts"],
+      "@rexops/api": ["apps/api/src/app.ts"]
+    }
+  }
+}

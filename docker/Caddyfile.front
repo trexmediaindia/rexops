@@ -1,0 +1,41 @@
+{
+	# No ACME contact email by default: a placeholder like admin@example.local is
+	# REJECTED by Let's Encrypt ("domain does not end with a valid public suffix").
+	# Set ACME_EMAIL to a real address to receive expiry warnings.
+	acme_ca {$ACME_CA:https://acme-v02.api.letsencrypt.org/directory}
+}
+
+# Shared app routing: the API owns /api/* + the health probes, the SPA owns the rest.
+(rexops_app) {
+	encode zstd gzip
+
+	route {
+		@api {
+			path /api/*
+			path /healthz
+			path /readyz
+			path /openapi
+			path /openapi/*
+		}
+		reverse_proxy @api api:3000 {
+			transport http {
+				read_timeout 300s
+				write_timeout 300s
+			}
+		}
+
+		reverse_proxy web:80
+	}
+}
+
+# Canonical site. A bare ":80" serves plain HTTP; a hostname gets automatic HTTPS.
+{$SITE_ADDRESS} {
+	import rexops_app
+}
+
+# Anything reaching this box on another host (e.g. the raw IP) is sent to the
+# canonical origin, so browsers that force HTTPS land somewhere real.
+# Set LEGACY_ADDRESS to "-" to disable this block.
+{$LEGACY_ADDRESS:http://127.0.0.1:8099} {
+	redir {$PUBLIC_ORIGIN:http://localhost}{uri} permanent
+}

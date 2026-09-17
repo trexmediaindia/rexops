@@ -1,0 +1,7 @@
+import { z } from "zod";
+
+export const create{{pascalCase name}}Schema = z.object({
+  name: z.string().trim().min(2).max(160),
+});
+
+export type Create{{pascalCase name}}Input = z.infer<typeof create{{pascalCase name}}Schema>;

@@ -1,0 +1,3845 @@
+#root {
+  min-height: 100vh;
+}
+
+.presence-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 11px;
+  height: 11px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--rx-accent);
+  pointer-events: none;
+}
+
+.registered-viewer {
+  position: relative;
+  width: 100%;
+  min-height: 240px;
+}
+
+/*
+ * video.js is mounted into this host imperatively. Pin it to the stage and let the
+ * media letterbox inside it — otherwise the player lays out at the file's intrinsic
+ * size (a 1080x1920 vertical cut rendered 1920px tall over everything below it).
+ */
+.video-proof__host {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* Sizing is driven by `player.dimensions("100%", "100%")` in the viewer, which rewrites
+   video.js's own `#vjs_video_N-dimensions` rule; these just keep the box honest. */
+.video-proof__host .video-js {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.video-proof__host .video-js .vjs-tech {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.annotation-tools {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 8;
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 8px;
+  background: rgb(11 13 16 / 86%);
+}
+
+.annotation-tools button {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--rx-ink-muted);
+  background: transparent;
+}
+
+.annotation-tools button[data-active="true"],
+.annotation-tools button:hover {
+  color: white;
+  background: rgb(255 255 255 / 10%);
+}
+
+.proof-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: calc(100% - 42px);
+  cursor: crosshair;
+}
+
+.image-proof img,
+.pdf-proof canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 72vh;
+  margin: auto;
+}
+
+.pdf-canvas {
+  display: block;
+  width: 100%;
+  padding: 52px 16px 16px;
+  border: 0;
+  background: #26282b;
+}
+
+.audio-proof {
+  padding: 72px 24px 30px;
+}
+
+.chat-workspace {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) 1fr;
+  gap: 14px;
+}
+
+.channel-switcher {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 14px;
+}
+
+.channel-switcher > div {
+  display: grid;
+  gap: 5px;
+}
+
+.channel-switcher button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  text-align: left;
+}
+
+.chat-feed blockquote {
+  margin: 10px 0 0 18px;
+  padding: 9px 12px;
+  border-left: 2px solid var(--rx-accent);
+  background: rgb(255 255 255 / 3%);
+}
+
+.version-rail__item > button:first-child {
+  width: 100%;
+}
+
+.version-companion {
+  width: calc(100% - 18px);
+  margin: -5px 9px 8px;
+  padding: 6px;
+  border: 1px dashed rgb(255 255 255 / 18%);
+  color: var(--rx-ink-muted);
+  background: transparent;
+}
+
+@media (max-width: 820px) {
+  .chat-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+.spin {
+  animation: rx-spin 0.9s linear infinite;
+}
+
+@keyframes rx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.app-frame {
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: 238px minmax(0, 1fr);
+}
+
+.deliverable-crumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  color: var(--mist);
+  font-size: 0.875rem;
+}
+
+.deliverable-crumb a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.deliverable-heading__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.deliverable-workspace {
+  display: grid;
+  min-height: 590px;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 16px;
+}
+
+.version-stage {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.version-stage__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.55);
+}
+
+.version-stage__topline > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.version-stage__topline .rx-mono {
+  padding: 5px 7px;
+  border: 1px solid var(--ash);
+  color: var(--tungsten);
+  font-size: 0.8125rem;
+}
+
+.version-stage__topline strong {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.version-preview {
+  display: flex;
+  min-height: 440px;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 11px;
+  padding: 44px;
+  color: var(--mist);
+  background:
+    radial-gradient(circle at 50% 40%, rgba(242, 163, 65, 0.09), transparent 34%),
+    linear-gradient(135deg, rgba(28, 32, 38, 0.8), rgba(10, 11, 13, 0.96));
+}
+
+.version-preview strong {
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.15rem;
+}
+
+.version-preview > span {
+  max-width: 80%;
+  overflow: hidden;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.version-preview > div {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.version-facts {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px;
+  border-top: 1px solid rgba(58, 64, 73, 0.55);
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.version-facts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.version-empty {
+  display: flex;
+  min-height: 520px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: var(--mist);
+  text-align: center;
+}
+
+.version-empty h2 {
+  margin: 16px 0 6px;
+  color: var(--paper);
+}
+
+.version-empty p {
+  margin: 0 0 20px;
+}
+
+.version-rail {
+  overflow: hidden;
+}
+
+.version-rail__list {
+  display: flex;
+  max-height: 590px;
+  overflow-y: auto;
+  flex-direction: column;
+}
+
+.version-rail__list > button {
+  display: grid;
+  position: relative;
+  min-height: 91px;
+  align-items: start;
+  /* minmax(0, …) so the label column can actually shrink and hand the job to its
+     text-overflow ellipsis; a bare 1fr kept a min-content floor that pushed the row
+     past the rail, which clips its overflow. */
+  grid-template-columns: 47px minmax(0, 1fr) auto;
+  gap: 9px;
+  padding: 15px 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.45);
+  border-left: 2px solid transparent;
+  color: var(--mist);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.version-rail__list > button:hover,
+.version-rail__list > button[data-selected="true"] {
+  border-left-color: var(--tungsten);
+  background: rgba(242, 163, 65, 0.055);
+}
+
+.version-number {
+  color: var(--tungsten);
+  font-size: 0.8125rem;
+}
+
+.version-rail__list strong,
+.version-rail__list small {
+  display: block;
+}
+
+.version-rail__list strong {
+  overflow: hidden;
+  color: var(--paper);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.version-rail__list small {
+  margin-top: 6px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.6875rem;
+}
+
+.version-rail__list em {
+  display: flex;
+  align-items: center;
+  grid-column: 2 / -1;
+  gap: 4px;
+  margin-top: 2px;
+  color: #78818d;
+  font-size: 0.75rem;
+  font-style: normal;
+}
+
+.version-ready {
+  color: var(--success);
+}
+
+.drawer-scrim {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(5, 6, 7, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.drawer-panel {
+  position: relative;
+  width: min(480px, 100vw);
+}
+
+.upload-drawer {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  flex-direction: column;
+  gap: 20px;
+  padding: 26px;
+  border-left: 1px solid var(--ash);
+  background: #14171b;
+  box-shadow: -24px 0 70px rgba(0, 0, 0, 0.35);
+  overflow-y: auto;
+}
+
+.upload-drawer__heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.upload-drawer__heading h2 {
+  margin: 8px 0 0;
+  font-size: 1.4rem;
+}
+
+.upload-dropzone {
+  display: flex;
+  min-height: 190px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 9px;
+  padding: 24px;
+  border: 1px dashed #555e69;
+  border-radius: 7px;
+  color: var(--mist);
+  background: rgba(32, 36, 43, 0.45);
+  cursor: pointer;
+}
+
+.upload-dropzone:hover,
+.upload-dropzone[data-dragging="true"] {
+  border-color: var(--tungsten);
+  color: var(--paper);
+  background: rgba(242, 163, 65, 0.07);
+}
+
+.upload-dropzone strong {
+  color: var(--paper);
+  font-size: 1rem;
+}
+
+.upload-dropzone span {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+}
+
+.upload-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.upload-fields label {
+  display: grid;
+  gap: 7px;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.upload-fields input {
+  height: 40px;
+  padding: 0 11px;
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  color: var(--paper);
+  background: var(--ink);
+  outline: none;
+}
+
+.upload-fields input:focus {
+  border-color: var(--tungsten);
+}
+
+.upload-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--mist);
+  font-size: 0.875rem;
+}
+
+.upload-toggles label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.upload-toggles input {
+  accent-color: var(--tungsten);
+}
+
+.upload-progress {
+  display: grid;
+  gap: 8px;
+}
+
+.upload-progress > div {
+  display: flex;
+  justify-content: space-between;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.upload-progress > i {
+  height: 3px;
+  overflow: hidden;
+  background: var(--ash);
+}
+
+.upload-progress > i > b {
+  display: block;
+  height: 100%;
+  background: var(--tungsten);
+  transition: width 160ms ease;
+}
+
+@media (max-width: 1050px) {
+  .deliverable-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .version-rail__list {
+    max-height: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .deliverable-heading__actions,
+  .version-preview > div,
+  .version-facts {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .version-facts {
+    padding: 14px 20px;
+  }
+
+  .upload-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.review-room {
+  min-height: calc(100vh - 116px);
+  overflow: hidden;
+  border: 1px solid rgba(58, 64, 73, 0.72);
+  border-radius: 9px;
+  background: #0c0e11;
+}
+
+.review-room__header {
+  display: flex;
+  min-height: 78px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.62);
+  background: rgba(20, 23, 27, 0.95);
+}
+
+.review-room__header > div {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.review-room__header a {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  color: var(--mist);
+}
+
+.review-room__header h1 {
+  margin: 5px 0 0;
+  font-size: 1.15rem;
+}
+
+.review-room__grid {
+  display: grid;
+  min-height: 690px;
+  /* The rail holds a 74px thumbnail plus label/status copy, and the comment column
+     holds a filter row and a composer toolbar; the old 150px/320px tracks left both
+     with less inner width than their contents need. */
+  grid-template-columns: 212px minmax(400px, 1fr) 344px;
+}
+
+.review-version-rail {
+  padding: 16px 10px;
+  border-right: 1px solid rgba(58, 64, 73, 0.62);
+  background: #121419;
+}
+
+.review-version-rail > .rx-eyebrow {
+  display: block;
+  margin: 3px 8px 13px;
+}
+
+.review-version-rail > button {
+  display: grid;
+  position: relative;
+  width: 100%;
+  min-height: 105px;
+  justify-items: start;
+  grid-template-columns: 1fr auto;
+  gap: 5px;
+  margin-bottom: 8px;
+  padding: 11px;
+  border: 1px solid rgba(58, 64, 73, 0.6);
+  border-left: 2px solid transparent;
+  border-radius: 5px;
+  color: var(--mist);
+  background: linear-gradient(145deg, rgba(50, 55, 63, 0.28), rgba(16, 18, 22, 0.7)), #181b20;
+  cursor: pointer;
+  text-align: left;
+}
+
+.review-version-rail > button:hover,
+.review-version-rail > button[data-selected="true"] {
+  border-color: #5b626d;
+  border-left-color: var(--tungsten);
+  background: linear-gradient(145deg, rgba(242, 163, 65, 0.09), rgba(16, 18, 22, 0.7)), #181b20;
+}
+
+.review-version-rail > button .rx-mono {
+  color: var(--tungsten);
+  font-size: 0.75rem;
+}
+
+.review-version-rail > button strong,
+.review-version-rail > button small {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.review-version-rail > button strong {
+  overflow: hidden;
+  color: var(--paper);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.review-version-rail > button small {
+  color: #77808b;
+  font-size: 0.6875rem;
+}
+
+.compare-picker {
+  display: grid;
+  gap: 7px;
+  margin: 18px 4px 0;
+  color: var(--mist);
+  font-size: 0.75rem;
+}
+
+.compare-picker select {
+  height: 33px;
+  padding: 0 8px;
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  color: var(--paper);
+  background: var(--ink);
+}
+
+/*
+ * Flex column rather than fixed grid rows: the annotation toolbar is conditional, so a
+ * three-row template silently handed row 1 (the media row) to the toolbar and squeezed
+ * the canvas into the 54px scrubber row whenever annotation was available.
+ */
+.review-media {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #08090b;
+}
+
+.review-media > .annotation-toolbar,
+.review-media > .review-scrubber,
+.review-media > .decision-bar {
+  flex: 0 0 auto;
+}
+
+.review-media > .review-media__canvas {
+  flex: 1 1 auto;
+  min-height: 480px;
+}
+
+.review-media__canvas {
+  display: grid;
+  position: relative;
+  min-width: 0;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, rgba(55, 61, 71, 0.22), transparent 48%), #07080a;
+}
+
+.review-media__canvas[data-compare="true"] {
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--ash);
+}
+
+.review-media__canvas > video,
+.review-media__canvas > iframe {
+  width: 100%;
+  max-width: 100%;
+  max-height: 560px;
+}
+
+.review-media__canvas > video {
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.review-media__canvas iframe {
+  height: 100%;
+  min-height: 520px;
+  border: 0;
+}
+
+.image-annotation-stage {
+  display: grid;
+  width: 100%;
+  max-width: 100%;
+  max-height: 560px;
+  height: 100%;
+  place-items: center;
+  border: 0;
+  background: #08090b;
+  cursor: crosshair;
+}
+
+.image-annotation-stage img {
+  max-width: 100%;
+  max-height: 560px;
+  object-fit: contain;
+}
+
+.region-pin {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--tungsten);
+  border-radius: 50%;
+  background: rgba(242, 163, 65, 0.16);
+  box-shadow: 0 0 0 6px rgba(242, 163, 65, 0.08);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.review-media__fallback {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--mist);
+  text-align: center;
+}
+
+.review-media__fallback strong {
+  color: var(--paper);
+}
+
+.review-media__fallback span {
+  font-size: 0.875rem;
+}
+
+.audio-review {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  max-height: 560px;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 24px;
+  padding: 38px;
+}
+
+.audio-review__waveform {
+  display: flex;
+  height: 210px;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.audio-review__waveform i {
+  width: 4px;
+  min-height: 8px;
+  border-radius: 2px;
+  background: linear-gradient(var(--tungsten), #82562a);
+  opacity: 0.72;
+}
+
+.review-scrubber {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 28px 86px 1fr 86px;
+  gap: 9px;
+  padding: 0 14px;
+  border-top: 1px solid rgba(58, 64, 73, 0.6);
+  border-bottom: 1px solid rgba(58, 64, 73, 0.6);
+  background: #13161a;
+}
+
+.review-scrubber > button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--ink);
+  background: var(--tungsten);
+}
+
+.review-scrubber > span {
+  color: var(--mist);
+  font-size: 0.6875rem;
+  text-align: center;
+}
+
+.scrubber-track {
+  position: relative;
+  height: 3px;
+  background: #464c55;
+}
+
+.scrubber-track > i {
+  display: block;
+  height: 100%;
+  background: var(--tungsten);
+}
+
+.scrubber-marker {
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  height: 14px;
+  padding: 0;
+  border: 1px solid #111;
+  border-radius: 2px;
+  background: #77c6b5;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.decision-bar {
+  display: flex;
+  min-height: 66px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #181b20;
+}
+
+.decision-bar > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.decision-bar--decisions {
+  justify-content: flex-end;
+}
+
+.decision-bar--decisions > button {
+  display: inline-flex;
+  height: 36px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  border: 1px solid #535b66;
+  border-radius: 4px;
+  color: var(--paper);
+  background: #242930;
+  cursor: pointer;
+  font-size: 0.8125rem;
+}
+
+.decision-bar--decisions > button:first-child {
+  border-color: #a87032;
+  background: rgba(242, 163, 65, 0.14);
+}
+
+.decision-bar > .decision-confirm {
+  display: grid;
+  width: min(520px, 100%);
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.decision-confirm > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  grid-column: 1 / -1;
+}
+
+.decision-confirm input,
+.decision-confirm textarea {
+  min-height: 38px;
+  padding: 9px;
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  color: var(--paper);
+  background: var(--ink);
+  resize: vertical;
+}
+
+.decision-confirm input {
+  grid-column: 1 / -1;
+}
+
+.decision-confirm textarea {
+  min-height: 58px;
+}
+
+.decision-confirm button:not(.rx-button) {
+  border: 0;
+  color: var(--mist);
+  background: transparent;
+}
+
+.decision-bar--quiet {
+  justify-content: center;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+/*
+ * A flex column, not a grid. The grid version pinned three rows — heading, list,
+ * composer — but the panel has since grown a filter strip and a typing indicator,
+ * so the filters landed in the `1fr` row and stretched into a tall empty box with
+ * four chips floating in the middle of it. Flex lets the list take the slack
+ * regardless of how many siblings it has.
+ */
+.review-comments {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border-left: 1px solid rgba(58, 64, 73, 0.62);
+  background: #15181c;
+}
+
+.review-comments__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.55);
+}
+
+.review-comments__heading h2 {
+  margin: 4px 0 0;
+  font-size: 1rem;
+}
+
+.review-comments__heading > span {
+  color: var(--tungsten);
+  font-size: 0.8125rem;
+}
+
+.review-comments__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.review-comments__list article {
+  margin-bottom: 9px;
+  padding: 12px;
+  border: 1px solid rgba(58, 64, 73, 0.58);
+  border-radius: 5px;
+  background: rgba(29, 33, 39, 0.72);
+}
+
+.review-comments__list article[data-internal="true"] {
+  border-color: rgba(158, 112, 185, 0.45);
+  background: rgba(92, 55, 114, 0.09);
+}
+
+.review-comments__list article > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review-comments__list strong {
+  font-size: 0.875rem;
+}
+
+.review-comments__list .rx-mono,
+.review-comments__list small {
+  color: #828b96;
+  font-size: 0.6875rem;
+}
+
+.review-comments__list p {
+  margin: 9px 0;
+  color: #d8dce2;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.comments-empty {
+  display: flex;
+  height: 240px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  color: #737c87;
+  font-size: 0.8125rem;
+}
+
+.comment-composer {
+  padding: 12px;
+  border-top: 1px solid rgba(58, 64, 73, 0.6);
+  background: #111317;
+}
+
+.comment-composer textarea {
+  width: 100%;
+  min-height: 76px;
+  padding: 10px;
+  border: 1px solid var(--ash);
+  border-radius: 5px;
+  color: var(--paper);
+  background: #0c0e11;
+  resize: vertical;
+}
+
+.comment-composer > div {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--mist);
+  font-size: 0.75rem;
+}
+
+.comment-composer label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.comment-composer input {
+  accent-color: var(--tungsten);
+}
+
+.comment-composer > div > button {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border: 0;
+  border-radius: 4px;
+  color: var(--ink);
+  background: var(--tungsten);
+}
+
+.comment-composer > div > button:disabled {
+  opacity: 0.35;
+}
+
+.anchor-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 7px;
+  padding: 4px 6px;
+  border: 1px solid #58616d;
+  border-radius: 3px;
+  color: var(--mist);
+  font-size: 0.6875rem;
+}
+
+.anchor-chip button {
+  display: grid;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+}
+
+.review-room-loading {
+  display: flex;
+  min-height: 70vh;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--mist);
+}
+
+.review-dialog {
+  position: fixed;
+  z-index: 80;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.review-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(4, 5, 6, 0.78);
+  backdrop-filter: blur(5px);
+}
+
+.review-dialog > section {
+  position: relative;
+  width: min(460px, calc(100vw - 30px));
+  padding: 24px;
+  border: 1px solid #505864;
+  border-radius: 8px;
+  background: #181b20;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.5);
+}
+
+.review-dialog > section > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review-dialog > section > div:first-child button {
+  border: 0;
+  color: var(--mist);
+  background: transparent;
+}
+
+.review-dialog h2 {
+  margin: 14px 0 22px;
+}
+
+.review-dialog label {
+  display: grid;
+  gap: 7px;
+  margin: 13px 0;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.review-dialog label > span {
+  color: #717986;
+}
+
+.review-dialog label > input[type="password"],
+.share-result input {
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.review-dialog .share-check {
+  display: flex;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+}
+
+.review-dialog > section > small {
+  display: block;
+  margin: 18px 0;
+  color: #747d88;
+  font-size: 0.6875rem;
+}
+
+.share-result {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+}
+
+.share-result .rx-button {
+  grid-column: 1 / -1;
+}
+
+.share-gate {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(242, 163, 65, 0.09), transparent 32%), #0c0e11;
+}
+
+.share-gate > section {
+  display: flex;
+  width: min(420px, 100%);
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 14px;
+  padding: 34px;
+  border: 1px solid var(--ash);
+  border-radius: 9px;
+  background: #181b20;
+}
+
+.share-gate h1 {
+  margin: 4px 0 0;
+}
+
+.share-gate p {
+  margin: 0;
+  color: var(--mist);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.share-gate input {
+  width: 100%;
+  height: 43px;
+  padding: 0 11px;
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.shared-review {
+  min-height: 100vh;
+  background: #0c0e11;
+}
+
+.shared-review > header {
+  display: flex;
+  height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid var(--ash);
+  background: #15181c;
+}
+
+.shared-review > header > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mist);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+}
+
+.shared-review__layout {
+  display: grid;
+  min-height: calc(100vh - 68px);
+  grid-template-columns: minmax(0, 1fr) 360px;
+}
+
+.shared-review__stage {
+  padding: 32px;
+}
+
+.shared-review__stage h1 {
+  margin: 7px 0 5px;
+  font-size: 1.65rem;
+}
+
+.shared-review__stage > div:first-child p {
+  margin: 0;
+  color: var(--mist);
+}
+
+.shared-review__media {
+  display: grid;
+  position: relative;
+  min-height: 520px;
+  margin-top: 25px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--ash);
+  border-radius: 7px;
+  background: #050607;
+}
+
+.shared-review__media video,
+.shared-review__media img {
+  width: 100%;
+  max-height: 680px;
+  object-fit: contain;
+}
+
+.shared-review__media > span {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  padding: 5px 7px;
+  color: rgba(255, 255, 255, 0.72);
+  background: rgba(0, 0, 0, 0.52);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.6875rem;
+  pointer-events: none;
+}
+
+.shared-review__stage > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 13px;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.shared-review__comments {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 24px;
+  border-left: 1px solid var(--ash);
+  background: #15181c;
+}
+
+.shared-review__comments h2 {
+  margin: 6px 0 16px;
+}
+
+.shared-review__feed {
+  overflow-y: auto;
+}
+
+.shared-review__feed article {
+  margin-bottom: 9px;
+  padding: 12px;
+  border: 1px solid rgba(58, 64, 73, 0.65);
+  border-radius: 5px;
+  background: #1d2127;
+}
+
+.shared-review__feed strong {
+  font-size: 0.875rem;
+}
+
+.shared-review__feed p {
+  color: #dce0e6;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.shared-review__feed time {
+  color: #78818c;
+  font-size: 0.6875rem;
+}
+
+.shared-review__empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.shared-comment-form {
+  display: grid;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ash);
+}
+
+.shared-comment-form input,
+.shared-comment-form textarea {
+  padding: 9px;
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  color: var(--paper);
+  background: #0c0e11;
+}
+
+.shared-comment-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+@media (max-width: 1250px) {
+  .review-room__grid {
+    grid-template-columns: 196px minmax(340px, 1fr) 320px;
+  }
+}
+
+@media (max-width: 980px) {
+  .review-room__grid {
+    grid-template-columns: 212px minmax(0, 1fr);
+  }
+
+  .review-comments {
+    min-height: 520px;
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--ash);
+    border-left: 0;
+  }
+
+  .shared-review__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .shared-review__comments {
+    min-height: 520px;
+    border-top: 1px solid var(--ash);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 650px) {
+  .review-room__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .review-room__grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .review-version-rail {
+    display: flex;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--ash);
+  }
+
+  .review-version-rail > .rx-eyebrow {
+    display: none;
+  }
+
+  .review-version-rail > button {
+    min-width: 118px;
+  }
+
+  .compare-picker {
+    min-width: 120px;
+  }
+
+  .review-media > .review-media__canvas {
+    min-height: 360px;
+  }
+
+  .review-scrubber {
+    grid-template-columns: 28px 1fr;
+  }
+
+  .review-scrubber > span {
+    display: none;
+  }
+
+  .decision-bar,
+  .decision-bar--decisions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .shared-review__stage {
+    padding: 20px;
+  }
+
+  .shared-review__media {
+    min-height: 360px;
+  }
+}
+
+.work-view-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/*
+ * `.inbox-tabs` holds the tab buttons directly. It used to share the toolbar's
+ * `space-between`, which flung two tabs to opposite ends of the screen and read as
+ * a broken layout rather than a tab strip. Tabs group at the start.
+ */
+.inbox-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.work-view-toolbar > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.work-view-toolbar button,
+.inbox-tabs button {
+  display: inline-flex;
+  min-height: var(--control-height-sm);
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+  color: var(--mist);
+  background: #171a1f;
+  cursor: pointer;
+  font-size: var(--text-label);
+  white-space: nowrap;
+  transition:
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.work-view-toolbar button:hover,
+.inbox-tabs button:hover {
+  border-color: var(--control-border-hover);
+  color: var(--paper);
+}
+
+.work-view-toolbar button[data-active="true"],
+.inbox-tabs button[data-active="true"] {
+  border-color: #a66d2d;
+  color: var(--paper);
+  background: rgba(242, 163, 65, 0.1);
+}
+
+/* The saved-view picker is a trailing control, not a field — it should not eat the
+   width the tab group needs. */
+.work-view-toolbar .rx-select {
+  width: auto;
+  min-width: 190px;
+  max-width: 260px;
+}
+
+.work-board {
+  display: grid;
+  overflow-x: auto;
+  grid-auto-columns: minmax(248px, 1fr);
+  grid-auto-flow: column;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+
+.work-column {
+  display: flex;
+  min-height: 420px;
+  flex-direction: column;
+  padding: 12px;
+  border: 1px solid rgba(58, 64, 73, 0.6);
+  border-radius: 10px;
+  background: rgba(18, 20, 24, 0.78);
+}
+
+.work-column > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 2px;
+  color: var(--mist);
+  font-size: var(--text-label);
+}
+
+.work-column > header > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* One dot per lane, matching the status colours used by the chips elsewhere, so a
+   column is identifiable at a glance without reading the label. */
+.work-column > header i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mist);
+}
+
+.work-column[data-status="in_progress"] header i {
+  background: var(--blue);
+}
+
+.work-column[data-status="under_internal_review"] header i {
+  background: var(--violet);
+}
+
+.work-column[data-status="under_client_review"] header i {
+  background: var(--teal);
+}
+
+.work-column[data-status="revision_requested"] header i {
+  background: var(--orange);
+}
+
+.work-column[data-status="approved"] header i {
+  background: var(--green);
+}
+
+.work-column > header b {
+  min-width: 22px;
+  border-radius: 20px;
+  padding: 2px 7px;
+  color: var(--mist);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: var(--text-micro);
+  font-weight: 500;
+  text-align: center;
+}
+
+.work-column__cards {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  gap: 8px;
+}
+
+.work-column__empty {
+  margin: 0;
+  padding: 18px 4px;
+  color: #616a76;
+  font-size: var(--text-meta);
+  text-align: center;
+}
+
+.work-column__add {
+  display: flex;
+  width: 100%;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+  border: 1px dashed #414954;
+  border-radius: var(--control-radius);
+  color: #7b848f;
+  background: transparent;
+  cursor: pointer;
+  font-size: var(--text-label);
+  transition:
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.work-column__add:hover {
+  border-color: var(--tungsten);
+  color: var(--tungsten);
+}
+
+/*
+ * The board renders cards as <a>. Without an explicit `display`, an anchor wrapping
+ * block children is an inline box: the background paints as a stack of disconnected
+ * fragments instead of a card. This is the one declaration holding the card together.
+ */
+.work-card {
+  display: grid;
+  gap: 10px;
+  padding: 12px 13px;
+  border: 1px solid rgba(58, 64, 73, 0.72);
+  border-left: 3px solid var(--ash);
+  border-radius: 8px;
+  color: inherit;
+  background: linear-gradient(155deg, #23272e, #1a1d22);
+  text-decoration: none;
+  transition:
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+.work-card:hover {
+  border-color: rgba(122, 132, 145, 0.8);
+  transform: translateY(-1px);
+}
+
+.work-card[data-priority="high"] {
+  border-left-color: var(--orange);
+}
+
+.work-card[data-priority="urgent"] {
+  border-left-color: var(--error);
+}
+
+.work-card h3 {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: var(--text-body);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.work-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.work-card__due {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--mist);
+  font-size: var(--text-meta);
+  white-space: nowrap;
+}
+
+.work-card__due[data-tone="late"] {
+  color: #f08a8d;
+}
+
+.work-card__due[data-tone="soon"] {
+  color: var(--tungsten);
+}
+
+.work-card__due[data-tone="none"] {
+  color: #626b77;
+}
+
+.work-card__priority {
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: var(--mist);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: var(--text-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.blocked-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: #e2a566;
+  background: rgba(242, 163, 65, 0.12);
+  font-size: var(--text-micro);
+}
+
+.work-calendar {
+  display: grid;
+  overflow-x: auto;
+  grid-template-columns: repeat(7, minmax(150px, 1fr));
+  border-top: 1px solid var(--ash);
+  border-left: 1px solid var(--ash);
+}
+
+.work-calendar > div {
+  min-height: 220px;
+  padding: 8px;
+  border-right: 1px solid var(--ash);
+  border-bottom: 1px solid var(--ash);
+  background: rgba(18, 20, 24, 0.65);
+}
+
+.work-calendar > div > header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: var(--mist);
+  font-size: 0.75rem;
+}
+
+.work-timeline {
+  padding: 18px;
+}
+
+.work-timeline > header {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  margin-left: 210px;
+  color: #78818c;
+  font-size: 0.6875rem;
+}
+
+.work-timeline article {
+  display: grid;
+  min-height: 52px;
+  align-items: center;
+  grid-template-columns: 195px 1fr;
+  gap: 15px;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.42);
+}
+
+.work-timeline article strong {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.work-timeline article > div {
+  height: 16px;
+  background: repeating-linear-gradient(90deg, transparent 0 12.4%, rgba(58, 64, 73, 0.4) 12.5%);
+}
+
+.work-timeline article i {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 4px;
+  border-radius: 3px;
+  color: #2b1d0d;
+  background: linear-gradient(90deg, #9f6b31, var(--tungsten));
+}
+
+/* Doubles as the inline error state on list screens, hence the Retry button rule. */
+.work-loading {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 50px;
+  color: var(--mist);
+  font-size: var(--text-body);
+  text-align: center;
+}
+
+.work-loading button {
+  min-height: var(--control-height-sm);
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+  padding: 0 14px;
+  color: var(--paper);
+  background: transparent;
+  cursor: pointer;
+  font-size: var(--text-label);
+}
+
+.work-loading button:hover {
+  border-color: var(--tungsten);
+  color: var(--tungsten);
+}
+
+.notification-inbox > div:last-child > a {
+  display: grid;
+  min-height: 78px;
+  align-items: center;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.45);
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.notification-inbox > div:last-child > a[data-read="true"] {
+  opacity: 0.55;
+}
+
+.notification-type {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid #59616c;
+  border-radius: 50%;
+  color: var(--tungsten);
+}
+
+.notification-inbox strong {
+  font-size: 0.875rem;
+}
+
+.notification-inbox p {
+  margin: 5px 0 0;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.notification-inbox time {
+  color: #727b87;
+  font-size: 0.6875rem;
+}
+
+.inbox-empty {
+  padding: 40px;
+  color: var(--mist);
+  text-align: center;
+}
+
+.production-chat {
+  min-height: 620px;
+}
+
+.chat-gate {
+  display: flex;
+  min-height: 540px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--mist);
+  text-align: center;
+}
+
+.chat-gate h2 {
+  margin: 12px 0 0;
+  color: var(--paper);
+}
+
+.chat-gate p {
+  margin: 0 0 15px;
+}
+
+.chat-feed {
+  min-height: 430px;
+  max-height: 530px;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.chat-message {
+  display: grid;
+  width: min(620px, 85%);
+  justify-items: start;
+  gap: 7px;
+  margin-bottom: 10px;
+  padding: 11px 13px;
+  border: 1px solid rgba(58, 64, 73, 0.6);
+  border-radius: 10px;
+  background: #1c2026;
+}
+
+/* Your own messages sit on the accent side of the ledger so a thread is readable
+   at a glance instead of being one undifferentiated column of grey cards. */
+.chat-feed .chat-message[data-mine] {
+  margin-left: auto;
+  border-color: rgba(242, 163, 65, 0.32);
+  background: color-mix(in srgb, var(--tungsten) 7%, #1c2026);
+}
+
+.chat-message > header {
+  display: flex;
+  width: 100%;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chat-message strong {
+  font-size: var(--text-label);
+  font-weight: 600;
+}
+
+.chat-message time {
+  color: #747d88;
+  font-size: var(--text-meta);
+  white-space: nowrap;
+}
+
+.chat-message p {
+  margin: 0;
+  color: #e0e3e7;
+  font-size: var(--text-body);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.chat-message .message-version-chips span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--tungsten);
+  font-size: var(--text-meta);
+}
+
+.message-reply {
+  min-height: 26px;
+  padding: 0 9px;
+  font-size: var(--text-meta);
+}
+
+.chat-composer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 9px;
+  padding: 14px;
+  border-top: 1px solid var(--ash);
+}
+
+.chat-composer__replying {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  border-left: 2px solid var(--tungsten);
+  border-radius: 0 5px 5px 0;
+  padding: 7px 10px;
+  color: var(--mist);
+  background: color-mix(in srgb, var(--tungsten) 7%, transparent);
+  font-size: var(--text-label);
+}
+
+.chat-composer__replying strong {
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.chat-composer__replying button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  color: var(--mist);
+  font-size: var(--text-meta);
+}
+
+.chat-composer__replying button:hover {
+  color: var(--paper);
+}
+
+.chat-composer textarea {
+  min-height: 62px;
+}
+
+.automation-tabs {
+  justify-content: flex-start;
+}
+
+.automation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 16px;
+}
+
+/* Four columns, not three: the toggle was landing in the implicit fourth track and
+   wrapping onto its own line under the rule name. */
+.rule-list article {
+  display: grid;
+  min-height: 78px;
+  align-items: center;
+  grid-template-columns: 105px minmax(0, 1fr) auto auto;
+  gap: 12px 16px;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.45);
+}
+
+.rule-kind {
+  color: var(--tungsten);
+  font-size: 0.6875rem;
+}
+
+.rule-list strong {
+  font-size: 0.875rem;
+}
+
+.rule-list p {
+  margin: 5px 0 0;
+  color: var(--mist);
+  font-size: 0.75rem;
+}
+
+.recipe-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recipe-gallery > .rx-eyebrow {
+  margin: 5px 0 4px;
+}
+
+.recipe-gallery article {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid var(--ash);
+  border-radius: 6px;
+  background: #191c21;
+}
+
+.recipe-gallery strong,
+.recipe-gallery span {
+  display: block;
+}
+
+.recipe-gallery strong {
+  font-size: 0.8125rem;
+}
+
+.recipe-gallery span {
+  margin-top: 5px;
+  color: var(--mist);
+  font-size: 0.6875rem;
+}
+
+.recipe-gallery button {
+  border: 0;
+  color: var(--tungsten);
+  background: transparent;
+  font-size: 0.75rem;
+}
+
+.automation-empty {
+  display: flex;
+  min-height: 440px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: var(--mist);
+  text-align: center;
+}
+
+.automation-empty h2 {
+  margin: 17px 0 7px;
+  color: var(--paper);
+}
+
+.automation-empty p {
+  max-width: 520px;
+}
+
+.automation-empty code {
+  margin-top: 12px;
+  color: var(--tungsten);
+}
+
+.intake-page {
+  min-height: 100vh;
+  padding: 30px;
+  background: radial-gradient(circle at 10% 0%, rgba(242, 163, 65, 0.08), transparent 28%), #0d0f12;
+}
+
+.intake-page > header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.intake-page > section {
+  width: min(680px, 100%);
+  margin: 70px auto;
+  padding: 34px;
+  border: 1px solid var(--ash);
+  border-radius: 9px;
+  background: #181b20;
+}
+
+.intake-page h1 {
+  margin: 9px 0;
+  font-size: 2rem;
+}
+
+.intake-page section > p {
+  color: var(--mist);
+}
+
+.intake-fields {
+  display: grid;
+  gap: 15px;
+  margin: 28px 0;
+}
+
+.intake-fields label {
+  display: grid;
+  gap: 7px;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.intake-fields label span {
+  color: var(--tungsten);
+  font-size: 0.6875rem;
+}
+
+.intake-fields input:not([type="checkbox"]) {
+  height: 43px;
+  padding: 0 10px;
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.intake-complete {
+  display: flex;
+  min-height: 320px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: var(--mist);
+  text-align: center;
+}
+
+.intake-complete > svg {
+  margin-bottom: 18px;
+  color: var(--success);
+}
+
+@media (max-width: 900px) {
+  .automation-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Below this the lanes stop sharing the width and become a fixed-width scroller. */
+  .work-board {
+    grid-auto-columns: 232px;
+  }
+}
+
+.command-palette {
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  display: grid;
+  align-items: start;
+  justify-items: center;
+  padding-top: min(18vh, 150px);
+}
+
+.command-palette__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(4, 5, 6, 0.75);
+  backdrop-filter: blur(5px);
+}
+
+.command-palette > section {
+  position: relative;
+  width: min(590px, calc(100vw - 28px));
+  overflow: hidden;
+  border: 1px solid #555d68;
+  border-radius: 8px;
+  background: #171a1f;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.58);
+}
+
+.command-palette label {
+  display: grid;
+  height: 58px;
+  align-items: center;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  padding: 0 15px;
+  border-bottom: 1px solid var(--ash);
+  color: var(--mist);
+}
+
+.command-palette input {
+  height: 100%;
+  border: 0;
+  color: var(--paper);
+  background: transparent;
+  outline: 0;
+}
+
+.command-palette kbd {
+  padding: 3px 5px;
+  border: 1px solid var(--ash);
+  border-radius: 3px;
+  font-size: 0.6875rem;
+}
+
+.command-palette > section > div {
+  padding: 8px;
+}
+
+.command-palette a {
+  display: grid;
+  min-height: 43px;
+  align-items: center;
+  grid-template-columns: 24px 1fr auto;
+  gap: 8px;
+  padding: 0 10px;
+  border-radius: 4px;
+  color: var(--mist);
+  text-decoration: none;
+}
+
+.command-palette a:hover {
+  color: var(--paper);
+  background: rgba(242, 163, 65, 0.08);
+}
+
+.command-palette small {
+  color: #707986;
+  font-size: 0.6875rem;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  border-right: 1px solid rgba(58, 64, 73, 0.68);
+  background: rgba(18, 20, 24, 0.96);
+  backdrop-filter: blur(20px);
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 66px;
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.sidebar > .wordmark {
+  padding: 0 18px;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.55);
+}
+
+.wordmark__mark {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border: 1px solid var(--tungsten);
+  color: var(--tungsten);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.9375rem;
+  transform: rotate(-2deg);
+}
+
+.sidebar__collapse {
+  margin-left: auto;
+}
+
+.icon-button {
+  position: relative;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--mist);
+  background: transparent;
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  border-color: var(--ash);
+  color: var(--paper);
+  background: var(--slate);
+}
+
+.workspace-switcher,
+.user-row {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+}
+
+.workspace-switcher {
+  margin: 14px;
+  padding: 10px;
+  border: 1px solid rgba(58, 64, 73, 0.6);
+  border-radius: 6px;
+  background: rgba(32, 36, 43, 0.58);
+}
+
+.workspace-switcher strong,
+.user-row strong {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+/* The role/subtitle line only. Left unscoped, this also matched the avatar —
+   itself a <span> — and overrode its `inline-grid` centring, so the initials
+   sat outside the circle in the sidebar footer, client bar, and admin rail. */
+.workspace-switcher > div span,
+.user-row > div span {
+  display: block;
+  margin-top: 2px;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.sidebar__nav {
+  padding: 8px 10px;
+}
+
+.nav-label {
+  display: block;
+  margin: 11px 9px 7px;
+  color: #6f7782;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nav-label--spaced {
+  margin-top: 25px;
+}
+
+.nav-item {
+  display: grid;
+  min-height: 40px;
+  align-items: center;
+  grid-template-columns: 22px 1fr auto;
+  gap: 8px;
+  padding: 0 9px;
+  border-left: 2px solid transparent;
+  border-radius: 3px;
+  color: var(--mist);
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  color: var(--paper);
+  background: rgba(32, 36, 43, 0.6);
+}
+
+.nav-item[data-active="true"] {
+  border-left-color: var(--tungsten);
+  color: var(--paper);
+  background: linear-gradient(90deg, rgba(242, 163, 65, 0.09), rgba(32, 36, 43, 0.38));
+}
+
+.nav-item em {
+  min-width: 20px;
+  padding: 2px 5px;
+  border: 1px solid rgba(58, 64, 73, 0.7);
+  border-radius: 10px;
+  color: var(--mist);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  font-style: normal;
+  text-align: center;
+}
+
+.sidebar__footer {
+  margin-top: auto;
+  padding: 12px 14px 15px;
+  border-top: 1px solid rgba(58, 64, 73, 0.55);
+}
+
+.capacity {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 7px;
+  margin: 0 2px 14px;
+  color: var(--mist);
+  font-size: 0.75rem;
+}
+
+.capacity i {
+  height: 2px;
+  grid-column: 1 / -1;
+  overflow: hidden;
+  background: var(--ash);
+}
+
+.capacity i b {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--tungsten);
+  transition: width 240ms ease;
+}
+
+.capacity[data-over="true"] i b {
+  background: var(--error);
+}
+
+.main-panel {
+  min-width: 0;
+}
+
+.topbar {
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  display: flex;
+  height: 66px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.55);
+  background: rgba(14, 15, 18, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.command-trigger {
+  display: flex;
+  width: min(390px, 42vw);
+  height: 36px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 11px;
+  border: 1px solid rgba(58, 64, 73, 0.65);
+  border-radius: 5px;
+  color: var(--mist);
+  background: rgba(32, 36, 43, 0.56);
+  cursor: pointer;
+}
+
+.command-trigger span {
+  flex: 1;
+  text-align: left;
+}
+
+.command-trigger kbd {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #6f7782;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notification-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--tungsten);
+}
+
+.screen {
+  width: min(1480px, 100%);
+  margin: 0 auto;
+  padding: 42px 38px 70px;
+}
+
+.screen-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 30px;
+  /* A title plus a row of status/action buttons stops fitting well before the 700px
+     breakpoint that stacked it — let the row reflow at whatever width it runs out. */
+  flex-wrap: wrap;
+}
+
+.screen-heading h1,
+.client-heading h1 {
+  margin: 8px 0 7px;
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+}
+
+.screen-heading p,
+.client-heading p {
+  max-width: 700px;
+  margin-bottom: 0;
+  color: var(--mist);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--mist);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+}
+
+.live-indicator span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 4px rgba(63, 182, 107, 0.1);
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 12px;
+}
+
+.panel {
+  border: 1px solid rgba(58, 64, 73, 0.68);
+  border-radius: 8px;
+  background: rgba(22, 24, 29, 0.82);
+}
+
+.panel__heading {
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 19px;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.55);
+}
+
+.panel__heading h2 {
+  margin: 5px 0 0;
+  font-size: 1.0625rem;
+  font-weight: 500;
+}
+
+.panel__heading button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  color: var(--mist);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.activity-list article {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr auto;
+  gap: 11px;
+  min-height: 72px;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(58, 64, 73, 0.35);
+}
+
+.activity-list article:last-child {
+  border-bottom: 0;
+}
+
+.activity-list p {
+  margin: 0 0 4px;
+  color: var(--mist);
+  font-size: 0.9375rem;
+}
+
+.activity-list p strong,
+.activity-list p b {
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.activity-list article > div > span,
+.activity-list time {
+  color: #707884;
+  font-size: 0.8125rem;
+}
+
+.queue-count {
+  color: var(--tungsten);
+  font-size: 1.15rem;
+}
+
+.review-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 124px 1fr auto;
+  gap: 15px;
+  margin: 14px;
+  padding: 10px;
+  border: 1px solid rgba(58, 64, 73, 0.6);
+  border-radius: 6px;
+  background: rgba(32, 36, 43, 0.6);
+}
+
+.review-card--compact {
+  margin-top: 0;
+}
+
+.review-thumb {
+  position: relative;
+  display: grid;
+  min-height: 100px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #3d403e;
+  border-radius: 4px;
+  color: #d8d5cb;
+  background:
+    linear-gradient(145deg, transparent 38%, rgba(242, 163, 65, 0.2)),
+    radial-gradient(circle at 35% 38%, #67756b, #222b27 45%, #111512);
+}
+
+.review-thumb--still {
+  background:
+    linear-gradient(135deg, rgba(208, 120, 72, 0.3), transparent 50%),
+    radial-gradient(circle at 60% 40%, #756053, #28211e 55%, #12100f);
+}
+
+.review-thumb > span {
+  position: absolute;
+  top: 6px;
+  left: 7px;
+  padding: 2px 4px;
+  background: rgba(14, 15, 18, 0.75);
+  font-size: 0.75rem;
+}
+
+.review-thumb i {
+  position: absolute;
+  right: 7px;
+  bottom: 6px;
+  color: #d5d7da;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.6875rem;
+  font-style: normal;
+}
+
+.review-card__body {
+  align-self: center;
+}
+
+.review-card__body h3 {
+  margin: 9px 0 3px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.review-card__body p {
+  margin: 0 0 14px;
+  color: var(--mist);
+  font-size: 0.875rem;
+}
+
+.review-card__body > div {
+  display: flex;
+  gap: 13px;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.review-card__body > div span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.review-arrow {
+  align-self: center;
+  border: 0;
+  color: var(--tungsten);
+  background: transparent;
+  cursor: pointer;
+}
+
+.client-rollup {
+  margin-top: 12px;
+}
+
+.data-table__head,
+.data-table__row {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1.5fr repeat(4, 0.75fr);
+  min-height: 52px;
+  padding: 0 19px;
+}
+
+.data-table {
+  display: block;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/*
+ * These tables are five-column grids. Below ~760px each track drops under ~60px, the
+ * cells wrap into an unreadable stack and the values lose their header. Scroll the
+ * table instead so every row keeps its column alignment.
+ */
+@media (max-width: 760px) {
+  .data-table {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .data-table__head,
+  .data-table__row {
+    min-width: 580px;
+  }
+}
+
+.data-table thead,
+.data-table tbody {
+  display: block;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0;
+  font-weight: inherit;
+  text-align: left;
+}
+
+.data-table__head {
+  min-height: 38px;
+  color: #777f8a;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.data-table__row {
+  border-top: 1px solid rgba(58, 64, 73, 0.4);
+  color: var(--mist);
+  font-size: 0.9375rem;
+}
+
+.data-table__row strong {
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.data-table__row > th {
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.list-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.list-toolbar label,
+.list-toolbar button {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid rgba(58, 64, 73, 0.65);
+  border-radius: 5px;
+  color: var(--mist);
+  background: rgba(32, 36, 43, 0.55);
+}
+
+.list-toolbar label {
+  width: min(360px, 100%);
+}
+
+.list-toolbar input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: var(--paper);
+  background: transparent;
+}
+
+.clients-table .data-table__head,
+.clients-table .data-table__row {
+  grid-template-columns: 1.4fr 1fr 0.6fr 0.7fr 0.5fr;
+}
+
+.clients-table .data-table__row {
+  min-height: 66px;
+}
+
+.clients-table .data-table__row > th {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.client-logo {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid var(--ash);
+  color: var(--mist);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+}
+
+/* `inline-flex` so an icon + label stays on one line — as a plain inline button the
+   glyph and the word each took their own line box and the label fell underneath. */
+.clients-table .data-table__row button,
+.project-row > button {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: 6px;
+  border: 0;
+  border-radius: 5px;
+  padding: 6px 8px;
+  color: var(--tungsten);
+  background: transparent;
+  cursor: pointer;
+  font-size: var(--text-body);
+  white-space: nowrap;
+}
+
+.clients-table .data-table__row button:hover,
+.project-row > button:hover {
+  background: rgba(242, 163, 65, 0.1);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.list-footnote {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 11px;
+  color: #737b86;
+  font-size: 0.875rem;
+}
+
+.project-list {
+  display: grid;
+  gap: 9px;
+}
+
+.project-row {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 92px 1.3fr 1fr 110px;
+  gap: 20px;
+  min-height: 114px;
+  padding: 15px 20px;
+  border: 1px solid rgba(58, 64, 73, 0.68);
+  border-radius: 7px;
+  background: rgba(22, 24, 29, 0.82);
+}
+
+.project-date {
+  display: grid;
+  align-self: stretch;
+  place-content: center;
+  border-right: 1px solid rgba(58, 64, 73, 0.5);
+}
+
+.project-date span {
+  color: #717984;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: var(--text-micro);
+  letter-spacing: 0.1em;
+}
+
+.project-date strong {
+  margin-top: 5px;
+  font-size: var(--text-body-lg);
+}
+
+.project-date[data-tone="late"] span,
+.project-date[data-tone="late"] strong {
+  color: #f08a8d;
+}
+
+.project-date[data-tone="soon"] span,
+.project-date[data-tone="soon"] strong {
+  color: var(--tungsten);
+}
+
+.project-date[data-tone="none"] strong {
+  color: #626b77;
+}
+
+.project-copy h2 {
+  margin: 9px 0 3px;
+  font-size: 1.0625rem;
+  font-weight: 500;
+}
+
+.project-copy p {
+  margin: 0;
+  color: var(--mist);
+  font-size: 0.875rem;
+}
+
+.project-progress div {
+  display: flex;
+  justify-content: space-between;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.project-progress i {
+  display: block;
+  height: 3px;
+  margin-top: 10px;
+  background: var(--ash);
+}
+
+.project-progress i b {
+  display: block;
+  height: 100%;
+  background: var(--tungsten);
+}
+
+.client-frame {
+  min-height: 100vh;
+}
+
+.client-bar {
+  display: grid;
+  height: 72px;
+  align-items: center;
+  grid-template-columns: 1fr auto 1fr;
+  padding: 0 clamp(20px, 5vw, 70px);
+  border-bottom: 1px solid rgba(58, 64, 73, 0.58);
+  background: rgba(14, 15, 18, 0.9);
+  backdrop-filter: blur(20px);
+}
+
+.client-bar nav {
+  display: flex;
+  gap: 25px;
+}
+
+.client-bar nav a {
+  color: var(--mist);
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+/* The bar is a three-column grid; the bell and the account menu share its last
+   column, or the account menu wraps onto a second row under the header. */
+.client-bar__account {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.client-main {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 72px 0 90px;
+}
+
+.client-heading {
+  margin-bottom: 52px;
+}
+
+.client-heading h1 {
+  font-size: clamp(2.3rem, 6vw, 4.2rem);
+}
+
+.client-section {
+  margin-bottom: 52px;
+}
+
+.client-section__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.client-section__heading h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.client-section__heading h2 span {
+  margin-left: 7px;
+  color: var(--tungsten);
+  font-size: 0.9375rem;
+}
+
+.client-section__heading p {
+  margin: 0;
+  color: var(--mist);
+  font-size: 0.875rem;
+}
+
+.review-needed-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.client-review-card {
+  display: grid;
+  grid-template-columns: 48% 1fr;
+  min-height: 230px;
+  overflow: hidden;
+  border: 1px solid rgba(58, 64, 73, 0.72);
+  border-radius: 8px;
+  background: rgba(22, 24, 29, 0.9);
+}
+
+.client-review-card__media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid rgba(58, 64, 73, 0.6);
+  color: #d9ddd8;
+  background:
+    linear-gradient(165deg, transparent 40%, rgba(242, 163, 65, 0.18)),
+    radial-gradient(circle at 45% 40%, #647065, #26302a 45%, #101411);
+}
+
+.client-review-card__media--room {
+  background:
+    linear-gradient(165deg, transparent 35%, rgba(242, 163, 65, 0.14)),
+    radial-gradient(circle at 55% 45%, #7d695d, #302721 48%, #14110f);
+}
+
+.client-review-card__media > span,
+.client-review-card__media i {
+  position: absolute;
+  font-size: 0.75rem;
+  font-style: normal;
+}
+
+.client-review-card__media > span {
+  top: 10px;
+  left: 10px;
+}
+
+.client-review-card__media i {
+  right: 10px;
+  bottom: 10px;
+}
+
+.client-review-card__copy {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  padding: 25px;
+}
+
+.client-review-card__copy h3 {
+  margin: 15px 0 4px;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.client-review-card__copy p {
+  margin: 0 0 26px;
+  color: var(--mist);
+  font-size: 0.875rem;
+}
+
+.client-review-card__copy button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  color: var(--tungsten);
+  background: transparent;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.client-lower-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+}
+
+/* The second column was dropped from this row; a lone section left in a two-column
+   grid rendered at half the width of everything above it. */
+.client-lower-grid:has(> :only-child) {
+  grid-template-columns: 1fr;
+}
+
+.simple-feed article {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr auto;
+  gap: 11px;
+  min-height: 62px;
+  border-top: 1px solid rgba(58, 64, 73, 0.5);
+}
+
+.approved-icon,
+.new-icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid rgba(63, 182, 107, 0.35);
+  border-radius: 50%;
+  color: var(--green);
+}
+
+.new-icon {
+  border-color: rgba(242, 163, 65, 0.35);
+  color: var(--tungsten);
+}
+
+/* `:not(.rx-status)` because a status chip dropped into one of these feeds was
+   being flattened to a block, which broke its dot off onto its own line. */
+.simple-feed strong,
+.simple-feed span:not(.rx-status, .rx-status__dot) {
+  display: block;
+}
+
+.simple-feed strong {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.simple-feed div span,
+.simple-feed time {
+  margin-top: 3px;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.admin-frame {
+  display: grid;
+  min-height: 100vh;
+  /* minmax(0, …) rather than 1fr: an fr track keeps an automatic min-content floor, so
+     the admin table's width propagated up and pushed the whole page wider than the
+     viewport instead of scrolling inside its own container. */
+  grid-template-columns: 210px minmax(0, 1fr);
+}
+
+.admin-main {
+  min-width: 0;
+}
+
+.admin-rail {
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px 20px;
+  border-right: 1px solid var(--ash);
+  background: #111317;
+}
+
+.admin-rail nav {
+  display: grid;
+  gap: 4px;
+  margin-top: 24px;
+}
+
+.admin-rail nav a {
+  padding: 11px;
+  border-left: 2px solid transparent;
+  color: var(--mist);
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.admin-rail nav a:hover {
+  border-left-color: var(--tungsten);
+  color: var(--paper);
+}
+
+.root-badge {
+  margin-top: auto;
+  color: var(--error);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+}
+
+.admin-main {
+  padding: 48px;
+}
+
+.root-warning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px 13px;
+  border: 1px solid rgba(229, 72, 77, 0.25);
+  color: #dca2a4;
+  background: rgba(229, 72, 77, 0.055);
+  font-size: 0.875rem;
+}
+
+.admin-table .data-table__head,
+.admin-table .data-table__row {
+  grid-template-columns: 1.5fr 1fr 0.7fr 1fr 0.8fr;
+}
+
+.admin-table small {
+  display: block;
+  margin-top: 3px;
+  color: var(--mist);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+}
+
+.login-screen {
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: minmax(420px, 1.08fr) minmax(420px, 0.92fr);
+}
+
+.login-aside {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  padding: 42px 56px;
+  overflow: hidden;
+  border-right: 1px solid rgba(58, 64, 73, 0.58);
+  background: linear-gradient(130deg, rgba(242, 163, 65, 0.03), transparent 42%), #111317;
+}
+
+.wordmark--large {
+  height: auto;
+  font-size: 1.125rem;
+}
+
+.login-aside__statement {
+  z-index: 2;
+  max-width: 600px;
+  margin-top: 15vh;
+}
+
+.login-aside__statement h1 {
+  margin: 14px 0 18px;
+  font-size: clamp(2.5rem, 5vw, 5.4rem);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.065em;
+}
+
+.login-aside__statement p {
+  max-width: 530px;
+  color: var(--mist);
+  line-height: 1.7;
+}
+
+.login-aside > small {
+  z-index: 2;
+  margin-top: auto;
+  color: #656d77;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.slate-art {
+  position: absolute;
+  right: -7vw;
+  bottom: -8vh;
+  width: min(42vw, 590px);
+  height: min(38vw, 520px);
+  padding: 28px;
+  border: 1px solid rgba(242, 163, 65, 0.18);
+  color: rgba(231, 234, 239, 0.16);
+  transform: rotate(-7deg);
+}
+
+.slate-art__top {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid currentColor;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8125rem;
+}
+
+.slate-art__top span {
+  padding-bottom: 8px;
+  border-right: 1px solid currentColor;
+}
+
+.slate-art > strong {
+  display: block;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 16rem;
+  font-weight: 500;
+  line-height: 0.9;
+}
+
+.slate-art__time {
+  position: absolute;
+  right: 28px;
+  bottom: 30px;
+  font-size: 1.5rem;
+}
+
+.slate-art__lines {
+  display: grid;
+  gap: 12px;
+}
+
+.slate-art__lines i {
+  height: 1px;
+  background: currentColor;
+}
+
+.login-panel {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 40px;
+}
+
+.login-card {
+  width: min(410px, 100%);
+}
+
+.login-card h2 {
+  margin: 12px 0 8px;
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.login-card > p {
+  margin-bottom: 34px;
+  color: var(--mist);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.login-card label {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 17px;
+  color: var(--mist);
+  font-size: 0.875rem;
+}
+
+.login-card input {
+  width: 100%;
+  height: 46px;
+  padding: 0 12px;
+  border: 1px solid var(--ash);
+  border-radius: 4px;
+  outline: 0;
+  color: var(--paper);
+  background: var(--slate);
+}
+
+.login-card input:focus {
+  border-color: var(--tungsten);
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 0;
+  color: var(--mist);
+  background: transparent;
+}
+
+.login-card > .rx-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.form-error {
+  margin: -3px 0 14px;
+  padding: 9px 11px;
+  border: 1px solid rgba(229, 72, 77, 0.35);
+  color: #e7afb1;
+  background: rgba(229, 72, 77, 0.06);
+  font-size: 0.875rem;
+}
+
+.demo-routes {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  color: #6e7680;
+  font-size: 0.8125rem;
+}
+
+.demo-routes button {
+  border: 0;
+  color: var(--mist);
+  background: transparent;
+  cursor: pointer;
+}
+
+.not-found {
+  display: grid;
+  min-height: 100vh;
+  max-width: 560px;
+  align-content: center;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.not-found h1 {
+  margin: 10px 0;
+}
+
+.not-found__body {
+  margin: 0 0 18px;
+  color: var(--mist);
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+
+.not-found__detail {
+  overflow-x: auto;
+  margin: 0 0 22px;
+  border: 1px solid rgba(58, 64, 73, 0.7);
+  border-radius: 6px;
+  padding: 12px 14px;
+  color: #f0a3a3;
+  background: rgba(229, 72, 77, 0.07);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: var(--text-label);
+  white-space: pre-wrap;
+}
+
+.not-found__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.not-found__link {
+  color: var(--tungsten);
+}
+
+@media (max-width: 1180px) {
+  .metric-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-needed-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 850px) {
+  .app-frame {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+
+  .sidebar > .wordmark {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .sidebar > .wordmark > span:not(.wordmark__mark),
+  .sidebar__collapse,
+  .workspace-switcher > div,
+  .workspace-switcher > svg,
+  .nav-label,
+  .nav-item span,
+  .nav-item em,
+  .capacity,
+  .user-row > div,
+  .user-row > svg {
+    display: none;
+  }
+
+  .workspace-switcher {
+    display: grid;
+    margin: 13px 9px;
+    padding: 8px;
+    place-items: center;
+  }
+
+  .nav-item {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    padding: 0;
+  }
+
+  .sidebar__footer {
+    display: grid;
+    place-items: center;
+    padding: 12px 0;
+  }
+
+  .topbar {
+    padding: 0 18px;
+  }
+
+  .screen {
+    padding: 32px 20px 60px;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .data-table__head {
+    display: none;
+  }
+
+  .data-table__row,
+  .clients-table .data-table__row {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .project-row {
+    grid-template-columns: 74px 1fr;
+  }
+
+  .project-progress,
+  .project-row > button {
+    grid-column: 2;
+  }
+
+  .client-bar {
+    grid-template-columns: 1fr auto;
+  }
+
+  .client-bar nav {
+    display: none;
+  }
+
+  .client-lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .login-screen {
+    grid-template-columns: 1fr;
+  }
+
+  .login-aside {
+    min-height: 46vh;
+    padding: 30px;
+  }
+
+  .login-aside__statement {
+    margin-top: 8vh;
+  }
+
+  .login-aside__statement h1 {
+    font-size: 2.8rem;
+  }
+
+  .login-panel {
+    min-height: 54vh;
+  }
+
+  .admin-frame {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-rail {
+    display: none;
+  }
+
+  .admin-main {
+    padding: 28px 20px;
+  }
+}
+
+@media (max-width: 580px) {
+  .app-frame {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    z-index: 20;
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 58px;
+    flex-direction: row;
+    border-top: 1px solid var(--ash);
+    border-right: 0;
+  }
+
+  .sidebar > .wordmark,
+  .workspace-switcher,
+  .sidebar__footer,
+  .nav-label {
+    display: none;
+  }
+
+  .sidebar__nav {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(6, 1fr);
+    padding: 4px;
+  }
+
+  .sidebar__nav .nav-item:nth-of-type(n + 7) {
+    display: none;
+  }
+
+  .nav-item {
+    min-height: 48px;
+  }
+
+  .topbar {
+    height: 58px;
+  }
+
+  .command-trigger {
+    width: 44px;
+  }
+
+  .command-trigger span,
+  .command-trigger kbd {
+    display: none;
+  }
+
+  .topbar__actions .rx-button {
+    padding: 0 11px;
+  }
+
+  .screen {
+    padding: 26px 15px 90px;
+  }
+
+  .screen-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-card {
+    grid-template-columns: 98px 1fr;
+  }
+
+  .review-arrow {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+  }
+
+  .project-row {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .project-date {
+    justify-content: start;
+    border-right: 0;
+  }
+
+  .project-progress,
+  .project-row > button {
+    grid-column: 1;
+  }
+
+  .client-main {
+    width: min(100% - 28px, 1120px);
+    padding-top: 42px;
+  }
+
+  .client-review-card {
+    grid-template-columns: 1fr;
+  }
+
+  .client-review-card__media {
+    min-height: 190px;
+    border-right: 0;
+    border-bottom: 1px solid var(--ash);
+  }
+
+  .client-section__heading {
+    align-items: start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .login-aside {
+    min-height: 390px;
+  }
+
+  .login-aside__statement p {
+    display: none;
+  }
+
+  .login-panel {
+    padding: 42px 22px;
+  }
+}

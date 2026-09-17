@@ -1,0 +1,213 @@
+- generic [active] [ref=f17e1]:
+  - generic [ref=f17e44]:
+    - complementary [ref=f17e45]:
+      - generic [ref=f17e46]:
+        - generic [ref=f17e47]: R
+        - generic [ref=f17e48]: RexOps
+        - button "Collapse sidebar" [expanded] [ref=f17e49] [cursor=pointer]
+      - generic [ref=f17e53]:
+        - img "T-Rex Media" [ref=f17e54]: TR
+        - generic [ref=f17e55]:
+          - strong [ref=f17e56]: T-Rex Media
+          - generic [ref=f17e57]: Agency workspace
+      - navigation "Agency navigation" [ref=f17e60]:
+        - generic [ref=f17e61]: Operate
+        - link "Dashboard" [ref=f17e62] [cursor=pointer]:
+          - /url: /agency/dashboard
+        - link "Clients" [ref=f17e67] [cursor=pointer]:
+          - /url: /agency/clients
+        - link "Projects" [ref=f17e73] [cursor=pointer]:
+          - /url: /agency/projects
+        - link "Work" [ref=f17e77] [cursor=pointer]:
+          - /url: /agency/work
+        - link "Review queue 6" [ref=f17e89] [cursor=pointer]:
+          - /url: /agency/review
+          - generic [ref=f17e93]: Review queue
+          - emphasis [ref=f17e94]: "6"
+        - link "Inbox 2" [ref=f17e95] [cursor=pointer]:
+          - /url: /agency/inbox
+          - generic [ref=f17e99]: Inbox
+          - emphasis [ref=f17e100]: "2"
+        - generic [ref=f17e101]: Manage
+        - link "Team" [ref=f17e102] [cursor=pointer]:
+          - /url: /agency/team
+        - link "Review pipelines" [ref=f17e109] [cursor=pointer]:
+          - /url: /agency/settings/pipelines
+        - link "Automation" [ref=f17e114] [cursor=pointer]:
+          - /url: /agency/settings
+      - generic [ref=f17e119]:
+        - generic [ref=f17e120]:
+          - generic [ref=f17e121]: Storage
+          - generic [ref=f17e122]: 1.6 GB / 100 GB
+        - button "Manas Rao — agency owner Manas Rao agency owner" [ref=f17e126] [cursor=pointer]:
+          - img "Manas Rao — agency owner" [ref=f17e127]: MR
+          - generic [ref=f17e128]:
+            - strong [ref=f17e129]: Manas Rao
+            - generic [ref=f17e130]: agency owner
+    - main [ref=f17e133]:
+      - generic [ref=f17e134]:
+        - button "Search anything K" [ref=f17e135] [cursor=pointer]:
+          - generic [ref=f17e139]: Search anything
+          - generic [ref=f17e140]: K
+        - generic [ref=f17e143]:
+          - link "2 unread notifications" [ref=f17e145] [cursor=pointer]:
+            - /url: /agency/inbox
+            - generic [ref=f17e149]: "2"
+          - button "Create new" [ref=f17e151] [cursor=pointer]
+      - generic [ref=f17e153]:
+        - generic [ref=f17e154]:
+          - generic [ref=f17e155]:
+            - text: Friday 21 August
+            - heading "Good morning, Manas." [level=1] [ref=f17e156]
+            - paragraph [ref=f17e157]: 6 items need a decision before the client sees them.
+          - generic [ref=f17e158]: Live
+        - region "Agency status overview" [ref=f17e160]:
+          - generic [ref=f17e161]:
+            - generic [ref=f17e162]: Active work
+            - strong [ref=f17e165]: "10"
+            - text: Across the visible slate
+          - generic [ref=f17e166]:
+            - generic [ref=f17e167]: Waiting on client
+            - strong [ref=f17e170]: "2"
+            - text: Client decision gate
+          - generic [ref=f17e171]:
+            - generic [ref=f17e172]: Revision rounds
+            - strong [ref=f17e175]: "1"
+            - text: Recorded decisions
+          - generic [ref=f17e176]:
+            - generic [ref=f17e177]: Avg. turnaround
+            - strong [ref=f17e180]: 60h
+            - text: Submit to approval
+          - generic [ref=f17e181]:
+            - generic [ref=f17e182]: On-time
+            - strong [ref=f17e185]: 75%
+            - text: 3 overdue
+        - generic [ref=f17e186]:
+          - generic [ref=f17e187]:
+            - generic [ref=f17e188]:
+              - generic [ref=f17e189]:
+                - text: Signal log
+                - heading "Recent activity" [level=2] [ref=f17e190]
+              - link "View all" [ref=f17e191] [cursor=pointer]:
+                - /url: /agency/inbox
+            - generic [ref=f17e195]:
+              - article [ref=f17e196]:
+                - generic [ref=f17e200]:
+                  - strong [ref=f17e201]: Priya left a note at 0:06
+                  - generic [ref=f17e202]: Priya Deshmukh
+                - time [ref=f17e206]: 8/20/2026, 3:02:09 PM
+              - article [ref=f17e207]:
+                - generic [ref=f17e212]:
+                  - strong [ref=f17e213]: Riya uploaded v2.1 — Colour pass
+                  - generic [ref=f17e214]: Riya Kapoor
+                - time [ref=f17e218]: 8/20/2026, 10:14:09 AM
+              - article [ref=f17e219]:
+                - generic [ref=f17e223]:
+                  - strong [ref=f17e224]: Arjun commented at 0:04
+                  - generic [ref=f17e225]: Arjun Mehta
+                - time [ref=f17e229]: 8/20/2026, 10:14:09 AM
+              - article [ref=f17e230]:
+                - generic [ref=f17e235]:
+                  - strong [ref=f17e236]: Sent to internal review
+                  - generic [ref=f17e237]: Neha Iyer
+                - time [ref=f17e241]: 8/20/2026, 10:14:09 AM
+              - article [ref=f17e242]:
+                - generic [ref=f17e247]:
+                  - strong [ref=f17e248]: Submitted to client review
+                  - generic [ref=f17e249]: Riya Kapoor
+                - time [ref=f17e253]: 8/20/2026, 10:14:09 AM
+              - article [ref=f17e254]:
+                - generic [ref=f17e259]:
+                  - strong [ref=f17e260]: Sara requested changes
+                  - generic [ref=f17e261]: Sara Fernandes
+                - time [ref=f17e265]: 8/19/2026, 10:14:09 AM
+              - article [ref=f17e266]:
+                - generic [ref=f17e271]:
+                  - strong [ref=f17e272]: Manas approved internally
+                  - generic [ref=f17e273]: Manas Rao
+                - time [ref=f17e277]: 8/19/2026, 10:14:09 AM
+              - article [ref=f17e278]:
+                - generic [ref=f17e283]:
+                  - strong [ref=f17e284]: Marked ready for internal review
+                  - generic [ref=f17e285]: Neha Iyer
+                - time [ref=f17e289]: 8/18/2026, 10:14:09 AM
+          - generic [ref=f17e290]:
+            - generic [ref=f17e291]:
+              - generic [ref=f17e292]:
+                - text: Your queue
+                - heading "Review before release" [level=2] [ref=f17e293]
+              - link "06" [ref=f17e294] [cursor=pointer]:
+                - /url: /agency/review
+            - article [ref=f17e295]:
+              - generic [ref=f17e301]:
+                - generic [ref=f17e302]: Ready for internal review
+                - heading "Spring Menu Static" [level=3] [ref=f17e304]
+                - paragraph [ref=f17e305]: Spring Menu Drop
+                - generic [ref=f17e306]: 1d overdue
+              - link "Open Spring Menu Static" [ref=f17e311] [cursor=pointer]:
+                - /url: /agency/deliverables/deliverable_menu_static
+            - article [ref=f17e315]:
+              - generic [ref=f17e321]:
+                - generic [ref=f17e322]: Internal review
+                - heading "Q3 Brand Board" [level=3] [ref=f17e324]
+                - paragraph [ref=f17e325]: Q3 Collection Launch
+                - generic [ref=f17e326]: due tomorrow
+              - link "Open Q3 Brand Board" [ref=f17e331] [cursor=pointer]:
+                - /url: /agency/deliverables/deliverable_brand_board
+            - article [ref=f17e335]:
+              - generic [ref=f17e339]:
+                - generic [ref=f17e340]: Waiting on client
+                - heading "Studio Launch Film" [level=3] [ref=f17e342]
+                - paragraph [ref=f17e343]: Nova Studio Launch
+                - generic [ref=f17e344]: due tomorrow
+              - link "Open Studio Launch Film" [ref=f17e349] [cursor=pointer]:
+                - /url: /agency/deliverables/deliverable_gym_launch
+            - article [ref=f17e353]:
+              - generic [ref=f17e357]:
+                - generic [ref=f17e358]: Changes requested
+                - heading "Holiday Teaser" [level=3] [ref=f17e360]
+                - paragraph [ref=f17e361]: Reels
+                - generic [ref=f17e362]: 1d overdue
+              - link "Open Holiday Teaser" [ref=f17e367] [cursor=pointer]:
+                - /url: /agency/deliverables/deliverable_holiday_teaser
+        - generic [ref=f17e371]:
+          - generic [ref=f17e373]:
+            - text: Portfolio
+            - heading "Client roll-up" [level=2] [ref=f17e374]
+          - table "Client roll-up" [ref=f17e375]:
+            - rowgroup [ref=f17e376]:
+              - row [ref=f17e377]:
+                - columnheader "Client" [ref=f17e378]
+                - columnheader "Active projects" [ref=f17e379]
+                - columnheader "In production" [ref=f17e380]
+                - columnheader "Waiting" [ref=f17e381]
+                - columnheader "Health" [ref=f17e382]
+            - rowgroup [ref=f17e383]:
+              - row [ref=f17e384]:
+                - rowheader "Imperial Living" [ref=f17e385]
+                - cell "4" [ref=f17e386]
+                - cell "6" [ref=f17e387]
+                - cell "1" [ref=f17e388]
+                - cell "WATCH" [ref=f17e389]
+              - row [ref=f17e392]:
+                - rowheader "Nova Fitness" [ref=f17e393]
+                - cell "2" [ref=f17e394]
+                - cell "3" [ref=f17e395]
+                - cell "1" [ref=f17e396]
+                - cell "WATCH" [ref=f17e397]
+              - row [ref=f17e400]:
+                - rowheader "Old Harbour Co" [ref=f17e401]
+                - cell "0" [ref=f17e402]
+                - cell "0" [ref=f17e403]
+                - cell "0" [ref=f17e404]
+                - cell "HEALTHY" [ref=f17e405]
+              - row [ref=f17e408]:
+                - rowheader "Latitude Coffee" [ref=f17e409]
+                - cell "1" [ref=f17e410]
+                - cell "1" [ref=f17e411]
+                - cell "0" [ref=f17e412]
+                - cell "WATCH" [ref=f17e413]
+  - generic [ref=f17e416]:
+    - link "Liveblocks" [ref=f17e417] [cursor=pointer]:
+      - /url: https://lblcks.io/badge
+    - button [ref=f17e426] [cursor=pointer]

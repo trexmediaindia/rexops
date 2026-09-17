@@ -1,0 +1,2 @@
+ALTER TABLE "pipeline_stage" ADD COLUMN "escalate_to_user_id" text;--> statement-breakpoint
+ALTER TABLE "pipeline_stage" ADD CONSTRAINT "pipeline_stage_escalate_to_user_id_user_id_fk" FOREIGN KEY ("escalate_to_user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;

@@ -1,0 +1,34 @@
+- main [ref=f20e3]:
+  - generic [ref=f20e4]:
+    - generic [ref=f20e5]:
+      - generic [ref=f20e6]: R
+      - generic [ref=f20e7]: RexOps
+    - generic [ref=f20e8]:
+      - text: Creative operations, calibrated
+      - heading "The clean handoff between making and approving." [level=1] [ref=f20e9]
+    - generic [ref=f20e10]:
+      - generic [ref=f20e11]:
+        - generic [ref=f20e12]: TAKE
+        - generic [ref=f20e13]: SCENE
+        - generic [ref=f20e14]: ROLL
+      - strong [ref=f20e15]: "02"
+      - generic [ref=f20e16]: 00:12:04:18
+    - generic [ref=f20e21]: RexOps / production system 0.1
+  - generic [ref=f20e23]:
+    - text: Secure workspace
+    - heading "Enter the review room." [level=2] [ref=f20e24]
+    - paragraph [ref=f20e25]: Your role decides what you can see. The boundary is enforced server-side.
+    - generic [ref=f20e26]:
+      - text: Work email
+      - textbox "Work email" [ref=f20e27]: manas@trex.test
+    - generic [ref=f20e28]:
+      - text: Password
+      - generic [ref=f20e29]:
+        - textbox "Password Show password" [ref=f20e30]: rexops-demo
+        - button "Show password" [ref=f20e31]
+    - button "Sign in" [ref=f20e35] [cursor=pointer]
+    - generic [ref=f20e38]:
+      - generic [ref=f20e39]: Preview shells
+      - button "Agency" [ref=f20e40] [cursor=pointer]
+      - button "Client" [ref=f20e41] [cursor=pointer]
+      - button "Root" [ref=f20e42] [cursor=pointer]

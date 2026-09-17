@@ -1,0 +1,6 @@
+# {{pascalCase name}} schema activation
+
+Do not create a parallel table by default. Activate the canonical additive table already defined in
+`packages/db/src/schema` and documented in `docs/02-domain-model.md`.
+
+Every tenant-owned row must carry `agencyId`. Every object lookup must return 404 for cross-tenant guesses.

@@ -1,0 +1,39 @@
+{
+  "name": "@rexops/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "check": "tsc --noEmit",
+    "test": "bun test --pass-with-no-tests"
+  },
+  "dependencies": {
+    "@annotorious/react": "^3.8.6",
+    "@elysiajs/eden": "^1.4.5",
+    "@liveblocks/client": "^3.14.0",
+    "@liveblocks/react": "^3.14.0",
+    "@rexops/api": "workspace:*",
+    "@rexops/ui": "workspace:*",
+    "@tanstack/react-query": "^5.90.17",
+    "@tanstack/react-router": "^1.144.1",
+    "better-auth": "^1.6.11",
+    "konva": "^10.3.0",
+    "lucide-react": "^0.562.0",
+    "pdfjs-dist": "^6.0.227",
+    "react": "^19.2.3",
+    "react-compare-slider": "^4.0.0",
+    "react-dom": "^19.2.3",
+    "react-konva": "^19.2.5",
+    "video.js": "^8.23.8",
+    "wavesurfer.js": "^7.12.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  }
+}

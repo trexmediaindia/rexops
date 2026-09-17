@@ -1,0 +1,5 @@
+[test]
+# Checks the database is reachable and seeded before any test file runs, so a
+# misconfigured environment reports one actionable error rather than one raw
+# driver stack trace per test.
+preload = ["./src/test/preflight.ts"]

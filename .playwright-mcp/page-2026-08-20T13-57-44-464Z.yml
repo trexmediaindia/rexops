@@ -1,0 +1,140 @@
+- generic [ref=f3e44]:
+  - complementary [ref=f3e45]:
+    - generic [ref=f3e46]:
+      - generic [ref=f3e47]: R
+      - generic [ref=f3e48]: RexOps
+      - button "Collapse sidebar" [ref=f3e49] [cursor=pointer]
+    - generic [ref=f3e53]:
+      - img "T-Rex Media" [ref=f3e54]: TR
+      - generic [ref=f3e55]:
+        - strong [ref=f3e56]: T-Rex Media
+        - generic [ref=f3e57]: Agency workspace
+    - navigation "Agency navigation" [ref=f3e60]:
+      - generic [ref=f3e61]: Operate
+      - link "Dashboard" [ref=f3e62] [cursor=pointer]:
+        - /url: /agency/dashboard
+      - link "Clients" [ref=f3e67] [cursor=pointer]:
+        - /url: /agency/clients
+      - link "Projects" [ref=f3e73] [cursor=pointer]:
+        - /url: /agency/projects
+      - link "Work" [ref=f3e77] [cursor=pointer]:
+        - /url: /agency/work
+      - link "Review queue 6" [ref=f3e89] [cursor=pointer]:
+        - /url: /agency/review
+        - generic [ref=f3e93]: Review queue
+        - emphasis [ref=f3e94]: "6"
+      - link "Inbox 3" [ref=f3e95] [cursor=pointer]:
+        - /url: /agency/inbox
+        - generic [ref=f3e99]: Inbox
+        - emphasis [ref=f3e100]: "3"
+      - generic [ref=f3e101]: Manage
+      - link "Team" [ref=f3e102] [cursor=pointer]:
+        - /url: /agency/team
+      - link "Review pipelines" [ref=f3e109] [cursor=pointer]:
+        - /url: /agency/settings/pipelines
+      - link "Automation" [ref=f3e114] [cursor=pointer]:
+        - /url: /agency/settings
+    - generic [ref=f3e119]:
+      - generic [ref=f3e120]:
+        - generic [ref=f3e121]: Storage
+        - generic [ref=f3e122]: 18.4 / 100 GB
+      - generic [ref=f3e125]:
+        - img "Manas — Agency owner" [ref=f3e126]: MA
+        - generic [ref=f3e127]:
+          - strong [ref=f3e128]: Manas
+          - generic [ref=f3e129]: Agency owner
+  - main [ref=f3e132]:
+    - generic [ref=f3e133]:
+      - button "Search anything K" [ref=f3e134] [cursor=pointer]:
+        - generic [ref=f3e138]: Search anything
+        - generic [ref=f3e139]: K
+      - generic [ref=f3e142]:
+        - generic [ref=f3e143]:
+          - generic [ref=f3e144]: Fallback
+          - generic [ref=f3e145]: "1"
+        - link "0 unread notifications" [ref=f3e147] [cursor=pointer]:
+          - /url: /agency/inbox
+        - button "Create new" [ref=f3e151] [cursor=pointer]
+    - generic [ref=f3e152]:
+      - generic [ref=f3e153]:
+        - generic [ref=f3e154]:
+          - text: Monday / 22 June
+          - heading "Good evening, Manas." [level=1] [ref=f3e155]
+          - paragraph [ref=f3e156]: The queue is moving. Three items need your decision before the client sees them.
+        - generic [ref=f3e157]: Live
+      - region "Agency status overview" [ref=f3e159]:
+        - generic [ref=f3e160]:
+          - generic [ref=f3e161]: Active work
+          - strong [ref=f3e164]: "1"
+          - text: Across the visible slate
+        - generic [ref=f3e165]:
+          - generic [ref=f3e166]: Waiting on client
+          - strong [ref=f3e169]: "0"
+          - text: Client decision gate
+        - generic [ref=f3e170]:
+          - generic [ref=f3e171]: Revision rounds
+          - strong [ref=f3e174]: "0"
+          - text: Recorded decisions
+        - generic [ref=f3e175]:
+          - generic [ref=f3e176]: Avg. turnaround
+          - strong [ref=f3e179]: 0h
+          - text: Submit to approval
+        - generic [ref=f3e180]:
+          - generic [ref=f3e181]: On-time
+          - strong [ref=f3e184]: 100%
+          - text: 0 overdue
+      - generic [ref=f3e185]:
+        - generic [ref=f3e186]:
+          - generic [ref=f3e187]:
+            - generic [ref=f3e188]:
+              - text: Signal log
+              - heading "Recent activity" [level=2] [ref=f3e189]
+            - button "View all" [ref=f3e190] [cursor=pointer]
+          - paragraph [ref=f3e195]: No activity recorded yet.
+        - generic [ref=f3e196]:
+          - generic [ref=f3e197]:
+            - generic [ref=f3e198]:
+              - text: Your queue
+              - heading "Review before release" [level=2] [ref=f3e199]
+            - generic [ref=f3e200]: "03"
+          - article [ref=f3e201]:
+            - generic [ref=f3e202]:
+              - generic [ref=f3e203]: v2
+              - generic [ref=f3e206]: 00:00:34
+            - generic [ref=f3e207]:
+              - generic [ref=f3e208]: Internal review
+              - heading "Beach Vibe Reel" [level=3] [ref=f3e210]
+              - paragraph [ref=f3e211]: June Content Retainer · Imperial Living
+              - generic [ref=f3e212]:
+                - generic [ref=f3e213]: 4 comments
+                - generic [ref=f3e216]: due today
+            - link "Open Beach Vibe Reel" [ref=f3e220] [cursor=pointer]:
+              - /url: /agency/deliverables/deliverable_beach_vibe
+          - article [ref=f3e224]:
+            - generic [ref=f3e225]:
+              - generic [ref=f3e226]: v4
+              - generic [ref=f3e227]: 1080 × 1350
+            - generic [ref=f3e228]:
+              - generic [ref=f3e229]: Internal review
+              - heading "Launch Static 04" [level=3] [ref=f3e231]
+              - paragraph [ref=f3e232]: Monsoon Campaign · Northstar
+            - button "Open Launch Static 04" [ref=f3e233] [cursor=pointer]
+      - generic [ref=f3e237]:
+        - generic [ref=f3e239]:
+          - text: Portfolio
+          - heading "Client roll-up" [level=2] [ref=f3e240]
+        - table "Client roll-up" [ref=f3e241]:
+          - rowgroup [ref=f3e242]:
+            - row [ref=f3e243]:
+              - columnheader "Client" [ref=f3e244]
+              - columnheader "Active projects" [ref=f3e245]
+              - columnheader "In production" [ref=f3e246]
+              - columnheader "Waiting" [ref=f3e247]
+              - columnheader "Health" [ref=f3e248]
+          - rowgroup [ref=f3e249]:
+            - row [ref=f3e250]:
+              - rowheader "Imperial Living" [ref=f3e251]
+              - cell "—" [ref=f3e252]
+              - cell "1" [ref=f3e253]
+              - cell "0" [ref=f3e254]
+              - cell "HEALTHY" [ref=f3e255]

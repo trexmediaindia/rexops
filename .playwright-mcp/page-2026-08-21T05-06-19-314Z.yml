@@ -1,0 +1,9 @@
+- main [ref=f21e4]:
+  - generic [ref=f21e5]:
+    - generic [ref=f21e6]:
+      - text: Platform control
+      - heading "Agencies" [level=1] [ref=f21e7]
+      - paragraph [ref=f21e8]: Tenant provisioning and operational oversight. Every cross-tenant read is audited.
+    - button "Provision agency" [ref=f21e9] [cursor=pointer]
+  - generic [ref=f21e11]: Root context · writes are explicit and logged
+  - generic [ref=f21e15]: Loading tenants…

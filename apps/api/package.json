@@ -1,0 +1,36 @@
+{
+  "name": "@rexops/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/app.ts"
+  },
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "check": "tsc --noEmit",
+    "test": "bun --env-file=../../.env.test --env-file=../../.env.test.local test"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.1",
+    "@elysiajs/eden": "^1.4.5",
+    "@elysiajs/openapi": "^1.4.14",
+    "@aws-sdk/client-s3": "^3.965.0",
+    "@aws-sdk/s3-request-presigner": "^3.965.0",
+    "@liveblocks/node": "^3.14.0",
+    "@paralleldrive/cuid2": "^2.3.1",
+    "@rexops/auth": "workspace:*",
+    "@rexops/config": "workspace:*",
+    "@rexops/core": "workspace:*",
+    "@rexops/db": "workspace:*",
+    "@rexops/validators": "workspace:*",
+    "better-auth": "^1.6.11",
+    "drizzle-orm": "^0.45.1",
+    "elysia": "^1.4.21",
+    "pino": "^10.3.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

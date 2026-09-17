@@ -1,0 +1,1316 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap");
+
+:root {
+  color-scheme: dark;
+  --ink: #0e0f12;
+  --graphite: #16181d;
+  --slate: #20242b;
+  --ash: #3a4049;
+  --mist: #9aa2ad;
+  --paper: #e7eaef;
+  --tungsten: #f2a341;
+  --tungsten-press: #d8882a;
+  --blue: #5b8def;
+  --violet: #8b7cf0;
+  --teal: #2fb6a8;
+  --orange: #e5733b;
+  --green: #3fb66b;
+  --error: #e5484d;
+
+  /* Type scale. The app used to run on a 8.5px–12px range that nobody could read;
+     these are the only sizes anything should use now. Named by role, not by number,
+     so a screen picks the rung that matches the job. */
+  --text-micro: 0.6875rem; /* 11px — eyebrows, column heads, tabular meta */
+  --text-meta: 0.75rem; /* 12px — timestamps, counters, captions */
+  --text-label: 0.8125rem; /* 13px — field labels, chips, table cells */
+  --text-body: 0.875rem; /* 14px — default running copy */
+  --text-body-lg: 0.9375rem; /* 15px — emphasised body, card titles */
+  --text-lead: 1rem; /* 16px — panel headings */
+
+  /* Form controls. One height and one radius so a row of mixed controls lines up. */
+  --control-height: 40px;
+  --control-height-sm: 32px;
+  --control-radius: 6px;
+  --control-bg: #14161a;
+  --control-bg-hover: #191c21;
+  --control-border: #3a4049;
+  --control-border-hover: #4d5560;
+
+  --surface-popover: #1c2026;
+
+  font-family: "IBM Plex Sans", sans-serif;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 16px;
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 66% -20%, rgba(242, 163, 65, 0.055), transparent 30rem),
+    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px), var(--ink);
+  background-size:
+    auto,
+    100% 4px,
+    auto;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/*
+ * Neutral button reset.
+ *
+ * Every button in this app is dressed by the component or panel that owns it. Any
+ * that a screen forgot fell through to the UA stylesheet and painted as a light-grey
+ * ButtonFace rectangle with an `outset` border — system chrome sitting in the middle
+ * of a dark UI ("Reply", "Enable", the channel switcher rows). Resetting to
+ * transparent means a missed button degrades to plain text instead of looking like a
+ * rendering fault, and it is the state every existing parent rule already assumes.
+ *
+ * Element specificity (0,0,1), so a single class still wins.
+ */
+button {
+  appearance: none;
+  border: 0;
+  border-radius: var(--control-radius);
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/*
+ * The default action button. Reach for this whenever a button needs to look like a
+ * button and there is no panel style already covering it.
+ */
+.rx-action {
+  display: inline-flex;
+  min-height: var(--control-height-sm);
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+  padding: 0 12px;
+  color: var(--mist);
+  background: var(--control-bg);
+  font-size: var(--text-label);
+  white-space: nowrap;
+  transition:
+    border-color 140ms ease,
+    color 140ms ease,
+    background 140ms ease;
+}
+
+.rx-action:hover:not(:disabled) {
+  border-color: var(--control-border-hover);
+  color: var(--paper);
+  background: var(--control-bg-hover);
+}
+
+.rx-action:disabled {
+  opacity: 0.45;
+}
+
+.rx-action--accent {
+  border-color: #a66d2d;
+  color: var(--tungsten);
+  background: rgba(242, 163, 65, 0.1);
+}
+
+.rx-action--accent:hover:not(:disabled) {
+  border-color: var(--tungsten);
+  color: var(--tungsten);
+  background: rgba(242, 163, 65, 0.16);
+}
+
+.rx-action--danger:hover:not(:disabled) {
+  border-color: var(--error);
+  color: #f0a3a3;
+  background: rgba(229, 72, 77, 0.1);
+}
+
+/* ---------------------------------------------------------------------------
+   Form control baseline.
+
+   Every text field, number field, date field and <select> in the app inherits
+   this. Before it existed, any control a screen forgot to style individually
+   fell back to the OS widget — white boxes and system chrome dropped straight
+   into a dark UI (the pipeline editor was entirely native). Screens may still
+   override, but nothing renders as raw browser chrome by default any more.
+   Checkboxes, radios, ranges, colours and file pickers are excluded: they are
+   not box-shaped and `accent-color` is the right lever for them.
+--------------------------------------------------------------------------- */
+
+input:where(
+  :not(
+    [type="checkbox"],
+    [type="radio"],
+    [type="range"],
+    [type="color"],
+    [type="file"],
+    [type="submit"],
+    [type="button"]
+  )
+),
+select,
+textarea {
+  /* No `width: 100%` — these sit in grid/flex labels that already stretch them,
+     and forcing it would blow out the inline controls that live in toolbars. */
+  max-width: 100%;
+  min-height: var(--control-height);
+  padding: 0 11px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+  color: var(--paper);
+  background: var(--control-bg);
+  font-size: var(--text-body);
+  transition:
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+textarea {
+  padding: 10px 11px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+input:where(
+  :not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"])
+):hover,
+select:hover,
+textarea:hover {
+  border-color: var(--control-border-hover);
+  background: var(--control-bg-hover);
+}
+
+input:where(
+  :not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"])
+):focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border-color: var(--tungsten);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tungsten) 18%, transparent);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6d7682;
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* A native <select> keeps its OS popup, but at least the closed state matches
+   the rest of the system. `RxSelect` is the styled replacement — see components.tsx. */
+select {
+  appearance: none;
+  padding-right: 32px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--mist) 50%),
+    linear-gradient(135deg, var(--mist) 50%, transparent 50%);
+  background-position:
+    calc(100% - 17px) calc(50% + 1px),
+    calc(100% - 12px) calc(50% + 1px);
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--tungsten);
+  cursor: pointer;
+}
+
+/* The native date/time widgets keep their own picker; make the trigger legible
+   on a dark ground instead of leaving it as a near-invisible grey glyph. */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  opacity: 0.55;
+  cursor: pointer;
+  filter: invert(1);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--tungsten);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3,
+.rx-display {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.rx-mono {
+  font-family: "IBM Plex Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Also worn by `<a>` (the "Open review room" link, among others). A bare anchor with
+ * this class was rendering as underlined inline text in the middle of a button row,
+ * so the layout properties live here rather than being assumed from `<button>`.
+ */
+.rx-button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--control-radius);
+  padding: 0 16px;
+  font-size: var(--text-body);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.rx-button:active {
+  transform: translateY(1px);
+}
+
+.rx-button--primary {
+  color: var(--ink);
+  background: var(--tungsten);
+}
+
+.rx-button--primary:hover {
+  background: #f7b45f;
+}
+
+.rx-button--secondary {
+  color: var(--paper);
+  background: var(--slate);
+  border-color: var(--ash);
+}
+
+.rx-button--ghost {
+  color: var(--mist);
+  background: transparent;
+}
+
+.rx-button--danger {
+  color: #fff;
+  background: var(--error);
+}
+
+.rx-card {
+  background: rgba(22, 24, 29, 0.94);
+  border: 1px solid rgba(58, 64, 73, 0.72);
+  border-radius: 8px;
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    0 8px 24px -12px rgba(0, 0, 0, 0.5);
+}
+
+.rx-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--mist);
+  font-size: var(--text-label);
+  font-weight: 500;
+  /* In a narrow cell the label used to wrap under the dot, leaving the dot stranded
+     on its own line above the text. */
+  white-space: nowrap;
+}
+
+.rx-status__dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mist);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mist) 12%, transparent);
+}
+
+.rx-status[data-status*="progress"] .rx-status__dot {
+  background: var(--blue);
+}
+
+.rx-status[data-status*="internal_review"] .rx-status__dot {
+  background: var(--violet);
+}
+
+.rx-status[data-status*="client_review"] .rx-status__dot {
+  background: var(--teal);
+}
+
+.rx-status[data-status*="revision"] .rx-status__dot {
+  background: var(--orange);
+}
+
+.rx-status[data-status*="approved"] .rx-status__dot,
+.rx-status[data-status*="delivered"] .rx-status__dot,
+.rx-status[data-status="active"] .rx-status__dot {
+  background: var(--green);
+}
+
+/* Client health, from the portfolio roll-up. Without these the dot fell back to the
+   neutral grey, so a client at risk looked identical to a healthy one. */
+.rx-status[data-status="healthy"] .rx-status__dot {
+  background: var(--green);
+}
+
+.rx-status[data-status="watch"] .rx-status__dot {
+  background: var(--tungsten);
+}
+
+.rx-status[data-status="at_risk"] .rx-status__dot {
+  background: var(--error);
+}
+
+/* Team roster chips carry a role rather than a workflow status. */
+.rx-status[data-status="owner"] .rx-status__dot {
+  background: var(--tungsten);
+}
+
+.rx-status[data-status="admin"] .rx-status__dot {
+  background: var(--violet);
+}
+
+.rx-status[data-status="suspended"] .rx-status__dot {
+  background: var(--error);
+}
+
+.rx-avatar {
+  display: inline-grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--ash);
+  border-radius: 50%;
+  background: var(--slate);
+  color: var(--paper);
+  font-family: "IBM Plex Mono", monospace;
+  /* Two initials inside a 32px circle — the body rung overflows it. */
+  font-size: var(--text-meta);
+}
+
+.rx-eyebrow {
+  color: var(--tungsten);
+  font-family: "IBM Plex Mono", monospace;
+  /* Wide tracking makes an eyebrow read a rung larger than it is set. */
+  font-size: var(--text-meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.rx-empty {
+  display: grid;
+  max-width: 560px;
+  justify-items: start;
+  padding: 42px;
+  border: 1px dashed var(--ash);
+  border-radius: 8px;
+  background: rgba(22, 24, 29, 0.54);
+}
+
+.rx-empty__icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid rgba(58, 64, 73, 0.9);
+  border-radius: 9px;
+  margin-bottom: 14px;
+  color: var(--mist);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rx-empty h2 {
+  margin: 12px 0 8px;
+  font-size: 1.15rem;
+}
+
+.rx-empty p {
+  margin: 0;
+  color: var(--mist);
+  line-height: 1.6;
+}
+
+/*
+ * An empty state dropped straight into a `.panel` used to draw its own dashed card
+ * inside the panel's card, at a display type size, pinned to the left. Inside a
+ * panel it should read as the panel's own body: no second border, centred, and set
+ * a rung down.
+ */
+.rx-empty[data-tone="inset"],
+.panel > .rx-empty {
+  display: grid;
+  max-width: none;
+  justify-items: center;
+  padding: 44px 24px;
+  border: 0;
+  background: transparent;
+  text-align: center;
+}
+
+.rx-empty[data-tone="inset"] h2,
+.panel > .rx-empty h2 {
+  margin: 0 0 6px;
+  font-size: var(--text-lead);
+  font-weight: 500;
+}
+
+.rx-empty[data-tone="inset"] p,
+.panel > .rx-empty p {
+  max-width: 40ch;
+  font-size: var(--text-body);
+}
+
+.rx-metric {
+  min-height: 156px;
+  padding: 18px;
+}
+
+.rx-metric__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--mist);
+  font-size: 0.9375rem;
+}
+
+.rx-metric__signal {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mist);
+}
+
+.rx-metric[data-tone="blue"] .rx-metric__signal {
+  background: var(--blue);
+}
+
+.rx-metric[data-tone="violet"] .rx-metric__signal {
+  background: var(--violet);
+}
+
+.rx-metric[data-tone="teal"] .rx-metric__signal {
+  background: var(--teal);
+}
+
+.rx-metric[data-tone="orange"] .rx-metric__signal {
+  background: var(--orange);
+}
+
+.rx-metric[data-tone="green"] .rx-metric__signal {
+  background: var(--green);
+}
+
+.rx-metric strong {
+  display: block;
+  margin: 18px 0 9px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 2.1rem;
+  font-weight: 500;
+  letter-spacing: -0.06em;
+}
+
+.rx-metric small {
+  color: var(--mist);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Popover layer — shared by RxSelect and DatePicker.
+
+   Portalled to <body> and fixed-positioned, so it escapes the scrollable dialog
+   bodies and clipped panels its triggers live in.
+--------------------------------------------------------------------------- */
+
+.rx-popover {
+  position: fixed;
+  z-index: 120;
+  overflow: auto;
+  border: 1px solid #4a525e;
+  border-radius: 8px;
+  padding: 5px;
+  background: var(--surface-popover);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 18px 48px -12px rgba(0, 0, 0, 0.7);
+  animation: rx-popover-in 110ms ease-out;
+}
+
+@keyframes rx-popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+}
+
+/* Select ------------------------------------------------------------------ */
+
+.rx-select {
+  display: flex;
+  width: 100%;
+  min-height: var(--control-height);
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+  padding: 0 11px;
+  color: var(--paper);
+  background: var(--control-bg);
+  cursor: pointer;
+  font-size: var(--text-body);
+  text-align: left;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.rx-select[data-size="sm"] {
+  min-height: var(--control-height-sm);
+  padding: 0 9px;
+  font-size: var(--text-label);
+}
+
+.rx-select > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rx-select > svg {
+  flex: 0 0 auto;
+  color: var(--mist);
+  transition: transform 140ms ease;
+}
+
+.rx-select[aria-expanded="true"] > svg {
+  transform: rotate(180deg);
+}
+
+.rx-select:hover:not(:disabled) {
+  border-color: var(--control-border-hover);
+  background: var(--control-bg-hover);
+}
+
+.rx-select[aria-expanded="true"] {
+  border-color: var(--tungsten);
+}
+
+.rx-select[data-placeholder] > span {
+  color: #6d7682;
+}
+
+.rx-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rx-select__menu [role="option"] {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-radius: 5px;
+  padding: 0 9px;
+  color: var(--paper);
+  cursor: pointer;
+  font-size: var(--text-body);
+}
+
+.rx-select__menu [role="option"] > span {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.rx-select__menu [role="option"] em {
+  color: var(--mist);
+  font-size: var(--text-micro);
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rx-select__menu [role="option"][data-active] {
+  background: rgba(242, 163, 65, 0.14);
+}
+
+.rx-select__menu [role="option"][aria-selected="true"] {
+  color: var(--tungsten);
+}
+
+.rx-select__menu [role="option"][aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Date picker ------------------------------------------------------------- */
+
+.rx-datefield {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.rx-datefield__trigger {
+  display: flex;
+  width: 100%;
+  min-height: var(--control-height);
+  align-items: center;
+  gap: 9px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+  padding: 0 11px;
+  color: var(--paper);
+  background: var(--control-bg);
+  cursor: pointer;
+  font-size: var(--text-body);
+  text-align: left;
+}
+
+.rx-datefield__trigger > svg {
+  flex: 0 0 auto;
+  color: var(--mist);
+}
+
+.rx-datefield__trigger:hover {
+  border-color: var(--control-border-hover);
+  background: var(--control-bg-hover);
+}
+
+.rx-datefield__trigger[aria-expanded="true"] {
+  border-color: var(--tungsten);
+}
+
+.rx-datefield__trigger[data-placeholder] > span {
+  color: #6d7682;
+}
+
+.rx-datefield__clear {
+  position: absolute;
+  right: 8px;
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  color: var(--mist);
+  background: transparent;
+  cursor: pointer;
+}
+
+.rx-datefield__clear:hover {
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.rx-calendar {
+  padding: 12px;
+}
+
+.rx-calendar > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.rx-calendar > header strong {
+  font-size: var(--text-body);
+  font-weight: 500;
+}
+
+.rx-calendar > header button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid var(--control-border);
+  border-radius: 5px;
+  color: var(--mist);
+  background: transparent;
+  cursor: pointer;
+}
+
+.rx-calendar > header button:hover {
+  border-color: var(--control-border-hover);
+  color: var(--paper);
+}
+
+.rx-calendar__weekdays,
+.rx-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.rx-calendar__weekdays {
+  margin-bottom: 4px;
+  color: var(--mist);
+  font-size: var(--text-micro);
+  text-align: center;
+}
+
+.rx-calendar__grid button {
+  height: 32px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--paper);
+  background: transparent;
+  cursor: pointer;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: var(--text-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+.rx-calendar__grid button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.rx-calendar__grid button[data-today] {
+  box-shadow: inset 0 0 0 1px var(--ash);
+}
+
+.rx-calendar__grid button[data-selected] {
+  color: var(--ink);
+  background: var(--tungsten);
+  font-weight: 600;
+}
+
+.rx-calendar__grid button:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+
+.rx-calendar > footer {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  border-top: 1px solid rgba(58, 64, 73, 0.6);
+  padding-top: 10px;
+}
+
+.rx-calendar > footer button {
+  flex: 1;
+  height: 28px;
+  border: 1px solid var(--control-border);
+  border-radius: 5px;
+  color: var(--mist);
+  background: transparent;
+  cursor: pointer;
+  font-size: var(--text-micro);
+}
+
+.rx-calendar > footer button:hover {
+  border-color: var(--control-border-hover);
+  color: var(--paper);
+}
+
+/* ---------------------------------------------------------------------------
+ * Explanation layer
+ *
+ * Help tips, callouts, step guides, switches and save indicators. These exist so
+ * that a control can carry its own explanation instead of relying on the user
+ * already knowing what the product does.
+ * --------------------------------------------------------------------------- */
+
+.rx-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.rx-helptip__trigger {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--mist);
+  cursor: pointer;
+  vertical-align: -3px;
+  transition:
+    color 140ms ease,
+    background 140ms ease;
+}
+
+.rx-helptip__trigger:hover,
+.rx-helptip__trigger[aria-expanded="true"] {
+  color: var(--tungsten);
+  background: rgba(242, 163, 65, 0.12);
+}
+
+.rx-popover.rx-helptip {
+  max-width: 320px;
+  padding: 0.75rem 0.85rem;
+}
+
+.rx-helptip strong {
+  display: block;
+  font-size: var(--text-label);
+  color: var(--paper);
+  margin-bottom: 0.3rem;
+}
+
+.rx-helptip__body {
+  font-size: var(--text-meta);
+  line-height: 1.55;
+  color: var(--mist);
+}
+
+.rx-helptip__body p {
+  margin: 0 0 0.45rem;
+}
+
+.rx-helptip__body p:last-child {
+  margin-bottom: 0;
+}
+
+.rx-callout {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.8rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--ash);
+  background: var(--graphite);
+  color: var(--paper);
+}
+
+.rx-callout > svg {
+  flex: none;
+  margin-top: 1px;
+  color: var(--mist);
+}
+
+.rx-callout[data-tone="info"] {
+  border-color: rgba(91, 141, 239, 0.34);
+  background: rgba(91, 141, 239, 0.08);
+}
+.rx-callout[data-tone="info"] > svg {
+  color: var(--blue);
+}
+
+.rx-callout[data-tone="warning"] {
+  border-color: rgba(229, 115, 59, 0.36);
+  background: rgba(229, 115, 59, 0.08);
+}
+.rx-callout[data-tone="warning"] > svg {
+  color: var(--orange);
+}
+
+.rx-callout[data-tone="danger"] {
+  border-color: rgba(229, 72, 77, 0.4);
+  background: rgba(229, 72, 77, 0.08);
+}
+.rx-callout[data-tone="danger"] > svg {
+  color: var(--error);
+}
+
+.rx-callout[data-tone="success"] {
+  border-color: rgba(63, 182, 107, 0.34);
+  background: rgba(63, 182, 107, 0.08);
+}
+.rx-callout[data-tone="success"] > svg {
+  color: var(--green);
+}
+
+.rx-callout__text {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-body);
+  line-height: 1.55;
+}
+
+.rx-callout__text strong {
+  display: block;
+  font-size: var(--text-body);
+  margin-bottom: 0.15rem;
+}
+
+.rx-callout__text > div {
+  color: var(--mist);
+}
+
+.rx-callout__action {
+  margin-top: 0.6rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.rx-callout__close {
+  flex: none;
+  border: 0;
+  background: transparent;
+  color: var(--mist);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.rx-callout__close:hover {
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.rx-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.rx-steps li {
+  display: flex;
+  gap: 0.85rem;
+  padding: 0.85rem 0.25rem;
+  border-top: 1px solid rgba(58, 64, 73, 0.5);
+}
+
+.rx-steps li:first-child {
+  border-top: 0;
+}
+
+.rx-steps__marker {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: var(--text-meta);
+  border: 1px solid var(--ash);
+  color: var(--mist);
+  background: var(--control-bg);
+}
+
+.rx-steps li[data-status="done"] .rx-steps__marker {
+  border-color: rgba(63, 182, 107, 0.5);
+  background: rgba(63, 182, 107, 0.14);
+  color: var(--green);
+}
+
+.rx-steps li[data-status="current"] .rx-steps__marker {
+  border-color: var(--tungsten);
+  background: rgba(242, 163, 65, 0.16);
+  color: var(--tungsten);
+}
+
+.rx-steps__body {
+  min-width: 0;
+}
+
+.rx-steps__body strong {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  font-size: var(--text-body-lg);
+  color: var(--paper);
+}
+
+.rx-steps li[data-status="todo"] .rx-steps__body strong,
+.rx-steps li[data-status="done"] .rx-steps__body strong {
+  color: var(--mist);
+}
+
+.rx-steps__state {
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--ash);
+  color: var(--mist);
+}
+
+.rx-steps li[data-status="current"] .rx-steps__state {
+  border-color: rgba(242, 163, 65, 0.45);
+  color: var(--tungsten);
+}
+
+.rx-steps li[data-status="done"] .rx-steps__state {
+  border-color: rgba(63, 182, 107, 0.4);
+  color: var(--green);
+}
+
+.rx-steps__body p {
+  margin: 0.25rem 0 0;
+  font-size: var(--text-body);
+  color: var(--mist);
+  max-width: 62ch;
+}
+
+.rx-steps__body small {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: var(--text-meta);
+  color: var(--mist);
+  opacity: 0.85;
+}
+
+.rx-steps__action {
+  margin-top: 0.65rem;
+}
+
+.rx-toggle {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0.9rem 0;
+  border-top: 1px solid rgba(58, 64, 73, 0.45);
+}
+
+.rx-toggle:first-child {
+  border-top: 0;
+}
+
+.rx-toggle[data-disabled="true"] {
+  opacity: 0.5;
+}
+
+.rx-toggle__text label {
+  display: block;
+  font-size: var(--text-body-lg);
+  color: var(--paper);
+}
+
+.rx-toggle__text p {
+  margin: 0.2rem 0 0;
+  font-size: var(--text-body);
+  color: var(--mist);
+  max-width: 60ch;
+}
+
+.rx-toggle__text small {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: var(--text-meta);
+  color: var(--tungsten);
+}
+
+.rx-switch {
+  flex: none;
+  position: relative;
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid var(--control-border);
+  background: var(--control-bg);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.rx-switch[data-on="true"] {
+  background: rgba(242, 163, 65, 0.28);
+  border-color: var(--tungsten);
+}
+
+.rx-switch span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--mist);
+  transition:
+    transform 160ms ease,
+    background 160ms ease;
+}
+
+.rx-switch[data-on="true"] span {
+  transform: translateX(18px);
+  background: var(--tungsten);
+}
+
+.rx-switch:disabled {
+  cursor: not-allowed;
+}
+
+.rx-segmented {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.rx-segmented__label {
+  font-size: var(--text-meta);
+  color: var(--mist);
+}
+
+.rx-segmented > div {
+  display: inline-flex;
+  padding: 2px;
+  gap: 2px;
+  border-radius: var(--control-radius);
+  border: 1px solid var(--control-border);
+  background: var(--control-bg);
+}
+
+.rx-segmented button {
+  border: 0;
+  background: transparent;
+  color: var(--mist);
+  font-size: var(--text-label);
+  padding: 0 0.7rem;
+  height: 26px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.rx-segmented button:hover {
+  color: var(--paper);
+}
+
+.rx-segmented button[data-active="true"] {
+  background: var(--slate);
+  color: var(--paper);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.rx-skeleton {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.35rem 0;
+}
+
+.rx-skeleton i {
+  display: block;
+  height: 11px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.09),
+    rgba(255, 255, 255, 0.045)
+  );
+  background-size: 280% 100%;
+  animation: rx-skeleton-sweep 1.5s ease-in-out infinite;
+}
+
+@keyframes rx-skeleton-sweep {
+  from {
+    background-position: 180% 0;
+  }
+  to {
+    background-position: -80% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rx-skeleton i {
+    animation: none;
+  }
+}
+
+.rx-savestate {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--text-meta);
+  color: var(--mist);
+}
+
+.rx-savestate[data-state="saved"] {
+  color: var(--green);
+}
+
+.rx-savestate[data-state="error"] {
+  color: var(--error);
+}
+
+.rx-savestate[data-state="dirty"] {
+  color: var(--orange);
+}

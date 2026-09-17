@@ -1,0 +1,483 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: R
+      - generic [ref=e7]:
+        - strong [ref=e8]: RexOps
+        - generic [ref=e9]: Agency Ops
+    - button "Collapse sidebar" [ref=e10] [cursor=pointer]:
+      - img [ref=e11]
+      - generic [ref=e14]: Collapse
+    - navigation "agency navigation" [ref=e15]:
+      - link "Dashboard" [ref=e16] [cursor=pointer]:
+        - /url: /agency/dashboard
+        - img [ref=e17]
+        - generic [ref=e20]: Dashboard
+      - link "Clients" [ref=e21] [cursor=pointer]:
+        - /url: /agency/clients
+        - img [ref=e22]
+        - generic [ref=e27]: Clients
+      - link "Projects" [ref=e28] [cursor=pointer]:
+        - /url: /agency/projects
+        - img [ref=e29]
+        - generic [ref=e31]: Projects
+      - link "Work" [ref=e32] [cursor=pointer]:
+        - /url: /agency/work
+        - img [ref=e33]
+        - generic [ref=e36]: Work
+      - link "Review Inbox" [ref=e37] [cursor=pointer]:
+        - /url: /agency/review
+        - img [ref=e38]
+        - generic [ref=e41]: Review Inbox
+      - link "Notifications" [ref=e42] [cursor=pointer]:
+        - /url: /agency/notifications
+        - img [ref=e43]
+        - generic [ref=e46]: Notifications
+  - generic [ref=e47]:
+    - banner [ref=e48]:
+      - generic [ref=e49]:
+        - img [ref=e50]
+        - generic [ref=e53]: Search work, reviews, clients
+      - img "AGENCY_OWNER" [ref=e54]: AG
+    - main [ref=e55]:
+      - generic [ref=e58]:
+        - generic [ref=e59]:
+          - generic [ref=e60]: Agency review
+          - heading "Beach Vibe Reel" [level=1] [ref=e61]
+          - generic [ref=e62]:
+            - generic [ref=e63]: 22 versions
+            - generic [ref=e64]: ·
+            - generic [ref=e65]: 1 open
+            - generic [ref=e66]: ·
+            - generic [ref=e67]: v22 VIDEO
+        - 'img "Review stage: internal active, client pending" [ref=e69]':
+          - emphasis [ref=e72]: Internal
+          - emphasis [ref=e76]: Client
+        - generic [ref=e77]:
+          - generic [ref=e78]: Ready for internal review
+          - button "Submit for internal review" [ref=e80] [cursor=pointer]:
+            - img [ref=e81]
+            - text: Submit for internal review
+      - generic [ref=e84]:
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - generic [ref=e87]: VIDEO
+            - generic [ref=e88]: Ready for review
+          - generic [ref=e92]:
+            - generic [ref=e93]: Playhead 00:00:00
+            - generic [ref=e94]: Pause or seek to anchor your comment to this frame.
+        - generic [ref=e95]:
+          - generic [ref=e97]: No anchor — comment applies to the whole version
+          - button "Compare with v21" [ref=e99] [cursor=pointer]:
+            - img [ref=e100]
+            - text: Compare with v21
+      - generic [ref=e105]:
+        - generic [ref=e106]: Versions
+        - generic [ref=e107]:
+          - button "v22 v1.21" [ref=e108] [cursor=pointer]:
+            - img [ref=e110]
+            - generic [ref=e112]:
+              - strong [ref=e113]: v22
+              - generic [ref=e114]: v1.21
+          - button "v21 v1.20" [ref=e116] [cursor=pointer]:
+            - img [ref=e118]
+            - generic [ref=e122]:
+              - strong [ref=e123]: v21
+              - generic [ref=e124]: v1.20
+          - button "v20 v1.19" [ref=e126] [cursor=pointer]:
+            - img [ref=e128]
+            - generic [ref=e132]:
+              - strong [ref=e133]: v20
+              - generic [ref=e134]: v1.19
+          - button "v19 v1.18" [ref=e136] [cursor=pointer]:
+            - img [ref=e138]
+            - generic [ref=e142]:
+              - strong [ref=e143]: v19
+              - generic [ref=e144]: v1.18
+          - button "v18 v1.17" [ref=e146] [cursor=pointer]:
+            - img [ref=e148]
+            - generic [ref=e152]:
+              - strong [ref=e153]: v18
+              - generic [ref=e154]: v1.17
+          - button "v17 v1.16" [ref=e156] [cursor=pointer]:
+            - img [ref=e158]
+            - generic [ref=e162]:
+              - strong [ref=e163]: v17
+              - generic [ref=e164]: v1.16
+          - button "v16 v1.15" [ref=e166] [cursor=pointer]:
+            - img [ref=e168]
+            - generic [ref=e172]:
+              - strong [ref=e173]: v16
+              - generic [ref=e174]: v1.15
+          - button "v15 v1.14" [ref=e176] [cursor=pointer]:
+            - img [ref=e178]
+            - generic [ref=e182]:
+              - strong [ref=e183]: v15
+              - generic [ref=e184]: v1.14
+          - button "v14 v1.13" [ref=e186] [cursor=pointer]:
+            - img [ref=e188]
+            - generic [ref=e192]:
+              - strong [ref=e193]: v14
+              - generic [ref=e194]: v1.13
+          - button "v13 v1.12" [ref=e196] [cursor=pointer]:
+            - img [ref=e198]
+            - generic [ref=e202]:
+              - strong [ref=e203]: v13
+              - generic [ref=e204]: v1.12
+          - button "v12 v1.11" [ref=e206] [cursor=pointer]:
+            - img [ref=e208]
+            - generic [ref=e212]:
+              - strong [ref=e213]: v12
+              - generic [ref=e214]: v1.11
+          - button "v11 v1.10" [ref=e216] [cursor=pointer]:
+            - img [ref=e218]
+            - generic [ref=e222]:
+              - strong [ref=e223]: v11
+              - generic [ref=e224]: v1.10
+          - button "v10 v1.9" [ref=e226] [cursor=pointer]:
+            - img [ref=e228]
+            - generic [ref=e232]:
+              - strong [ref=e233]: v10
+              - generic [ref=e234]: v1.9
+          - button "v9 v1.8" [ref=e236] [cursor=pointer]:
+            - img [ref=e238]
+            - generic [ref=e242]:
+              - strong [ref=e243]: v9
+              - generic [ref=e244]: v1.8
+          - button "v8 v1.7" [ref=e246] [cursor=pointer]:
+            - img [ref=e248]
+            - generic [ref=e252]:
+              - strong [ref=e253]: v8
+              - generic [ref=e254]: v1.7
+          - button "v7 v1.6" [ref=e256] [cursor=pointer]:
+            - img [ref=e258]
+            - generic [ref=e262]:
+              - strong [ref=e263]: v7
+              - generic [ref=e264]: v1.6
+          - button "v6 v1.5" [ref=e266] [cursor=pointer]:
+            - img [ref=e268]
+            - generic [ref=e272]:
+              - strong [ref=e273]: v6
+              - generic [ref=e274]: v1.5
+          - button "v5 v1.4" [ref=e276] [cursor=pointer]:
+            - img [ref=e278]
+            - generic [ref=e282]:
+              - strong [ref=e283]: v5
+              - generic [ref=e284]: v1.4
+          - button "v4 v1.3 audio bed" [ref=e286] [cursor=pointer]:
+            - img [ref=e288]
+            - generic [ref=e290]:
+              - strong [ref=e291]: v4
+              - generic [ref=e292]: v1.3 audio bed
+          - button "v3 v1.2 storyboard" [ref=e294] [cursor=pointer]:
+            - img [ref=e296]
+            - generic [ref=e299]:
+              - strong [ref=e300]: v3
+              - generic [ref=e301]: v1.2 storyboard
+          - button "v2 v1.1 image proof" [ref=e303] [cursor=pointer]:
+            - img [ref=e305]
+            - generic [ref=e309]:
+              - strong [ref=e310]: v2
+              - generic [ref=e311]: v1.1 image proof
+          - button "v1 v1.0" [ref=e313] [cursor=pointer]:
+            - img [ref=e315]
+            - generic [ref=e317]:
+              - strong [ref=e318]: v1
+              - generic [ref=e319]: v1.0
+          - button "Upload" [ref=e321] [cursor=pointer]:
+            - img [ref=e322]
+            - text: Upload
+      - generic [ref=e325]:
+        - generic [ref=e326]:
+          - generic [ref=e327]:
+            - text: Activity
+            - heading "Comments · 1 open" [level=2] [ref=e328]
+          - tablist "Default comment visibility" [ref=e330]:
+            - tab "Internal" [selected] [ref=e331] [cursor=pointer]
+            - tab "Client" [ref=e332] [cursor=pointer]
+        - generic [ref=e333]:
+          - button "All 16" [ref=e334] [cursor=pointer]
+          - button "Open 1" [ref=e335] [cursor=pointer]
+          - button "Resolved 15" [ref=e336] [cursor=pointer]
+          - button "Internal" [ref=e337] [cursor=pointer]
+        - generic [ref=e338]:
+          - generic [ref=e340]:
+            - img [ref=e341]
+            - generic [ref=e342]: whole version
+          - textbox "Comment on v22…" [ref=e343]
+          - button "Send" [disabled] [ref=e344]:
+            - img [ref=e345]
+            - text: Send
+        - generic [ref=e346]:
+          - article [ref=e347]:
+            - generic [ref=e348]:
+              - button "4.0–6.8s" [ref=e349] [cursor=pointer]:
+                - img [ref=e350]
+                - generic [ref=e352]: 4.0–6.8s
+              - generic [ref=e353]: Internal
+            - paragraph [ref=e354]: Phase K anchored comment 1782719405655
+            - generic [ref=e355]:
+              - button "0" [ref=e356] [cursor=pointer]:
+                - img [ref=e357]
+                - text: "0"
+              - button "Reopen" [ref=e359] [cursor=pointer]:
+                - img [ref=e360]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e362]:
+                - img [ref=e363]
+                - text: Task linked
+          - article [ref=e366]:
+            - generic [ref=e367]:
+              - button "4.0–6.8s" [ref=e368] [cursor=pointer]:
+                - img [ref=e369]
+                - generic [ref=e371]: 4.0–6.8s
+              - generic [ref=e372]: Internal
+            - paragraph [ref=e373]: Phase K anchored comment 1782719406431
+            - generic [ref=e374]:
+              - button "0" [ref=e375] [cursor=pointer]:
+                - img [ref=e376]
+                - text: "0"
+              - button "Reopen" [ref=e378] [cursor=pointer]:
+                - img [ref=e379]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e381]:
+                - img [ref=e382]
+                - text: Task linked
+          - article [ref=e385]:
+            - generic [ref=e386]:
+              - button "region" [ref=e387] [cursor=pointer]:
+                - img [ref=e388]
+                - generic [ref=e390]: region
+              - generic [ref=e391]: Internal
+            - paragraph [ref=e392]: Phase K anchored comment 1782719498327
+            - generic [ref=e393]:
+              - button "0" [ref=e394] [cursor=pointer]:
+                - img [ref=e395]
+                - text: "0"
+              - button "Reopen" [ref=e397] [cursor=pointer]:
+                - img [ref=e398]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e400]:
+                - img [ref=e401]
+                - text: Task linked
+          - article [ref=e404]:
+            - generic [ref=e405]:
+              - button "region" [ref=e406] [cursor=pointer]:
+                - img [ref=e407]
+                - generic [ref=e409]: region
+              - generic [ref=e410]: Internal
+            - paragraph [ref=e411]: Phase K anchored comment 1782719499214
+            - generic [ref=e412]:
+              - button "0" [ref=e413] [cursor=pointer]:
+                - img [ref=e414]
+                - text: "0"
+              - button "Reopen" [ref=e416] [cursor=pointer]:
+                - img [ref=e417]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e419]:
+                - img [ref=e420]
+                - text: Task linked
+          - article [ref=e423]:
+            - generic [ref=e424]:
+              - button "region" [ref=e425] [cursor=pointer]:
+                - img [ref=e426]
+                - generic [ref=e428]: region
+              - generic [ref=e429]: Internal
+            - paragraph [ref=e430]: Phase K anchored comment 1782720650251
+            - generic [ref=e431]:
+              - button "0" [ref=e432] [cursor=pointer]:
+                - img [ref=e433]
+                - text: "0"
+              - button "Reopen" [ref=e435] [cursor=pointer]:
+                - img [ref=e436]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e438]:
+                - img [ref=e439]
+                - text: Task linked
+          - article [ref=e442]:
+            - generic [ref=e443]:
+              - button "region" [ref=e444] [cursor=pointer]:
+                - img [ref=e445]
+                - generic [ref=e447]: region
+              - generic [ref=e448]: Internal
+            - paragraph [ref=e449]: Phase K anchored comment 1782720652473
+            - generic [ref=e450]:
+              - button "0" [ref=e451] [cursor=pointer]:
+                - img [ref=e452]
+                - text: "0"
+              - button "Reopen" [ref=e454] [cursor=pointer]:
+                - img [ref=e455]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e457]:
+                - img [ref=e458]
+                - text: Task linked
+          - article [ref=e461]:
+            - generic [ref=e462]:
+              - button "region" [ref=e463] [cursor=pointer]:
+                - img [ref=e464]
+                - generic [ref=e466]: region
+              - generic [ref=e467]: Internal
+            - paragraph [ref=e468]: Phase K anchored comment 1782724027958
+            - generic [ref=e469]:
+              - button "0" [ref=e470] [cursor=pointer]:
+                - img [ref=e471]
+                - text: "0"
+              - button "Reopen" [ref=e473] [cursor=pointer]:
+                - img [ref=e474]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e476]:
+                - img [ref=e477]
+                - text: Task linked
+          - article [ref=e480]:
+            - generic [ref=e481]:
+              - button "region" [ref=e482] [cursor=pointer]:
+                - img [ref=e483]
+                - generic [ref=e485]: region
+              - generic [ref=e486]: Internal
+            - paragraph [ref=e487]: Phase K anchored comment 1782724028497
+            - generic [ref=e488]:
+              - button "0" [ref=e489] [cursor=pointer]:
+                - img [ref=e490]
+                - text: "0"
+              - button "Reopen" [ref=e492] [cursor=pointer]:
+                - img [ref=e493]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e495]:
+                - img [ref=e496]
+                - text: Task linked
+          - article [ref=e499]:
+            - generic [ref=e500]:
+              - button "region" [ref=e501] [cursor=pointer]:
+                - img [ref=e502]
+                - generic [ref=e504]: region
+              - generic [ref=e505]: Internal
+            - paragraph [ref=e506]: Phase K anchored comment 1782724894273
+            - generic [ref=e507]:
+              - button "0" [ref=e508] [cursor=pointer]:
+                - img [ref=e509]
+                - text: "0"
+              - button "Reopen" [ref=e511] [cursor=pointer]:
+                - img [ref=e512]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e514]:
+                - img [ref=e515]
+                - text: Task linked
+          - article [ref=e518]:
+            - generic [ref=e519]:
+              - button "region" [ref=e520] [cursor=pointer]:
+                - img [ref=e521]
+                - generic [ref=e523]: region
+              - generic [ref=e524]: Internal
+            - paragraph [ref=e525]: Phase K anchored comment 1782724897076
+            - generic [ref=e526]:
+              - button "0" [ref=e527] [cursor=pointer]:
+                - img [ref=e528]
+                - text: "0"
+              - button "Reopen" [ref=e530] [cursor=pointer]:
+                - img [ref=e531]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e533]:
+                - img [ref=e534]
+                - text: Task linked
+          - article [ref=e537]:
+            - generic [ref=e538]:
+              - button "region" [ref=e539] [cursor=pointer]:
+                - img [ref=e540]
+                - generic [ref=e542]: region
+              - generic [ref=e543]: Internal
+            - paragraph [ref=e544]: Phase K anchored comment 1782724935156
+            - generic [ref=e545]:
+              - button "0" [ref=e546] [cursor=pointer]:
+                - img [ref=e547]
+                - text: "0"
+              - button "Reopen" [ref=e549] [cursor=pointer]:
+                - img [ref=e550]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e552]:
+                - img [ref=e553]
+                - text: Task linked
+          - article [ref=e556]:
+            - generic [ref=e557]:
+              - button "region" [ref=e558] [cursor=pointer]:
+                - img [ref=e559]
+                - generic [ref=e561]: region
+              - generic [ref=e562]: Internal
+            - paragraph [ref=e563]: Phase K anchored comment 1782724935157
+            - generic [ref=e564]:
+              - button "0" [ref=e565] [cursor=pointer]:
+                - img [ref=e566]
+                - text: "0"
+              - button "Reopen" [ref=e568] [cursor=pointer]:
+                - img [ref=e569]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e571]:
+                - img [ref=e572]
+                - text: Task linked
+          - article [ref=e575]:
+            - generic [ref=e576]:
+              - button "region" [ref=e577] [cursor=pointer]:
+                - img [ref=e578]
+                - generic [ref=e580]: region
+              - generic [ref=e581]: Internal
+            - paragraph [ref=e582]: Phase K anchored comment 1782724967550
+            - generic [ref=e583]:
+              - button "0" [ref=e584] [cursor=pointer]:
+                - img [ref=e585]
+                - text: "0"
+              - button "Reopen" [ref=e587] [cursor=pointer]:
+                - img [ref=e588]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e590]:
+                - img [ref=e591]
+                - text: Task linked
+          - article [ref=e594]:
+            - generic [ref=e595]:
+              - button "region" [ref=e596] [cursor=pointer]:
+                - img [ref=e597]
+                - generic [ref=e599]: region
+              - generic [ref=e600]: Internal
+            - paragraph [ref=e601]: Phase K anchored comment 1782724967550
+            - generic [ref=e602]:
+              - button "0" [ref=e603] [cursor=pointer]:
+                - img [ref=e604]
+                - text: "0"
+              - button "Resolve" [ref=e606] [cursor=pointer]:
+                - img [ref=e607]
+                - text: Resolve
+              - button "Make task" [ref=e609] [cursor=pointer]:
+                - img [ref=e610]
+                - text: Make task
+          - article [ref=e613]:
+            - generic [ref=e614]:
+              - button "region" [ref=e615] [cursor=pointer]:
+                - img [ref=e616]
+                - generic [ref=e618]: region
+              - generic [ref=e619]: Internal
+            - paragraph [ref=e620]: Phase K anchored comment 1782725016119
+            - generic [ref=e621]:
+              - button "0" [ref=e622] [cursor=pointer]:
+                - img [ref=e623]
+                - text: "0"
+              - button "Reopen" [ref=e625] [cursor=pointer]:
+                - img [ref=e626]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e628]:
+                - img [ref=e629]
+                - text: Task linked
+          - article [ref=e632]:
+            - generic [ref=e633]:
+              - button "region" [ref=e634] [cursor=pointer]:
+                - img [ref=e635]
+                - generic [ref=e637]: region
+              - generic [ref=e638]: Internal
+            - paragraph [ref=e639]: Phase K anchored comment 1782725016996
+            - generic [ref=e640]:
+              - button "0" [ref=e641] [cursor=pointer]:
+                - img [ref=e642]
+                - text: "0"
+              - button "Reopen" [ref=e644] [cursor=pointer]:
+                - img [ref=e645]
+                - text: Reopen
+              - button "Task linked" [disabled] [ref=e647]:
+                - img [ref=e648]
+                - text: Task linked

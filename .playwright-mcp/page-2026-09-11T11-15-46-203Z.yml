@@ -1,0 +1,35 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: R
+      - generic [ref=e7]: RexOps
+    - generic [ref=e8]:
+      - text: Creative operations, calibrated
+      - heading "The clean handoff between making and approving." [level=1] [ref=e9]
+      - paragraph [ref=e10]: Projects, versions, review decisions, and the exact frame that changed — held in one accountable system.
+    - generic [aria-hidden] [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e13]: TAKE
+        - generic [ref=e14]: SCENE
+        - generic [ref=e15]: ROLL
+      - strong [ref=e16]: "02"
+      - generic [ref=e17]: 00:12:04:18
+    - generic [ref=e22]: RexOps / production system 0.1
+  - generic [ref=e24]:
+    - text: Secure workspace
+    - heading "Enter the review room." [level=2] [ref=e25]
+    - paragraph [ref=e26]: Your role decides what you can see. The boundary is enforced server-side.
+    - generic [ref=e27]:
+      - text: Work email
+      - textbox "Work email" [ref=e28]: manas@trex.test
+    - generic [ref=e29]:
+      - text: Password
+      - generic [ref=e30]:
+        - textbox "Password Show password" [ref=e31]: rexops-demo
+        - button "Show password" [ref=e32] [cursor=pointer]
+    - button "Sign in" [ref=e36] [cursor=pointer]
+    - generic [ref=e39]:
+      - generic [ref=e40]: Preview shells
+      - button "Agency" [ref=e41] [cursor=pointer]
+      - button "Client" [ref=e42] [cursor=pointer]
+      - button "Root" [ref=e43] [cursor=pointer]

@@ -1,0 +1,461 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: R
+      - generic [ref=e7]:
+        - strong [ref=e8]: RexOps
+        - generic [ref=e9]: Agency Ops
+    - button "Collapse sidebar" [ref=e10] [cursor=pointer]:
+      - img [ref=e11]
+      - generic [ref=e14]: Collapse
+    - navigation "agency navigation" [ref=e15]:
+      - link "Dashboard" [ref=e16] [cursor=pointer]:
+        - /url: /agency/dashboard
+        - img [ref=e17]
+        - generic [ref=e20]: Dashboard
+      - link "Clients" [ref=e21] [cursor=pointer]:
+        - /url: /agency/clients
+        - img [ref=e22]
+        - generic [ref=e27]: Clients
+      - link "Projects" [ref=e28] [cursor=pointer]:
+        - /url: /agency/projects
+        - img [ref=e29]
+        - generic [ref=e31]: Projects
+      - link "Work" [ref=e32] [cursor=pointer]:
+        - /url: /agency/work
+        - img [ref=e33]
+        - generic [ref=e36]: Work
+      - link "Review Inbox" [ref=e37] [cursor=pointer]:
+        - /url: /agency/review
+        - img [ref=e38]
+        - generic [ref=e41]: Review Inbox
+      - link "Notifications" [ref=e42] [cursor=pointer]:
+        - /url: /agency/notifications
+        - img [ref=e43]
+        - generic [ref=e46]: Notifications
+  - generic [ref=e47]:
+    - banner [ref=e48]:
+      - generic [ref=e49]:
+        - img [ref=e50]
+        - generic [ref=e53]: Search work, reviews, clients
+      - img "AGENCY_OWNER" [ref=e54]: AG
+    - main [ref=e55]:
+      - generic [ref=e56]:
+        - generic [ref=e57]:
+          - text: Agency Review Room
+          - heading "Beach Vibe Reel" [level=1] [ref=e58]
+          - generic [ref=e59]:
+            - generic [ref=e60]:
+              - img [ref=e61]
+              - text: 20 versions
+            - generic [ref=e65]:
+              - img [ref=e66]
+              - text: 19 ready
+            - generic [ref=e69]:
+              - img [ref=e70]
+              - text: 1 open comments
+        - generic [ref=e72]:
+          - button "Compare" [ref=e73] [cursor=pointer]:
+            - img [ref=e74]
+            - text: Compare
+          - generic [ref=e79]: Ready for internal review
+      - complementary [ref=e81]:
+        - generic [ref=e82]:
+          - generic [ref=e83]: Upload
+          - generic [ref=e84]:
+            - generic [ref=e85]: New version
+            - button "Upload new version file" [ref=e86]
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - generic [ref=e89]: Media
+              - combobox "Media" [ref=e90]:
+                - option "Video" [selected]
+                - option "Image"
+                - option "PDF"
+                - option "Audio"
+            - generic [ref=e91]:
+              - generic [ref=e92]: Bump
+              - combobox "Bump" [ref=e93]:
+                - option "Minor" [selected]
+                - option "Major"
+          - button "Upload new version" [disabled] [ref=e94]:
+            - img [ref=e95]
+            - text: Upload new version
+          - generic [ref=e98]: No cloud keys required
+        - button "v20 IMAGE v1.19 phase-l-upload-1782725016996.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e99]:
+          - generic [ref=e100]:
+            - img [ref=e101]
+            - text: v20 IMAGE
+          - strong [ref=e105]: v1.19
+          - emphasis [ref=e106]: phase-l-upload-1782725016996.txt
+          - generic [ref=e107]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e108]: Ready
+        - button "v19 IMAGE v1.18 phase-l-upload-1782725016119.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e110]:
+          - generic [ref=e111]:
+            - img [ref=e112]
+            - text: v19 IMAGE
+          - strong [ref=e116]: v1.18
+          - emphasis [ref=e117]: phase-l-upload-1782725016119.txt
+          - generic [ref=e118]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e119]: Ready
+        - button "v18 IMAGE v1.17 phase-l-upload-1782724967550.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e121]:
+          - generic [ref=e122]:
+            - img [ref=e123]
+            - text: v18 IMAGE
+          - strong [ref=e127]: v1.17
+          - emphasis [ref=e128]: phase-l-upload-1782724967550.txt
+          - generic [ref=e129]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e130]: Ready
+        - button "v17 IMAGE v1.16 phase-l-upload-1782724967550.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e132]:
+          - generic [ref=e133]:
+            - img [ref=e134]
+            - text: v17 IMAGE
+          - strong [ref=e138]: v1.16
+          - emphasis [ref=e139]: phase-l-upload-1782724967550.txt
+          - generic [ref=e140]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e141]: Ready
+        - button "v16 IMAGE v1.15 phase-l-upload-1782724935156.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e143]:
+          - generic [ref=e144]:
+            - img [ref=e145]
+            - text: v16 IMAGE
+          - strong [ref=e149]: v1.15
+          - emphasis [ref=e150]: phase-l-upload-1782724935156.txt
+          - generic [ref=e151]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e152]: Ready
+        - button "v15 IMAGE v1.14 phase-l-upload-1782724935157.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e154]:
+          - generic [ref=e155]:
+            - img [ref=e156]
+            - text: v15 IMAGE
+          - strong [ref=e160]: v1.14
+          - emphasis [ref=e161]: phase-l-upload-1782724935157.txt
+          - generic [ref=e162]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e163]: Ready
+        - button "v14 IMAGE v1.13 phase-l-upload-1782724897076.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e165]:
+          - generic [ref=e166]:
+            - img [ref=e167]
+            - text: v14 IMAGE
+          - strong [ref=e171]: v1.13
+          - emphasis [ref=e172]: phase-l-upload-1782724897076.txt
+          - generic [ref=e173]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e174]: Ready
+        - button "v13 IMAGE v1.12 phase-l-upload-1782724894273.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e176]:
+          - generic [ref=e177]:
+            - img [ref=e178]
+            - text: v13 IMAGE
+          - strong [ref=e182]: v1.12
+          - emphasis [ref=e183]: phase-l-upload-1782724894273.txt
+          - generic [ref=e184]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e185]: Ready
+        - button "v12 IMAGE v1.11 phase-l-upload-1782724028497.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e187]:
+          - generic [ref=e188]:
+            - img [ref=e189]
+            - text: v12 IMAGE
+          - strong [ref=e193]: v1.11
+          - emphasis [ref=e194]: phase-l-upload-1782724028497.txt
+          - generic [ref=e195]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e196]: Ready
+        - button "v11 IMAGE v1.10 phase-l-upload-1782724027958.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e198]:
+          - generic [ref=e199]:
+            - img [ref=e200]
+            - text: v11 IMAGE
+          - strong [ref=e204]: v1.10
+          - emphasis [ref=e205]: phase-l-upload-1782724027958.txt
+          - generic [ref=e206]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e207]: Ready
+        - button "v10 IMAGE v1.9 phase-l-upload-1782720652473.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e209]:
+          - generic [ref=e210]:
+            - img [ref=e211]
+            - text: v10 IMAGE
+          - strong [ref=e215]: v1.9
+          - emphasis [ref=e216]: phase-l-upload-1782720652473.txt
+          - generic [ref=e217]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e218]: Ready
+        - button "v9 IMAGE v1.8 phase-l-upload-1782720650251.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e220]:
+          - generic [ref=e221]:
+            - img [ref=e222]
+            - text: v9 IMAGE
+          - strong [ref=e226]: v1.8
+          - emphasis [ref=e227]: phase-l-upload-1782720650251.txt
+          - generic [ref=e228]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e229]: Ready
+        - button "v8 IMAGE v1.7 phase-l-upload-1782719499214.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e231]:
+          - generic [ref=e232]:
+            - img [ref=e233]
+            - text: v8 IMAGE
+          - strong [ref=e237]: v1.7
+          - emphasis [ref=e238]: phase-l-upload-1782719499214.txt
+          - generic [ref=e239]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e240]: Ready
+        - button "v7 IMAGE v1.6 phase-l-upload-1782719498327.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e242]:
+          - generic [ref=e243]:
+            - img [ref=e244]
+            - text: v7 IMAGE
+          - strong [ref=e248]: v1.6
+          - emphasis [ref=e249]: phase-l-upload-1782719498327.txt
+          - generic [ref=e250]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e251]: Ready
+        - button "v6 IMAGE v1.5 phase-l-upload-1782719406431.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e253]:
+          - generic [ref=e254]:
+            - img [ref=e255]
+            - text: v6 IMAGE
+          - strong [ref=e259]: v1.5
+          - emphasis [ref=e260]: phase-l-upload-1782719406431.txt
+          - generic [ref=e261]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e262]: Ready
+        - button "v5 IMAGE v1.4 phase-l-upload-1782719405655.txt INTERNAL · 2/2 artifacts ready Ready" [ref=e264]:
+          - generic [ref=e265]:
+            - img [ref=e266]
+            - text: v5 IMAGE
+          - strong [ref=e270]: v1.4
+          - emphasis [ref=e271]: phase-l-upload-1782719405655.txt
+          - generic [ref=e272]: INTERNAL · 2/2 artifacts ready
+          - generic [ref=e273]: Ready
+        - button "v4 AUDIO v1.3 audio bed audio-bed-v1.txt CLIENT · 1/1 artifacts ready Waiting on client" [ref=e275]:
+          - generic [ref=e276]:
+            - img [ref=e277]
+            - text: v4 AUDIO
+          - strong [ref=e279]: v1.3 audio bed
+          - emphasis [ref=e280]: audio-bed-v1.txt
+          - generic [ref=e281]: CLIENT · 1/1 artifacts ready
+          - generic [ref=e282]: Waiting on client
+        - button "v3 PDF v1.2 storyboard storyboard-v1.txt INTERNAL · 1/1 artifacts ready Ready" [ref=e284]:
+          - generic [ref=e285]:
+            - img [ref=e286]
+            - text: v3 PDF
+          - strong [ref=e289]: v1.2 storyboard
+          - emphasis [ref=e290]: storyboard-v1.txt
+          - generic [ref=e291]: INTERNAL · 1/1 artifacts ready
+          - generic [ref=e292]: Ready
+        - button "v2 IMAGE v1.1 image proof key-visual-v1.txt INTERNAL · 1/1 artifacts ready Ready" [ref=e294]:
+          - generic [ref=e295]:
+            - img [ref=e296]
+            - text: v2 IMAGE
+          - strong [ref=e300]: v1.1 image proof
+          - emphasis [ref=e301]: key-visual-v1.txt
+          - generic [ref=e302]: INTERNAL · 1/1 artifacts ready
+          - generic [ref=e303]: Ready
+        - button "v1 VIDEO v1.0 beach-vibe-reel-v1.txt INTERNAL · 1/1 artifacts ready Ready" [ref=e305]:
+          - generic [ref=e306]:
+            - img [ref=e307]
+            - text: v1 VIDEO
+          - strong [ref=e309]: v1.0
+          - emphasis [ref=e310]: beach-vibe-reel-v1.txt
+          - generic [ref=e311]: INTERNAL · 1/1 artifacts ready
+          - generic [ref=e312]: Ready
+      - generic [ref=e315]:
+        - generic [ref=e316]:
+          - generic [ref=e317]:
+            - text: IMAGE
+            - heading "phase-l-upload-1782725016996.txt" [level=2] [ref=e318]
+          - generic [ref=e319]:
+            - generic [ref=e320]: Latest
+            - generic [ref=e321]: INTERNAL
+            - generic [ref=e322]: Ready for review
+        - generic [ref=e324]: Loading viewer…
+        - generic [ref=e325]:
+          - generic [ref=e326]:
+            - img [ref=e327]
+            - generic [ref=e330]: No anchor — comment applies to the whole version
+          - generic [ref=e331]: 2/2 artifacts ready
+      - complementary [ref=e332]:
+        - generic [ref=e333]:
+          - generic [ref=e334]:
+            - text: Activity
+            - heading "Comments" [level=2] [ref=e335]:
+              - img [ref=e336]
+              - text: Comments
+          - generic [ref=e338]: 1 open
+        - generic [ref=e339]:
+          - generic [ref=e340]: Open 1
+          - generic [ref=e341]: Resolved 15
+        - generic [ref=e342]:
+          - generic "Comment visibility" [ref=e343]:
+            - button "Internal" [ref=e344]
+            - button "Client-visible" [ref=e345]
+          - textbox "Add region comment on v20" [ref=e346]
+          - button "Add comment" [disabled] [ref=e347]:
+            - img [ref=e348]
+            - text: Add comment
+        - generic [ref=e349]:
+          - strong [ref=e350]: INTERNAL · WAVEFORM_RANGE
+          - paragraph [ref=e351]: Phase K anchored comment 1782719405655
+          - generic [ref=e352]: endMs:6800 · startMs:4000
+          - generic [ref=e353]:
+            - button "Locate" [ref=e354]
+            - button "+1 0" [ref=e355]
+            - button "Reopen" [ref=e356]
+            - button "Task linked" [disabled] [ref=e357]:
+              - img [ref=e358]
+              - text: Task linked
+        - generic [ref=e361]:
+          - strong [ref=e362]: INTERNAL · WAVEFORM_RANGE
+          - paragraph [ref=e363]: Phase K anchored comment 1782719406431
+          - generic [ref=e364]: endMs:6800 · startMs:4000
+          - generic [ref=e365]:
+            - button "Locate" [ref=e366]
+            - button "+1 0" [ref=e367]
+            - button "Reopen" [ref=e368]
+            - button "Task linked" [disabled] [ref=e369]:
+              - img [ref=e370]
+              - text: Task linked
+        - generic [ref=e373]:
+          - strong [ref=e374]: INTERNAL · REGION
+          - paragraph [ref=e375]: Phase K anchored comment 1782719498327
+          - generic [ref=e376]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e377]:
+            - button "Locate" [ref=e378]
+            - button "+1 0" [ref=e379]
+            - button "Reopen" [ref=e380]
+            - button "Task linked" [disabled] [ref=e381]:
+              - img [ref=e382]
+              - text: Task linked
+        - generic [ref=e385]:
+          - strong [ref=e386]: INTERNAL · REGION
+          - paragraph [ref=e387]: Phase K anchored comment 1782719499214
+          - generic [ref=e388]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e389]:
+            - button "Locate" [ref=e390]
+            - button "+1 0" [ref=e391]
+            - button "Reopen" [ref=e392]
+            - button "Task linked" [disabled] [ref=e393]:
+              - img [ref=e394]
+              - text: Task linked
+        - generic [ref=e397]:
+          - strong [ref=e398]: INTERNAL · REGION
+          - paragraph [ref=e399]: Phase K anchored comment 1782720650251
+          - generic [ref=e400]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e401]:
+            - button "Locate" [ref=e402]
+            - button "+1 0" [ref=e403]
+            - button "Reopen" [ref=e404]
+            - button "Task linked" [disabled] [ref=e405]:
+              - img [ref=e406]
+              - text: Task linked
+        - generic [ref=e409]:
+          - strong [ref=e410]: INTERNAL · REGION
+          - paragraph [ref=e411]: Phase K anchored comment 1782720652473
+          - generic [ref=e412]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e413]:
+            - button "Locate" [ref=e414]
+            - button "+1 0" [ref=e415]
+            - button "Reopen" [ref=e416]
+            - button "Task linked" [disabled] [ref=e417]:
+              - img [ref=e418]
+              - text: Task linked
+        - generic [ref=e421]:
+          - strong [ref=e422]: INTERNAL · REGION
+          - paragraph [ref=e423]: Phase K anchored comment 1782724027958
+          - generic [ref=e424]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e425]:
+            - button "Locate" [ref=e426]
+            - button "+1 0" [ref=e427]
+            - button "Reopen" [ref=e428]
+            - button "Task linked" [disabled] [ref=e429]:
+              - img [ref=e430]
+              - text: Task linked
+        - generic [ref=e433]:
+          - strong [ref=e434]: INTERNAL · REGION
+          - paragraph [ref=e435]: Phase K anchored comment 1782724028497
+          - generic [ref=e436]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e437]:
+            - button "Locate" [ref=e438]
+            - button "+1 0" [ref=e439]
+            - button "Reopen" [ref=e440]
+            - button "Task linked" [disabled] [ref=e441]:
+              - img [ref=e442]
+              - text: Task linked
+        - generic [ref=e445]:
+          - strong [ref=e446]: INTERNAL · REGION
+          - paragraph [ref=e447]: Phase K anchored comment 1782724894273
+          - generic [ref=e448]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e449]:
+            - button "Locate" [ref=e450]
+            - button "+1 0" [ref=e451]
+            - button "Reopen" [ref=e452]
+            - button "Task linked" [disabled] [ref=e453]:
+              - img [ref=e454]
+              - text: Task linked
+        - generic [ref=e457]:
+          - strong [ref=e458]: INTERNAL · REGION
+          - paragraph [ref=e459]: Phase K anchored comment 1782724897076
+          - generic [ref=e460]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e461]:
+            - button "Locate" [ref=e462]
+            - button "+1 0" [ref=e463]
+            - button "Reopen" [ref=e464]
+            - button "Task linked" [disabled] [ref=e465]:
+              - img [ref=e466]
+              - text: Task linked
+        - generic [ref=e469]:
+          - strong [ref=e470]: INTERNAL · REGION
+          - paragraph [ref=e471]: Phase K anchored comment 1782724935156
+          - generic [ref=e472]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e473]:
+            - button "Locate" [ref=e474]
+            - button "+1 0" [ref=e475]
+            - button "Reopen" [ref=e476]
+            - button "Task linked" [disabled] [ref=e477]:
+              - img [ref=e478]
+              - text: Task linked
+        - generic [ref=e481]:
+          - strong [ref=e482]: INTERNAL · REGION
+          - paragraph [ref=e483]: Phase K anchored comment 1782724935157
+          - generic [ref=e484]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e485]:
+            - button "Locate" [ref=e486]
+            - button "+1 0" [ref=e487]
+            - button "Reopen" [ref=e488]
+            - button "Task linked" [disabled] [ref=e489]:
+              - img [ref=e490]
+              - text: Task linked
+        - generic [ref=e493]:
+          - strong [ref=e494]: INTERNAL · REGION
+          - paragraph [ref=e495]: Phase K anchored comment 1782724967550
+          - generic [ref=e496]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e497]:
+            - button "Locate" [ref=e498]
+            - button "+1 0" [ref=e499]
+            - button "Reopen" [ref=e500]
+            - button "Task linked" [disabled] [ref=e501]:
+              - img [ref=e502]
+              - text: Task linked
+        - generic [ref=e505]:
+          - strong [ref=e506]: INTERNAL · REGION
+          - paragraph [ref=e507]: Phase K anchored comment 1782724967550
+          - generic [ref=e508]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e509]:
+            - button "Locate" [ref=e510]
+            - button "+1 0" [ref=e511]
+            - button "Resolve" [ref=e512]
+            - button "Make task" [ref=e513]:
+              - img [ref=e514]
+              - text: Make task
+        - generic [ref=e517]:
+          - strong [ref=e518]: INTERNAL · REGION
+          - paragraph [ref=e519]: Phase K anchored comment 1782725016119
+          - generic [ref=e520]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e521]:
+            - button "Locate" [ref=e522]
+            - button "+1 0" [ref=e523]
+            - button "Reopen" [ref=e524]
+            - button "Task linked" [disabled] [ref=e525]:
+              - img [ref=e526]
+              - text: Task linked
+        - generic [ref=e529]:
+          - strong [ref=e530]: INTERNAL · REGION
+          - paragraph [ref=e531]: Phase K anchored comment 1782725016996
+          - generic [ref=e532]: h:0.18 · w:0.24 · x:0.42 · y:0.38
+          - generic [ref=e533]:
+            - button "Locate" [ref=e534]
+            - button "+1 0" [ref=e535]
+            - button "Reopen" [ref=e536]
+            - button "Task linked" [disabled] [ref=e537]:
+              - img [ref=e538]
+              - text: Task linked
+      - generic [ref=e541]:
+        - textbox "Feedback required for changes or reject" [ref=e542]
+        - button "Approve" [disabled] [ref=e543]:
+          - img [ref=e544]
+          - text: Approve
+        - button "Request changes" [disabled] [ref=e547]
+        - button "Reject" [disabled] [ref=e548]

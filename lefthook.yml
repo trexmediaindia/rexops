@@ -1,0 +1,13 @@
+pre-commit:
+  parallel: true
+  commands:
+    biome:
+      glob: "*.{ts,tsx,js,jsx,json,css,md}"
+      run: bunx biome check {staged_files}
+    typecheck:
+      run: bun run check
+
+commit-msg:
+  commands:
+    commitlint:
+      run: bunx commitlint --edit {1}

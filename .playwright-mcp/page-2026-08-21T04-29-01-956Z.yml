@@ -1,0 +1,96 @@
+- generic [ref=f2e3]:
+  - complementary [ref=f2e4]:
+    - generic [ref=f2e5]:
+      - generic [ref=f2e6]: R
+      - generic [ref=f2e7]: RexOps
+      - button "Collapse sidebar" [expanded] [ref=f2e8] [cursor=pointer]
+    - generic [ref=f2e12]:
+      - img "T-Rex Media" [ref=f2e13]: TR
+      - generic [ref=f2e14]:
+        - strong [ref=f2e15]: T-Rex Media
+        - generic [ref=f2e16]: Agency workspace
+    - navigation "Agency navigation" [ref=f2e19]:
+      - generic [ref=f2e20]: Operate
+      - link "Dashboard" [ref=f2e21] [cursor=pointer]:
+        - /url: /agency/dashboard
+      - link "Clients" [ref=f2e26] [cursor=pointer]:
+        - /url: /agency/clients
+      - link "Projects" [ref=f2e32] [cursor=pointer]:
+        - /url: /agency/projects
+      - generic [ref=f2e36]: Manage
+      - link "Team" [ref=f2e37] [cursor=pointer]:
+        - /url: /agency/team
+    - generic [ref=f2e44]:
+      - generic [ref=f2e45]:
+        - generic [ref=f2e46]: Storage
+        - generic [ref=f2e47]: —
+      - button "Signed out — signed out Signed out signed out" [ref=f2e50] [cursor=pointer]:
+        - img "Signed out — signed out" [ref=f2e51]: SO
+        - generic [ref=f2e52]:
+          - strong [ref=f2e53]: Signed out
+          - generic [ref=f2e54]: signed out
+  - main [ref=f2e57]:
+    - generic [ref=f2e58]:
+      - button "Search anything K" [ref=f2e59] [cursor=pointer]:
+        - generic [ref=f2e63]: Search anything
+        - generic [ref=f2e64]: K
+      - generic [ref=f2e67]:
+        - link "Notifications" [ref=f2e68] [cursor=pointer]:
+          - /url: /agency/inbox
+        - button "Create new" [ref=f2e73] [cursor=pointer]
+    - generic [ref=f2e75]:
+      - generic [ref=f2e76]:
+        - generic [ref=f2e77]:
+          - text: Friday 21 August
+          - heading "Good morning." [level=1] [ref=f2e78]
+          - paragraph [ref=f2e79]: Nothing is waiting on a decision right now.
+        - generic [ref=f2e80]: Live
+      - region "Agency status overview" [ref=f2e82]:
+        - generic [ref=f2e83]:
+          - generic [ref=f2e84]: Active work
+          - strong [ref=f2e87]: —
+          - text: Across the visible slate
+        - generic [ref=f2e88]:
+          - generic [ref=f2e89]: Waiting on client
+          - strong [ref=f2e92]: —
+          - text: Client decision gate
+        - generic [ref=f2e93]:
+          - generic [ref=f2e94]: Revision rounds
+          - strong [ref=f2e97]: —
+          - text: Recorded decisions
+        - generic [ref=f2e98]:
+          - generic [ref=f2e99]: Avg. turnaround
+          - strong [ref=f2e102]: —
+          - text: Submit to approval
+        - generic [ref=f2e103]:
+          - generic [ref=f2e104]: On-time
+          - strong [ref=f2e107]: —
+          - text: 0 overdue
+      - generic [ref=f2e108]:
+        - generic [ref=f2e109]:
+          - generic [ref=f2e110]:
+            - generic [ref=f2e111]:
+              - text: Signal log
+              - heading "Recent activity" [level=2] [ref=f2e112]
+            - link "View all" [ref=f2e113] [cursor=pointer]:
+              - /url: /agency/inbox
+          - paragraph [ref=f2e118]: No activity recorded yet.
+        - generic [ref=f2e120]:
+          - generic [ref=f2e121]:
+            - text: Your queue
+            - heading "Review before release" [level=2] [ref=f2e122]
+          - link "00" [ref=f2e123] [cursor=pointer]:
+            - /url: /agency/review
+      - generic [ref=f2e124]:
+        - generic [ref=f2e126]:
+          - text: Portfolio
+          - heading "Client roll-up" [level=2] [ref=f2e127]
+        - table "Client roll-up" [ref=f2e128]:
+          - rowgroup [ref=f2e129]:
+            - row [ref=f2e130]:
+              - columnheader "Client" [ref=f2e131]
+              - columnheader "Active projects" [ref=f2e132]
+              - columnheader "In production" [ref=f2e133]
+              - columnheader "Waiting" [ref=f2e134]
+              - columnheader "Health" [ref=f2e135]
+          - rowgroup

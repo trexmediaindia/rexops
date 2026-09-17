@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <title>RexOps</title>
+  <rect width="192" height="192" rx="30" fill="#14171b"/>
+  <rect x="38" y="38" width="116" height="116" rx="8" fill="none" stroke="#f2a341" stroke-width="8"/>
+  <path d="M72 132V61h30c20 0 32 11 32 28 0 12-6 21-17 25l20 18h-22l-18-16h-7v16H72Zm18-32h11c10 0 15-4 15-11s-5-11-15-11H90v22Z" fill="#f6f2e9"/>
+</svg>

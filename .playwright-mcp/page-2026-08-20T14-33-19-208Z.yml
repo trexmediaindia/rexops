@@ -1,0 +1,30 @@
+- generic [ref=f7e3]:
+  - complementary [ref=f7e4]:
+    - generic [ref=f7e5]:
+      - generic [ref=f7e6]: R
+      - generic [ref=f7e7]: RexOps / root
+    - navigation [ref=f7e8]:
+      - link "Agencies" [ref=f7e9] [cursor=pointer]:
+        - /url: /admin/agencies
+      - link "Users" [ref=f7e10] [cursor=pointer]:
+        - /url: /admin/users
+      - link "Audit log" [ref=f7e11] [cursor=pointer]:
+        - /url: /admin/audit
+    - generic [ref=f7e12]: SUPER_ADMIN
+  - main [ref=f7e13]:
+    - generic [ref=f7e14]:
+      - generic [ref=f7e15]:
+        - text: Platform control
+        - heading "Agencies" [level=1] [ref=f7e16]
+        - paragraph [ref=f7e17]: Tenant provisioning and operational oversight. Every cross-tenant read is audited.
+      - button "Provision agency" [ref=f7e18] [cursor=pointer]
+    - generic [ref=f7e20]: Root context · writes are explicit and logged
+    - table [ref=f7e25]:
+      - rowgroup [ref=f7e26]:
+        - row [ref=f7e27]:
+          - columnheader "Agency" [ref=f7e28]
+          - columnheader "Slug" [ref=f7e29]
+          - columnheader "Members" [ref=f7e30]
+          - columnheader "Created" [ref=f7e31]
+          - columnheader "Status" [ref=f7e32]
+      - rowgroup

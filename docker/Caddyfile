@@ -1,0 +1,25 @@
+:80 {
+	root * /srv
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		Content-Security-Policy "default-src 'self'; img-src 'self' data: blob: https:; media-src 'self' blob: https: http://localhost:*; connect-src 'self' https: wss: http://localhost:* ws://localhost:*; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; script-src 'self'; frame-src 'self' blob: https:"
+	}
+
+	# Asset filenames carry a content hash, so they can be cached forever.
+	@assets path /assets/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+
+	# index.html and the service worker must NOT be. index.html is the only thing
+	# naming the current asset hashes; when browsers cached it heuristically, a
+	# deploy left them loading a fresh stylesheet against a stale JS bundle — which
+	# surfaced as pages crashing on hard reload while working on in-app navigation.
+	@nocache path /index.html / /sw.js
+	header @nocache Cache-Control "no-cache, must-revalidate"
+
+	try_files {path} /index.html
+	file_server
+}

@@ -1,0 +1,18 @@
+FROM oven/bun:1.3.5 AS build
+WORKDIR /app
+COPY . .
+RUN bun install --frozen-lockfile --ignore-scripts
+ARG VITE_API_URL=http://localhost:3000
+ARG VITE_LIVEBLOCKS_AUTH_URL=http://localhost:3000/api/liveblocks-auth
+ARG VITE_VAPID_PUBLIC_KEY=
+ARG VITE_SENTRY_DSN=
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_LIVEBLOCKS_AUTH_URL=$VITE_LIVEBLOCKS_AUTH_URL
+ENV VITE_VAPID_PUBLIC_KEY=$VITE_VAPID_PUBLIC_KEY
+ENV VITE_SENTRY_DSN=$VITE_SENTRY_DSN
+RUN bun run --cwd apps/web build
+
+FROM caddy:2-alpine
+COPY docker/Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /app/apps/web/dist /srv
+EXPOSE 80

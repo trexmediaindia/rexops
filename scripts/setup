@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+bun install
+
+if [[ ! -f .env ]]; then
+  cp .env.example .env
+fi
+
+docker compose up -d postgres redis
+bun run db:migrate
+bun run db:seed
+# The suite runs against its own database so a test run cannot disturb the data
+# you are looking at in the browser; it has to exist before `bun run test` works.
+bun run db:test:prepare
+
+echo "RexOps is ready. Run: bun run dev"

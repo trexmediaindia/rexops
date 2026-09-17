@@ -1,0 +1,130 @@
+- generic [ref=f3e1]:
+  - generic [ref=f3e44]:
+    - complementary [ref=f3e45]:
+      - generic [ref=f3e46]:
+        - generic [ref=f3e47]: R
+        - generic [ref=f3e48]: RexOps
+        - button "Collapse sidebar" [expanded] [ref=f3e49] [cursor=pointer]
+      - generic [ref=f3e53]:
+        - img "T-Rex Media" [ref=f3e54]: TR
+        - generic [ref=f3e55]:
+          - strong [ref=f3e56]: T-Rex Media
+          - generic [ref=f3e57]: Agency workspace
+      - navigation "Agency navigation" [ref=f3e60]:
+        - generic [ref=f3e61]: Operate
+        - link "Dashboard" [ref=f3e62] [cursor=pointer]:
+          - /url: /agency/dashboard
+        - link "Clients" [ref=f3e67] [cursor=pointer]:
+          - /url: /agency/clients
+        - link "Projects" [ref=f3e73] [cursor=pointer]:
+          - /url: /agency/projects
+        - link "Work" [ref=f3e77] [cursor=pointer]:
+          - /url: /agency/work
+        - link "Review queue" [ref=f3e89] [cursor=pointer]:
+          - /url: /agency/review
+        - link "Inbox" [ref=f3e94] [cursor=pointer]:
+          - /url: /agency/inbox
+        - generic [ref=f3e99]: Manage
+        - link "Team" [ref=f3e100] [cursor=pointer]:
+          - /url: /agency/team
+        - link "Review pipelines" [ref=f3e107] [cursor=pointer]:
+          - /url: /agency/settings/pipelines
+        - link "Automation" [ref=f3e112] [cursor=pointer]:
+          - /url: /agency/settings
+      - generic [ref=f3e117]:
+        - generic [ref=f3e118]:
+          - generic [ref=f3e119]: Storage
+          - generic [ref=f3e120]: 18.4 / 100 GB
+        - button "Manas — agency owner Manas agency owner" [ref=f3e124] [cursor=pointer]:
+          - img "Manas — agency owner" [ref=f3e125]: M
+          - generic [ref=f3e126]:
+            - strong [ref=f3e127]: Manas
+            - generic [ref=f3e128]: agency owner
+    - main [ref=f3e131]:
+      - generic [ref=f3e132]:
+        - button "Search anything K" [ref=f3e133] [cursor=pointer]:
+          - generic [ref=f3e137]: Search anything
+          - generic [ref=f3e138]: K
+        - generic [ref=f3e141]:
+          - generic [ref=f3e142]:
+            - generic [ref=f3e143]: Live
+            - generic [ref=f3e144]: "1"
+          - link "0 unread notifications" [ref=f3e146] [cursor=pointer]:
+            - /url: /agency/inbox
+          - generic [ref=f3e150]:
+            - button "Create new" [expanded] [active] [ref=f3e151] [cursor=pointer]
+            - button "Close create menu" [ref=f3e239]
+            - menu [ref=f3e240]:
+              - menuitem "New client" [ref=f3e241] [cursor=pointer]
+              - menuitem "New project" [ref=f3e246] [cursor=pointer]
+              - menuitem "New deliverable" [ref=f3e249] [cursor=pointer]
+      - generic [ref=f3e153]:
+        - generic [ref=f3e154]:
+          - generic [ref=f3e155]:
+            - text: Thursday 20 August
+            - heading "Good evening, Manas." [level=1] [ref=f3e156]
+            - paragraph [ref=f3e157]: Nothing is waiting on a decision right now.
+          - generic [ref=f3e158]: Live
+        - region "Agency status overview" [ref=f3e160]:
+          - generic [ref=f3e161]:
+            - generic [ref=f3e162]: Active work
+            - strong [ref=f3e165]: "1"
+            - text: Across the visible slate
+          - generic [ref=f3e166]:
+            - generic [ref=f3e167]: Waiting on client
+            - strong [ref=f3e170]: "0"
+            - text: Client decision gate
+          - generic [ref=f3e171]:
+            - generic [ref=f3e172]: Revision rounds
+            - strong [ref=f3e175]: "0"
+            - text: Recorded decisions
+          - generic [ref=f3e176]:
+            - generic [ref=f3e177]: Avg. turnaround
+            - strong [ref=f3e180]: 0h
+            - text: Submit to approval
+          - generic [ref=f3e181]:
+            - generic [ref=f3e182]: On-time
+            - strong [ref=f3e185]: 100%
+            - text: 0 overdue
+        - generic [ref=f3e186]:
+          - generic [ref=f3e187]:
+            - generic [ref=f3e188]:
+              - generic [ref=f3e189]:
+                - text: Signal log
+                - heading "Recent activity" [level=2] [ref=f3e190]
+              - link "View all" [ref=f3e191] [cursor=pointer]:
+                - /url: /agency/inbox
+            - paragraph [ref=f3e196]: No activity recorded yet.
+          - generic [ref=f3e197]:
+            - generic [ref=f3e198]:
+              - generic [ref=f3e199]:
+                - text: Your queue
+                - heading "Review before release" [level=2] [ref=f3e200]
+              - link "00" [ref=f3e201] [cursor=pointer]:
+                - /url: /agency/review
+            - generic [ref=f3e202]:
+              - heading "Nothing waiting" [level=2] [ref=f3e203]
+              - paragraph [ref=f3e204]: No deliverable is sitting in review.
+        - generic [ref=f3e205]:
+          - generic [ref=f3e207]:
+            - text: Portfolio
+            - heading "Client roll-up" [level=2] [ref=f3e208]
+          - table "Client roll-up" [ref=f3e209]:
+            - rowgroup [ref=f3e210]:
+              - row [ref=f3e211]:
+                - columnheader "Client" [ref=f3e212]
+                - columnheader "Active projects" [ref=f3e213]
+                - columnheader "In production" [ref=f3e214]
+                - columnheader "Waiting" [ref=f3e215]
+                - columnheader "Health" [ref=f3e216]
+            - rowgroup [ref=f3e217]:
+              - row [ref=f3e218]:
+                - rowheader "Imperial Living" [ref=f3e219]
+                - cell "2" [ref=f3e220]
+                - cell "1" [ref=f3e221]
+                - cell "0" [ref=f3e222]
+                - cell "HEALTHY" [ref=f3e223]
+  - generic [ref=f3e226]:
+    - link "Liveblocks" [ref=f3e227] [cursor=pointer]:
+      - /url: https://lblcks.io/badge
+    - button [ref=f3e236] [cursor=pointer]

@@ -1,0 +1,28 @@
+{
+  "name": "@rexops/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "check": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@liveblocks/node": "^3.14.0",
+    "@aws-sdk/client-s3": "^3.943.0",
+    "@rexops/config": "workspace:*",
+    "@rexops/core": "workspace:*",
+    "@rexops/db": "workspace:*",
+    "@rexops/jobs": "workspace:*",
+    "bullmq": "^5.69.3",
+    "drizzle-orm": "^0.45.1",
+    "pino": "^10.3.1",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@types/web-push": "^3.6.4",
+    "typescript": "^5.9.3"
+  }
+}

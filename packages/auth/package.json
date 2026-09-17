@@ -1,0 +1,21 @@
+{
+  "name": "@rexops/auth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "check": "tsc --noEmit",
+    "test": "bun test --pass-with-no-tests"
+  },
+  "dependencies": {
+    "@rexops/db": "workspace:*",
+    "better-auth": "^1.6.11"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

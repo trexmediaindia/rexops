@@ -1,0 +1,37 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: R
+      - generic [ref=e7]:
+        - strong [ref=e8]: RexOps
+        - generic [ref=e9]: Client Portal
+    - button "Collapse sidebar" [ref=e10] [cursor=pointer]:
+      - img [ref=e11]
+      - generic [ref=e14]: Collapse
+    - navigation "client navigation" [ref=e15]:
+      - link "Home" [ref=e16] [cursor=pointer]:
+        - /url: /client/home
+        - img [ref=e17]
+        - generic [ref=e20]: Home
+      - link "For Review" [ref=e21] [cursor=pointer]:
+        - /url: /client/for-review
+        - img [ref=e22]
+        - generic [ref=e25]: For Review
+      - link "Approved" [ref=e26] [cursor=pointer]:
+        - /url: /client/history
+        - img [ref=e27]
+        - generic [ref=e30]: Approved
+      - link "Notifications" [ref=e31] [cursor=pointer]:
+        - /url: /client/notifications
+        - img [ref=e32]
+        - generic [ref=e35]: Notifications
+  - generic [ref=e36]:
+    - banner [ref=e37]:
+      - generic [ref=e38]:
+        - img [ref=e39]
+        - generic [ref=e42]: Search work, reviews, clients
+      - img "CLIENT_OWNER" [ref=e43]: CL
+    - main [ref=e44]:
+      - generic [ref=e45]:
+        - text: loading
+        - heading "Loading operational data" [level=2] [ref=e46]

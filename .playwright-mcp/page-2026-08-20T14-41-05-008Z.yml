@@ -1,0 +1,96 @@
+- generic [ref=f12e3]:
+  - complementary [ref=f12e4]:
+    - generic [ref=f12e5]:
+      - generic [ref=f12e6]: R
+      - generic [ref=f12e7]: RexOps
+      - button "Collapse sidebar" [expanded] [ref=f12e8] [cursor=pointer]
+    - generic [ref=f12e12]:
+      - img "T-Rex Media" [ref=f12e13]: TR
+      - generic [ref=f12e14]:
+        - strong [ref=f12e15]: T-Rex Media
+        - generic [ref=f12e16]: Agency workspace
+    - navigation "Agency navigation" [ref=f12e19]:
+      - generic [ref=f12e20]: Operate
+      - link "Dashboard" [ref=f12e21] [cursor=pointer]:
+        - /url: /agency/dashboard
+      - link "Clients" [ref=f12e26] [cursor=pointer]:
+        - /url: /agency/clients
+      - link "Projects" [ref=f12e32] [cursor=pointer]:
+        - /url: /agency/projects
+      - generic [ref=f12e36]: Manage
+      - link "Team" [ref=f12e37] [cursor=pointer]:
+        - /url: /agency/team
+    - generic [ref=f12e44]:
+      - generic [ref=f12e45]:
+        - generic [ref=f12e46]: Storage
+        - generic [ref=f12e47]: 18.4 / 100 GB
+      - button "Signed out — signed out Signed out signed out" [ref=f12e51] [cursor=pointer]:
+        - img "Signed out — signed out" [ref=f12e52]: SO
+        - generic [ref=f12e53]:
+          - strong [ref=f12e54]: Signed out
+          - generic [ref=f12e55]: signed out
+  - main [ref=f12e58]:
+    - generic [ref=f12e59]:
+      - button "Search anything K" [ref=f12e60] [cursor=pointer]:
+        - generic [ref=f12e64]: Search anything
+        - generic [ref=f12e65]: K
+      - generic [ref=f12e68]:
+        - link "Notifications" [ref=f12e69] [cursor=pointer]:
+          - /url: /agency/inbox
+        - button "Create new" [ref=f12e74] [cursor=pointer]
+    - generic [ref=f12e76]:
+      - generic [ref=f12e77]:
+        - generic [ref=f12e78]:
+          - text: Thursday 20 August
+          - heading "Good evening." [level=1] [ref=f12e79]
+          - paragraph [ref=f12e80]: Nothing is waiting on a decision right now.
+        - generic [ref=f12e81]: Live
+      - region "Agency status overview" [ref=f12e83]:
+        - generic [ref=f12e84]:
+          - generic [ref=f12e85]: Active work
+          - strong [ref=f12e88]: —
+          - text: Across the visible slate
+        - generic [ref=f12e89]:
+          - generic [ref=f12e90]: Waiting on client
+          - strong [ref=f12e93]: —
+          - text: Client decision gate
+        - generic [ref=f12e94]:
+          - generic [ref=f12e95]: Revision rounds
+          - strong [ref=f12e98]: —
+          - text: Recorded decisions
+        - generic [ref=f12e99]:
+          - generic [ref=f12e100]: Avg. turnaround
+          - strong [ref=f12e103]: —
+          - text: Submit to approval
+        - generic [ref=f12e104]:
+          - generic [ref=f12e105]: On-time
+          - strong [ref=f12e108]: —
+          - text: 0 overdue
+      - generic [ref=f12e109]:
+        - generic [ref=f12e110]:
+          - generic [ref=f12e111]:
+            - generic [ref=f12e112]:
+              - text: Signal log
+              - heading "Recent activity" [level=2] [ref=f12e113]
+            - link "View all" [ref=f12e114] [cursor=pointer]:
+              - /url: /agency/inbox
+          - paragraph [ref=f12e119]: No activity recorded yet.
+        - generic [ref=f12e121]:
+          - generic [ref=f12e122]:
+            - text: Your queue
+            - heading "Review before release" [level=2] [ref=f12e123]
+          - link "00" [ref=f12e124] [cursor=pointer]:
+            - /url: /agency/review
+      - generic [ref=f12e125]:
+        - generic [ref=f12e127]:
+          - text: Portfolio
+          - heading "Client roll-up" [level=2] [ref=f12e128]
+        - table "Client roll-up" [ref=f12e129]:
+          - rowgroup [ref=f12e130]:
+            - row [ref=f12e131]:
+              - columnheader "Client" [ref=f12e132]
+              - columnheader "Active projects" [ref=f12e133]
+              - columnheader "In production" [ref=f12e134]
+              - columnheader "Waiting" [ref=f12e135]
+              - columnheader "Health" [ref=f12e136]
+          - rowgroup

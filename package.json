@@ -1,0 +1,40 @@
+{
+  "name": "rexops",
+  "private": true,
+  "packageManager": "bun@1.3.5",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "setup": "bash scripts/setup",
+    "smoke:media": "bun --env-file=.env scripts/smoke-media.ts",
+    "smoke:canonical": "bun --env-file=.env scripts/smoke-canonical.ts",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "check:bundle": "bun scripts/check-bundle-budget.ts",
+    "check": "biome check . && turbo check && bun run check:boundaries",
+    "check:boundaries": "dependency-cruiser --config packages/config/dependency-cruiser.cjs apps packages",
+    "test": "turbo test",
+    "test:core": "bun test packages/core",
+    "db:generate": "bun run --cwd packages/db generate",
+    "db:migrate": "bun run --cwd packages/db migrate",
+    "db:push": "bun run --cwd packages/db push",
+    "db:seed": "bun run --cwd packages/db seed",
+    "db:test:prepare": "bun --env-file=.env.test --env-file=.env.test.local scripts/prepare-test-db.ts",
+    "db:studio": "bun run --cwd packages/db studio",
+    "gen": "turbo gen",
+    "format": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.11",
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
+    "@turbo/gen": "^2.8.10",
+    "@types/bun": "^1.3.5",
+    "dependency-cruiser": "^17.3.5",
+    "lefthook": "^2.0.15",
+    "turbo": "^2.8.10",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,27 @@
+- main [ref=f20e44]:
+  - generic [ref=f20e45]:
+    - generic [ref=f20e46]:
+      - text: Platform control
+      - heading "Agencies" [level=1] [ref=f20e47]
+      - paragraph [ref=f20e48]: Tenant provisioning and operational oversight. Every cross-tenant read is audited.
+    - button "Provision agency" [ref=f20e49] [cursor=pointer]
+  - generic [ref=f20e51]: Root context · writes are explicit and logged
+  - table [ref=f20e56]:
+    - rowgroup
+    - rowgroup [ref=f20e57]:
+      - row [ref=f20e58]:
+        - rowheader "Outside Agency outside-agency" [ref=f20e59]:
+          - text: Outside Agency
+          - generic [ref=f20e60]: outside-agency
+        - cell "outside-agency" [ref=f20e61]
+        - cell "01" [ref=f20e62]
+        - cell "21 AUG 2026" [ref=f20e63]
+        - cell "Active" [ref=f20e64]
+      - row [ref=f20e67]:
+        - rowheader "T-Rex Media t-rex-media" [ref=f20e68]:
+          - text: T-Rex Media
+          - generic [ref=f20e69]: t-rex-media
+        - cell "t-rex-media" [ref=f20e70]
+        - cell "12" [ref=f20e71]
+        - cell "21 AUG 2026" [ref=f20e72]
+        - cell "Active" [ref=f20e73]

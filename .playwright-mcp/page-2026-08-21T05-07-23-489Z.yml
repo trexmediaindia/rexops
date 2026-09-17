@@ -1,0 +1,208 @@
+- generic [ref=f22e44]:
+  - complementary [ref=f22e45]:
+    - generic [ref=f22e46]:
+      - generic [ref=f22e47]: R
+      - generic [ref=f22e48]: RexOps
+      - button "Collapse sidebar" [expanded] [ref=f22e49] [cursor=pointer]
+    - generic [ref=f22e53]:
+      - img "T-Rex Media" [ref=f22e54]: TR
+      - generic [ref=f22e55]:
+        - strong [ref=f22e56]: T-Rex Media
+        - generic [ref=f22e57]: Agency workspace
+    - navigation "Agency navigation" [ref=f22e60]:
+      - generic [ref=f22e61]: Operate
+      - link "Dashboard" [ref=f22e62] [cursor=pointer]:
+        - /url: /agency/dashboard
+      - link "Clients" [ref=f22e67] [cursor=pointer]:
+        - /url: /agency/clients
+      - link "Projects" [ref=f22e73] [cursor=pointer]:
+        - /url: /agency/projects
+      - link "Work" [ref=f22e77] [cursor=pointer]:
+        - /url: /agency/work
+      - link "Review queue 6" [ref=f22e89] [cursor=pointer]:
+        - /url: /agency/review
+        - generic [ref=f22e93]: Review queue
+        - emphasis [ref=f22e94]: "6"
+      - link "Inbox 2" [ref=f22e95] [cursor=pointer]:
+        - /url: /agency/inbox
+        - generic [ref=f22e99]: Inbox
+        - emphasis [ref=f22e100]: "2"
+      - generic [ref=f22e101]: Manage
+      - link "Team" [ref=f22e102] [cursor=pointer]:
+        - /url: /agency/team
+      - link "Review pipelines" [ref=f22e109] [cursor=pointer]:
+        - /url: /agency/settings/pipelines
+      - link "Automation" [ref=f22e114] [cursor=pointer]:
+        - /url: /agency/settings
+    - generic [ref=f22e119]:
+      - generic [ref=f22e120]:
+        - generic [ref=f22e121]: Storage
+        - generic [ref=f22e122]: 1.6 GB / 100 GB
+      - button "Manas Rao — agency owner Manas Rao agency owner" [ref=f22e126] [cursor=pointer]:
+        - img "Manas Rao — agency owner" [ref=f22e127]: MR
+        - generic [ref=f22e128]:
+          - strong [ref=f22e129]: Manas Rao
+          - generic [ref=f22e130]: agency owner
+  - main [ref=f22e133]:
+    - generic [ref=f22e134]:
+      - button "Search anything K" [ref=f22e135] [cursor=pointer]:
+        - generic [ref=f22e139]: Search anything
+        - generic [ref=f22e140]: K
+      - generic [ref=f22e143]:
+        - link "2 unread notifications" [ref=f22e145] [cursor=pointer]:
+          - /url: /agency/inbox
+          - generic [ref=f22e149]: "2"
+        - button "Create new" [ref=f22e151] [cursor=pointer]
+    - generic [ref=f22e153]:
+      - generic [ref=f22e154]:
+        - generic [ref=f22e155]:
+          - text: Friday 21 August
+          - heading "Good morning, Manas." [level=1] [ref=f22e156]
+          - paragraph [ref=f22e157]: 6 items need a decision before the client sees them.
+        - generic [ref=f22e158]: Live
+      - region "Agency status overview" [ref=f22e160]:
+        - generic [ref=f22e161]:
+          - generic [ref=f22e162]: Active work
+          - strong [ref=f22e165]: "10"
+          - text: Across the visible slate
+        - generic [ref=f22e166]:
+          - generic [ref=f22e167]: Waiting on client
+          - strong [ref=f22e170]: "2"
+          - text: Client decision gate
+        - generic [ref=f22e171]:
+          - generic [ref=f22e172]: Revision rounds
+          - strong [ref=f22e175]: "1"
+          - text: Recorded decisions
+        - generic [ref=f22e176]:
+          - generic [ref=f22e177]: Avg. turnaround
+          - strong [ref=f22e180]: 60h
+          - text: Submit to approval
+        - generic [ref=f22e181]:
+          - generic [ref=f22e182]: On-time
+          - strong [ref=f22e185]: 75%
+          - text: 3 overdue
+      - generic [ref=f22e186]:
+        - generic [ref=f22e187]:
+          - generic [ref=f22e188]:
+            - generic [ref=f22e189]:
+              - text: Signal log
+              - heading "Recent activity" [level=2] [ref=f22e190]
+            - link "View all" [ref=f22e191] [cursor=pointer]:
+              - /url: /agency/inbox
+          - generic [ref=f22e195]:
+            - article [ref=f22e196]:
+              - generic [ref=f22e200]:
+                - strong [ref=f22e201]: Priya left a note at 0:06
+                - generic [ref=f22e202]: Priya Deshmukh
+              - time [ref=f22e206]: 8/20/2026, 3:02:09 PM
+            - article [ref=f22e207]:
+              - generic [ref=f22e212]:
+                - strong [ref=f22e213]: Riya uploaded v2.1 — Colour pass
+                - generic [ref=f22e214]: Riya Kapoor
+              - time [ref=f22e218]: 8/20/2026, 10:14:09 AM
+            - article [ref=f22e219]:
+              - generic [ref=f22e223]:
+                - strong [ref=f22e224]: Arjun commented at 0:04
+                - generic [ref=f22e225]: Arjun Mehta
+              - time [ref=f22e229]: 8/20/2026, 10:14:09 AM
+            - article [ref=f22e230]:
+              - generic [ref=f22e235]:
+                - strong [ref=f22e236]: Sent to internal review
+                - generic [ref=f22e237]: Neha Iyer
+              - time [ref=f22e241]: 8/20/2026, 10:14:09 AM
+            - article [ref=f22e242]:
+              - generic [ref=f22e247]:
+                - strong [ref=f22e248]: Submitted to client review
+                - generic [ref=f22e249]: Riya Kapoor
+              - time [ref=f22e253]: 8/20/2026, 10:14:09 AM
+            - article [ref=f22e254]:
+              - generic [ref=f22e259]:
+                - strong [ref=f22e260]: Sara requested changes
+                - generic [ref=f22e261]: Sara Fernandes
+              - time [ref=f22e265]: 8/19/2026, 10:14:09 AM
+            - article [ref=f22e266]:
+              - generic [ref=f22e271]:
+                - strong [ref=f22e272]: Manas approved internally
+                - generic [ref=f22e273]: Manas Rao
+              - time [ref=f22e277]: 8/19/2026, 10:14:09 AM
+            - article [ref=f22e278]:
+              - generic [ref=f22e283]:
+                - strong [ref=f22e284]: Marked ready for internal review
+                - generic [ref=f22e285]: Neha Iyer
+              - time [ref=f22e289]: 8/18/2026, 10:14:09 AM
+        - generic [ref=f22e290]:
+          - generic [ref=f22e291]:
+            - generic [ref=f22e292]:
+              - text: Your queue
+              - heading "Review before release" [level=2] [ref=f22e293]
+            - link "06" [ref=f22e294] [cursor=pointer]:
+              - /url: /agency/review
+          - article [ref=f22e295]:
+            - generic [ref=f22e301]:
+              - generic [ref=f22e302]: Ready for internal review
+              - heading "Spring Menu Static" [level=3] [ref=f22e304]
+              - paragraph [ref=f22e305]: Spring Menu Drop
+              - generic [ref=f22e306]: 1d overdue
+            - link "Open Spring Menu Static" [ref=f22e311] [cursor=pointer]:
+              - /url: /agency/deliverables/deliverable_menu_static
+          - article [ref=f22e315]:
+            - generic [ref=f22e321]:
+              - generic [ref=f22e322]: Internal review
+              - heading "Q3 Brand Board" [level=3] [ref=f22e324]
+              - paragraph [ref=f22e325]: Q3 Collection Launch
+              - generic [ref=f22e326]: due tomorrow
+            - link "Open Q3 Brand Board" [ref=f22e331] [cursor=pointer]:
+              - /url: /agency/deliverables/deliverable_brand_board
+          - article [ref=f22e335]:
+            - generic [ref=f22e339]:
+              - generic [ref=f22e340]: Waiting on client
+              - heading "Studio Launch Film" [level=3] [ref=f22e342]
+              - paragraph [ref=f22e343]: Nova Studio Launch
+              - generic [ref=f22e344]: due tomorrow
+            - link "Open Studio Launch Film" [ref=f22e349] [cursor=pointer]:
+              - /url: /agency/deliverables/deliverable_gym_launch
+          - article [ref=f22e353]:
+            - generic [ref=f22e357]:
+              - generic [ref=f22e358]: Changes requested
+              - heading "Holiday Teaser" [level=3] [ref=f22e360]
+              - paragraph [ref=f22e361]: Reels
+              - generic [ref=f22e362]: 1d overdue
+            - link "Open Holiday Teaser" [ref=f22e367] [cursor=pointer]:
+              - /url: /agency/deliverables/deliverable_holiday_teaser
+      - generic [ref=f22e371]:
+        - generic [ref=f22e373]:
+          - text: Portfolio
+          - heading "Client roll-up" [level=2] [ref=f22e374]
+        - table "Client roll-up" [ref=f22e375]:
+          - rowgroup [ref=f22e376]:
+            - row [ref=f22e377]:
+              - columnheader "Client" [ref=f22e378]
+              - columnheader "Active projects" [ref=f22e379]
+              - columnheader "In production" [ref=f22e380]
+              - columnheader "Waiting" [ref=f22e381]
+              - columnheader "Health" [ref=f22e382]
+          - rowgroup [ref=f22e383]:
+            - row [ref=f22e384]:
+              - rowheader "Imperial Living" [ref=f22e385]
+              - cell "4" [ref=f22e386]
+              - cell "6" [ref=f22e387]
+              - cell "1" [ref=f22e388]
+              - cell "WATCH" [ref=f22e389]
+            - row [ref=f22e392]:
+              - rowheader "Nova Fitness" [ref=f22e393]
+              - cell "2" [ref=f22e394]
+              - cell "3" [ref=f22e395]
+              - cell "1" [ref=f22e396]
+              - cell "WATCH" [ref=f22e397]
+            - row [ref=f22e400]:
+              - rowheader "Old Harbour Co" [ref=f22e401]
+              - cell "0" [ref=f22e402]
+              - cell "0" [ref=f22e403]
+              - cell "0" [ref=f22e404]
+              - cell "HEALTHY" [ref=f22e405]
+            - row [ref=f22e408]:
+              - rowheader "Latitude Coffee" [ref=f22e409]
+              - cell "1" [ref=f22e410]
+              - cell "1" [ref=f22e411]
+              - cell "0" [ref=f22e412]
+              - cell "WATCH" [ref=f22e413]

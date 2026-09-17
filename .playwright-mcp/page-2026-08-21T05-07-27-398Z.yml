@@ -1,0 +1,60 @@
+- generic [ref=f23e2]:
+  - generic [ref=f23e3]:
+    - generic [ref=f23e4]: Fallback
+    - generic [ref=f23e5]: "1"
+  - generic [ref=f23e6]:
+    - complementary [ref=f23e7]:
+      - generic [ref=f23e8]:
+        - generic [ref=f23e9]: R
+        - generic [ref=f23e10]: RexOps
+        - button "Collapse sidebar" [expanded] [ref=f23e11] [cursor=pointer]
+      - generic [ref=f23e15]:
+        - img "T-Rex Media" [ref=f23e16]: TR
+        - generic [ref=f23e17]:
+          - strong [ref=f23e18]: T-Rex Media
+          - generic [ref=f23e19]: Agency workspace
+      - navigation "Agency navigation" [ref=f23e22]:
+        - generic [ref=f23e23]: Operate
+        - link "Dashboard" [ref=f23e24] [cursor=pointer]:
+          - /url: /agency/dashboard
+        - link "Clients" [ref=f23e29] [cursor=pointer]:
+          - /url: /agency/clients
+        - link "Projects" [ref=f23e35] [cursor=pointer]:
+          - /url: /agency/projects
+        - link "Work" [ref=f23e39] [cursor=pointer]:
+          - /url: /agency/work
+        - link "Review queue 6" [ref=f23e51] [cursor=pointer]:
+          - /url: /agency/review
+          - generic [ref=f23e55]: Review queue
+          - emphasis [ref=f23e56]: "6"
+        - link "Inbox 2" [ref=f23e57] [cursor=pointer]:
+          - /url: /agency/inbox
+          - generic [ref=f23e61]: Inbox
+          - emphasis [ref=f23e62]: "2"
+        - generic [ref=f23e63]: Manage
+        - link "Team" [ref=f23e64] [cursor=pointer]:
+          - /url: /agency/team
+        - link "Review pipelines" [ref=f23e71] [cursor=pointer]:
+          - /url: /agency/settings/pipelines
+        - link "Automation" [ref=f23e76] [cursor=pointer]:
+          - /url: /agency/settings
+      - generic [ref=f23e81]:
+        - generic [ref=f23e82]:
+          - generic [ref=f23e83]: Storage
+          - generic [ref=f23e84]: 1.6 GB / 100 GB
+        - button "Manas Rao — agency owner Manas Rao agency owner" [ref=f23e87] [cursor=pointer]:
+          - img "Manas Rao — agency owner" [ref=f23e88]: MR
+          - generic [ref=f23e89]:
+            - strong [ref=f23e90]: Manas Rao
+            - generic [ref=f23e91]: agency owner
+    - main [ref=f23e94]:
+      - generic [ref=f23e95]:
+        - button "Search anything K" [ref=f23e96] [cursor=pointer]:
+          - generic [ref=f23e100]: Search anything
+          - generic [ref=f23e101]: K
+        - generic [ref=f23e104]:
+          - link "2 unread notifications" [ref=f23e106] [cursor=pointer]:
+            - /url: /agency/inbox
+            - generic [ref=f23e110]: "2"
+          - button "Create new" [ref=f23e112] [cursor=pointer]
+      - generic [ref=f23e114]: Loading review room

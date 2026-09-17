@@ -1,0 +1,96 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e791]:
+    - complementary [ref=f3e792]:
+      - generic [ref=f3e793]:
+        - generic [ref=f3e794]: R
+        - generic [ref=f3e795]: RexOps
+        - button "Collapse sidebar" [expanded] [ref=f3e796] [cursor=pointer]
+      - generic [ref=f3e800]:
+        - img "T-Rex Media" [ref=f3e801]: TR
+        - generic [ref=f3e802]:
+          - strong [ref=f3e803]: T-Rex Media
+          - generic [ref=f3e804]: Agency workspace
+      - navigation "Agency navigation" [ref=f3e807]:
+        - generic [ref=f3e808]: Operate
+        - link "Dashboard" [ref=f3e809] [cursor=pointer]:
+          - /url: /agency/dashboard
+        - link "Clients" [ref=f3e814] [cursor=pointer]:
+          - /url: /agency/clients
+        - link "Projects" [ref=f3e820] [cursor=pointer]:
+          - /url: /agency/projects
+        - link "Work" [ref=f3e824] [cursor=pointer]:
+          - /url: /agency/work
+        - link "Review queue" [ref=f3e836] [cursor=pointer]:
+          - /url: /agency/review
+        - link "Inbox" [ref=f3e841] [cursor=pointer]:
+          - /url: /agency/inbox
+        - generic [ref=f3e846]: Manage
+        - link "Team" [ref=f3e847] [cursor=pointer]:
+          - /url: /agency/team
+        - link "Review pipelines" [ref=f3e854] [cursor=pointer]:
+          - /url: /agency/settings/pipelines
+        - link "Automation" [ref=f3e859] [cursor=pointer]:
+          - /url: /agency/settings
+      - generic [ref=f3e864]:
+        - generic [ref=f3e865]:
+          - generic [ref=f3e866]: Storage
+          - generic [ref=f3e867]: 18.4 / 100 GB
+        - button "Manas — agency owner Manas agency owner" [ref=f3e871] [cursor=pointer]:
+          - img "Manas — agency owner" [ref=f3e872]: M
+          - generic [ref=f3e873]:
+            - strong [ref=f3e874]: Manas
+            - generic [ref=f3e875]: agency owner
+    - main [ref=f3e878]:
+      - generic [ref=f3e879]:
+        - button "Search anything K" [ref=f3e880] [cursor=pointer]:
+          - generic [ref=f3e884]: Search anything
+          - generic [ref=f3e885]: K
+        - generic [ref=f3e888]:
+          - generic [ref=f3e889]:
+            - generic [ref=f3e890]: Live
+            - generic [ref=f3e891]: "1"
+          - link "0 unread notifications" [ref=f3e893] [cursor=pointer]:
+            - /url: /agency/inbox
+          - button "Create new" [ref=f3e898] [cursor=pointer]
+      - generic [ref=f3e900]:
+        - generic [ref=f3e901]:
+          - link "Projects" [ref=f3e902] [cursor=pointer]:
+            - /url: /agency/projects
+          - generic [ref=f3e905]: /
+          - generic [ref=f3e906]: Production cockpit
+        - generic [ref=f3e907]:
+          - generic [ref=f3e908]:
+            - generic [ref=f3e909]: OTHER deliverable
+            - heading "Beach Vibe Reel" [level=1] [ref=f3e910]
+            - paragraph [ref=f3e911]: Version history, revision work, and release control.
+          - generic [ref=f3e912]:
+            - generic [ref=f3e913]: Pending
+            - button "Move to in progress" [ref=f3e915] [cursor=pointer]
+            - button "Move to archived" [ref=f3e916] [cursor=pointer]
+            - link "Open review room" [ref=f3e917] [cursor=pointer]:
+              - /url: /agency/review/gf26ozrpfjg8fafatoz95uxo
+            - button "Upload major version" [ref=f3e920] [cursor=pointer]
+        - generic [ref=f3e924]:
+          - button "versions" [ref=f3e925]
+          - button "revisions 0" [ref=f3e928]:
+            - text: revisions
+            - generic [ref=f3e932]: "0"
+          - button "activity" [ref=f3e933]
+        - generic [ref=f3e936]:
+          - region "Version preview and drop target" [ref=f3e937]:
+            - generic [ref=f3e938]:
+              - heading "No versions yet." [level=2] [ref=f3e942]
+              - paragraph [ref=f3e943]: Drop the first cut here to start the review trail.
+          - complementary [ref=f3e944]:
+            - generic [ref=f3e946]:
+              - text: Version stack
+              - heading "0 cuts" [level=2] [ref=f3e947]
+            - generic [ref=f3e951]:
+              - button "Drop a file to add" [ref=f3e952] [cursor=pointer]
+              - button "Drop the first cut here or upload a new version" [ref=f3e954] [cursor=pointer]:
+                - strong [ref=f3e958]: Drop the first cut here
+                - generic [ref=f3e959]: or upload a new version
+  - generic [ref=f3e226]:
+    - link "Liveblocks" [ref=f3e227] [cursor=pointer]:
+      - /url: https://lblcks.io/badge
+    - button [ref=f3e236] [cursor=pointer]

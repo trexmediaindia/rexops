@@ -1,0 +1,52 @@
+- generic [ref=f11e3]:
+  - complementary [ref=f11e4]:
+    - generic [ref=f11e5]:
+      - generic [ref=f11e6]: R
+      - generic [ref=f11e7]: RexOps
+      - button "Collapse sidebar" [expanded] [ref=f11e8] [cursor=pointer]
+    - generic [ref=f11e12]:
+      - img "T-Rex Media" [ref=f11e13]: TR
+      - generic [ref=f11e14]:
+        - strong [ref=f11e15]: T-Rex Media
+        - generic [ref=f11e16]: Agency workspace
+    - navigation "Agency navigation" [ref=f11e19]:
+      - generic [ref=f11e20]: Operate
+      - link "Dashboard" [ref=f11e21] [cursor=pointer]:
+        - /url: /agency/dashboard
+      - link "Clients" [ref=f11e26] [cursor=pointer]:
+        - /url: /agency/clients
+      - link "Projects" [ref=f11e32] [cursor=pointer]:
+        - /url: /agency/projects
+      - generic [ref=f11e36]: Manage
+      - link "Team" [ref=f11e37] [cursor=pointer]:
+        - /url: /agency/team
+    - generic [ref=f11e44]:
+      - generic [ref=f11e45]:
+        - generic [ref=f11e46]: Storage
+        - generic [ref=f11e47]: 18.4 / 100 GB
+      - button "Signed out — signed out Signed out signed out" [ref=f11e51] [cursor=pointer]:
+        - img "Signed out — signed out" [ref=f11e52]: SO
+        - generic [ref=f11e53]:
+          - strong [ref=f11e54]: Signed out
+          - generic [ref=f11e55]: signed out
+  - main [ref=f11e58]:
+    - generic [ref=f11e59]:
+      - button "Search anything K" [ref=f11e60] [cursor=pointer]:
+        - generic [ref=f11e64]: Search anything
+        - generic [ref=f11e65]: K
+      - generic [ref=f11e68]:
+        - link "Notifications" [ref=f11e69] [cursor=pointer]:
+          - /url: /agency/inbox
+        - button "Create new" [ref=f11e74] [cursor=pointer]
+    - generic [ref=f11e76]:
+      - generic [ref=f11e77]:
+        - generic [ref=f11e78]:
+          - text: Production slate
+          - heading "Projects" [level=1] [ref=f11e79]
+          - paragraph [ref=f11e80]: The active bodies of work across every client.
+        - button "New project" [disabled] [ref=f11e81] [cursor=pointer]
+      - generic [ref=f11e83]:
+        - button "All active" [ref=f11e84]
+        - button "Due date" [ref=f11e86]
+      - generic [ref=f11e89]: Loading the slate…
+      - generic [ref=f11e90]: 0 projects shown

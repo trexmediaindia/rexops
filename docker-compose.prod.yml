@@ -1,0 +1,129 @@
+name: rexops
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: rexops
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: rexops
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rexops -d rexops"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - rexops-postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - rexops-redis:/data
+
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    image: rexops-api:latest
+    command: ["bun", "run", "db:migrate"]
+    env_file: .env.production
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    image: rexops-api:latest
+    restart: unless-stopped
+    env_file: .env.production
+    volumes:
+      - rexops-media:/app/.data/object-storage
+    expose:
+      - "3000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "bun",
+          "-e",
+          "fetch('http://127.0.0.1:3000/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    image: rexops-worker:latest
+    restart: unless-stopped
+    env_file: .env.production
+    volumes:
+      - rexops-media:/app/.data/object-storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
+      args:
+        VITE_API_URL: ${PUBLIC_ORIGIN:?PUBLIC_ORIGIN is required}
+        VITE_LIVEBLOCKS_AUTH_URL: ${PUBLIC_ORIGIN}/api/liveblocks-auth
+        VITE_VAPID_PUBLIC_KEY: ${VITE_VAPID_PUBLIC_KEY:-}
+        VITE_SENTRY_DSN: ${VITE_SENTRY_DSN:-}
+    image: rexops-web:latest
+    restart: unless-stopped
+    expose:
+      - "80"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?SITE_ADDRESS is required}
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN}
+      LEGACY_ADDRESS: ${LEGACY_ADDRESS:-http://127.0.0.1:8099}
+    volumes:
+      - ./docker/Caddyfile.front:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - api
+      - web
+
+volumes:
+  rexops-postgres:
+  rexops-redis:
+  rexops-media:
+  caddy-data:
+  caddy-config:

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+docker compose up -d postgres
+bun run db:test:prepare
+bun run test

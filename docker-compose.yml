@@ -1,0 +1,97 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: rexops
+      POSTGRES_PASSWORD: rexops
+      POSTGRES_DB: rexops
+    ports:
+      # 5432 on the host is occupied often enough (another project's database,
+      # a Homebrew postgres) that defaulting to it cost more than it saved: the
+      # suite would connect to the wrong server and fail with a wall of raw
+      # driver errors. Set POSTGRES_PORT to move it again.
+      - "${POSTGRES_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rexops -d rexops"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - rexops-postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    command: ["bun", "run", "db:migrate"]
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://rexops:rexops@postgres:5432/rexops
+      DATABASE_URL_UNPOOLED: postgres://rexops:rexops@postgres:5432/rexops
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: ["app"]
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://rexops:rexops@postgres:5432/rexops
+      DATABASE_URL_UNPOOLED: postgres://rexops:rexops@postgres:5432/rexops
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles: ["app"]
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://rexops:rexops@postgres:5432/rexops
+      DATABASE_URL_UNPOOLED: postgres://rexops:rexops@postgres:5432/rexops
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles: ["app"]
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
+        VITE_LIVEBLOCKS_AUTH_URL: ${VITE_LIVEBLOCKS_AUTH_URL:-http://localhost:3000/api/liveblocks-auth}
+        VITE_VAPID_PUBLIC_KEY: ${VITE_VAPID_PUBLIC_KEY:-}
+        VITE_SENTRY_DSN: ${VITE_SENTRY_DSN:-}
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    profiles: ["app"]
+
+volumes:
+  rexops-postgres:

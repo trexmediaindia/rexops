@@ -1,0 +1,20 @@
+{
+  "name": "@rexops/jobs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "check": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "bullmq": "^5.69.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

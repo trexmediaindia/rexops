@@ -1,0 +1,98 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e260]:
+    - complementary [ref=f3e261]:
+      - generic [ref=f3e262]:
+        - generic [ref=f3e263]: R
+        - generic [ref=f3e264]: RexOps
+        - button "Collapse sidebar" [expanded] [ref=f3e265] [cursor=pointer]
+      - generic [ref=f3e269]:
+        - img "T-Rex Media" [ref=f3e270]: TR
+        - generic [ref=f3e271]:
+          - strong [ref=f3e272]: T-Rex Media
+          - generic [ref=f3e273]: Agency workspace
+      - navigation "Agency navigation" [ref=f3e276]:
+        - generic [ref=f3e277]: Operate
+        - link "Dashboard" [ref=f3e278] [cursor=pointer]:
+          - /url: /agency/dashboard
+        - link "Clients" [ref=f3e283] [cursor=pointer]:
+          - /url: /agency/clients
+        - link "Projects" [ref=f3e289] [cursor=pointer]:
+          - /url: /agency/projects
+        - link "Work" [ref=f3e293] [cursor=pointer]:
+          - /url: /agency/work
+        - link "Review queue" [ref=f3e305] [cursor=pointer]:
+          - /url: /agency/review
+        - link "Inbox" [ref=f3e310] [cursor=pointer]:
+          - /url: /agency/inbox
+        - generic [ref=f3e315]: Manage
+        - link "Team" [ref=f3e316] [cursor=pointer]:
+          - /url: /agency/team
+        - link "Review pipelines" [ref=f3e323] [cursor=pointer]:
+          - /url: /agency/settings/pipelines
+        - link "Automation" [ref=f3e328] [cursor=pointer]:
+          - /url: /agency/settings
+      - generic [ref=f3e333]:
+        - generic [ref=f3e334]:
+          - generic [ref=f3e335]: Storage
+          - generic [ref=f3e336]: 18.4 / 100 GB
+        - button "Manas — agency owner Manas agency owner" [ref=f3e340] [cursor=pointer]:
+          - img "Manas — agency owner" [ref=f3e341]: M
+          - generic [ref=f3e342]:
+            - strong [ref=f3e343]: Manas
+            - generic [ref=f3e344]: agency owner
+    - main [ref=f3e347]:
+      - generic [ref=f3e348]:
+        - button "Search anything K" [ref=f3e349] [cursor=pointer]:
+          - generic [ref=f3e353]: Search anything
+          - generic [ref=f3e354]: K
+        - generic [ref=f3e357]:
+          - generic [ref=f3e358]:
+            - generic [ref=f3e359]: Live
+            - generic [ref=f3e360]: "1"
+          - link "0 unread notifications" [ref=f3e362] [cursor=pointer]:
+            - /url: /agency/inbox
+          - button "Create new" [ref=f3e367] [cursor=pointer]
+      - generic [ref=f3e369]:
+        - generic [ref=f3e370]:
+          - generic [ref=f3e371]:
+            - text: Relationships
+            - heading "Clients" [level=1] [ref=f3e372]
+            - paragraph [ref=f3e373]: Every project, decision, and client-facing version starts here.
+          - button "Add client" [ref=f3e374] [cursor=pointer]
+        - generic [ref=f3e376]:
+          - textbox "Search clients" [ref=f3e381]
+          - button "Active only" [ref=f3e382]
+        - table [ref=f3e386]:
+          - rowgroup [ref=f3e387]:
+            - row "Client Company Projects Status Actions" [ref=f3e388]:
+              - columnheader "Client" [ref=f3e389]
+              - columnheader "Company" [ref=f3e390]
+              - columnheader "Projects" [ref=f3e391]
+              - columnheader "Status" [ref=f3e392]
+              - columnheader "Actions"
+          - rowgroup [ref=f3e394]:
+            - row [ref=f3e395]:
+              - rowheader "IM Imperial Living" [ref=f3e396]:
+                - generic [ref=f3e397]: IM
+                - text: Imperial Living
+              - cell "Imperial Living" [ref=f3e398]
+              - cell "2" [ref=f3e399]
+              - cell "Active" [ref=f3e400]
+              - cell [ref=f3e403]:
+                - button "Open" [ref=f3e404] [cursor=pointer]
+                - button "Archive Imperial Living" [ref=f3e405] [cursor=pointer]: Archive
+            - row [ref=f3e450]:
+              - rowheader "NO Northstar Foods" [ref=f3e451]:
+                - generic [ref=f3e452]: "NO"
+                - text: Northstar Foods
+              - cell "Northstar Consumer" [ref=f3e453]
+              - cell "0" [ref=f3e454]
+              - cell "Active" [ref=f3e455]
+              - cell [ref=f3e458]:
+                - button "Open" [ref=f3e459] [cursor=pointer]
+                - button "Archive Northstar Foods" [ref=f3e460] [cursor=pointer]: Archive
+        - generic [ref=f3e409]: 2 clients shown · 2 active projects
+  - generic [ref=f3e226]:
+    - link "Liveblocks" [ref=f3e227] [cursor=pointer]:
+      - /url: https://lblcks.io/badge
+    - button [ref=f3e236] [cursor=pointer]

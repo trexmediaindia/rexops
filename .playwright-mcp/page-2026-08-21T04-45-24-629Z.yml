@@ -1,0 +1,97 @@
+- generic [ref=f19e3]:
+  - complementary [ref=f19e4]:
+    - generic [ref=f19e5]:
+      - generic [ref=f19e6]: R
+      - generic [ref=f19e7]: RexOps
+      - button "Collapse sidebar" [expanded] [ref=f19e8] [cursor=pointer]
+    - generic [ref=f19e12]:
+      - img "T-Rex Media" [ref=f19e13]: TR
+      - generic [ref=f19e14]:
+        - strong [ref=f19e15]: T-Rex Media
+        - generic [ref=f19e16]: Agency workspace
+    - navigation "Agency navigation" [ref=f19e19]:
+      - generic [ref=f19e20]: Operate
+      - link "Dashboard" [ref=f19e21] [cursor=pointer]:
+        - /url: /agency/dashboard
+      - link "Clients" [ref=f19e26] [cursor=pointer]:
+        - /url: /agency/clients
+      - link "Projects" [ref=f19e32] [cursor=pointer]:
+        - /url: /agency/projects
+      - link "Work" [ref=f19e36] [cursor=pointer]:
+        - /url: /agency/work
+      - link "Review queue" [ref=f19e48] [cursor=pointer]:
+        - /url: /agency/review
+      - link "Inbox" [ref=f19e53] [cursor=pointer]:
+        - /url: /agency/inbox
+      - generic [ref=f19e58]: Manage
+      - link "Team" [ref=f19e59] [cursor=pointer]:
+        - /url: /agency/team
+      - link "Review pipelines" [ref=f19e66] [cursor=pointer]:
+        - /url: /agency/settings/pipelines
+      - link "Automation" [ref=f19e71] [cursor=pointer]:
+        - /url: /agency/settings
+    - generic [ref=f19e76]:
+      - generic [ref=f19e77]:
+        - generic [ref=f19e78]: Storage
+        - generic [ref=f19e79]: —
+      - button "Signed out — signed out Signed out signed out" [ref=f19e82] [cursor=pointer]:
+        - img "Signed out — signed out" [ref=f19e83]: SO
+        - generic [ref=f19e84]:
+          - strong [ref=f19e85]: Signed out
+          - generic [ref=f19e86]: signed out
+  - main [ref=f19e89]:
+    - generic [ref=f19e90]:
+      - button "Search anything K" [ref=f19e91] [cursor=pointer]:
+        - generic [ref=f19e95]: Search anything
+        - generic [ref=f19e96]: K
+      - generic [ref=f19e99]:
+        - link "Notifications" [ref=f19e100] [cursor=pointer]:
+          - /url: /agency/inbox
+        - button "Create new" [ref=f19e105] [cursor=pointer]
+    - generic [ref=f19e107]:
+      - generic [ref=f19e108]:
+        - generic [ref=f19e109]:
+          - text: One dataset / four lenses
+          - heading "Work" [level=1] [ref=f19e110]
+          - paragraph [ref=f19e111]: Switch the view without changing the underlying deliverables or their access rules.
+        - button "Save this view" [ref=f19e112] [cursor=pointer]
+      - generic [ref=f19e117]:
+        - generic [ref=f19e118]:
+          - button "Board" [ref=f19e119] [cursor=pointer]
+          - button "List" [ref=f19e122] [cursor=pointer]
+          - button "Calendar" [ref=f19e124] [cursor=pointer]
+          - button "Timeline" [ref=f19e127] [cursor=pointer]
+        - combobox "Saved views" [ref=f19e129]:
+          - option "Saved views" [selected]
+      - generic [ref=f19e130]: Loading the slate…
+      - generic [ref=f19e131]:
+        - generic [ref=f19e132]:
+          - generic [ref=f19e133]:
+            - generic [ref=f19e134]: PENDING
+            - generic [ref=f19e135]: "00"
+          - button "Add deliverable" [ref=f19e136]
+        - generic [ref=f19e138]:
+          - generic [ref=f19e139]:
+            - generic [ref=f19e140]: IN PROGRESS
+            - generic [ref=f19e141]: "00"
+          - button "Add deliverable" [ref=f19e142]
+        - generic [ref=f19e144]:
+          - generic [ref=f19e145]:
+            - generic [ref=f19e146]: UNDER INTERNAL REVIEW
+            - generic [ref=f19e147]: "00"
+          - button "Add deliverable" [ref=f19e148]
+        - generic [ref=f19e150]:
+          - generic [ref=f19e151]:
+            - generic [ref=f19e152]: UNDER CLIENT REVIEW
+            - generic [ref=f19e153]: "00"
+          - button "Add deliverable" [ref=f19e154]
+        - generic [ref=f19e156]:
+          - generic [ref=f19e157]:
+            - generic [ref=f19e158]: REVISION REQUESTED
+            - generic [ref=f19e159]: "00"
+          - button "Add deliverable" [ref=f19e160]
+        - generic [ref=f19e162]:
+          - generic [ref=f19e163]:
+            - generic [ref=f19e164]: APPROVED
+            - generic [ref=f19e165]: "00"
+          - button "Add deliverable" [ref=f19e166]
