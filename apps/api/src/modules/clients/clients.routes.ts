@@ -1,10 +1,12 @@
-import { createClientSchema, updateClientSchema } from "@rexops/validators";
+import { addClientPersonSchema, createClientSchema, updateClientSchema } from "@rexops/validators";
 import { Elysia, t } from "elysia";
 import { authGuard, requirePrincipal } from "../../plugins/auth-guard";
 import {
+  addClientPerson,
   archiveClient,
   createClient,
   getClient,
+  listClientPeople,
   listClients,
   updateClient,
 } from "./clients.service";
@@ -66,4 +68,24 @@ export const clientsRoutes = new Elysia({ prefix: "/api/clients" })
     const actor = requirePrincipal(principal, set);
     if (!actor) return { error: "UNAUTHORIZED" };
     return archiveClient(actor, params.id);
-  });
+  })
+  .get("/:id/people", ({ params, principal, set }) => {
+    const actor = requirePrincipal(principal, set);
+    if (!actor) return { error: "UNAUTHORIZED" };
+    return listClientPeople(actor, params.id);
+  })
+  .post(
+    "/:id/people",
+    ({ params, body, principal, set }) => {
+      const actor = requirePrincipal(principal, set);
+      if (!actor) return { error: "UNAUTHORIZED" };
+      return addClientPerson(actor, params.id, addClientPersonSchema.parse(body));
+    },
+    {
+      body: t.Object({
+        name: t.String({ minLength: 2 }),
+        email: t.String({ format: "email" }),
+        role: t.Optional(t.Union([t.Literal("CLIENT_OWNER"), t.Literal("CLIENT_MEMBER")])),
+      }),
+    },
+  );

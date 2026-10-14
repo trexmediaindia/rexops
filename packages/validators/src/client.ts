@@ -23,3 +23,15 @@ export const updateClientSchema = createClientSchema
 
 export type CreateClientInput = z.infer<typeof createClientSchema>;
 export type UpdateClientInput = z.infer<typeof updateClientSchema>;
+
+/** A person at a client company who signs in to the client portal. CLIENT_OWNER can approve
+ * work (the final sign-off); CLIENT_MEMBER can view and comment but not approve. */
+export const clientPersonRoleSchema = z.enum(["CLIENT_OWNER", "CLIENT_MEMBER"]);
+
+export const addClientPersonSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  email: z.email(),
+  role: clientPersonRoleSchema.default("CLIENT_OWNER"),
+});
+
+export type AddClientPersonInput = z.infer<typeof addClientPersonSchema>;
