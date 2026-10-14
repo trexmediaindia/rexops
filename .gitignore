@@ -8,4 +8,4 @@ coverage
 *.log
 .DS_Store
 .data
-packages/db/drizzle/meta
+dump.rdb

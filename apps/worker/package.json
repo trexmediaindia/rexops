@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun --watch src/index.ts",
+    "dev": "cd ../.. && bun --env-file=.env --watch apps/worker/src/index.ts",
     "build": "bun build src/index.ts --outdir dist --target bun",
     "check": "tsc --noEmit",
     "test": "bun test"

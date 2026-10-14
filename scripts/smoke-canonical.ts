@@ -169,6 +169,10 @@ await clientOwner(`/api/reviews/deliverables/${deliverable.id}/decisions`, {
     fileVersionId: v2.id,
     decision: "APPROVE",
     eSignature: "Sara Imperial",
+    // Same consent record the client review room sends (apps/web/src/routes/review-room.tsx);
+    // the API rejects a final client approval without it.
+    signatureConsentText: "I confirm that I am authorized to approve this version.",
+    signatureConsentVersion: "2026-06-22",
   }),
 });
 const delivered = await owner<{ status: string }>(

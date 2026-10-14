@@ -40,7 +40,7 @@ for (const worker of workers) {
     logger.info({ jobId: job.id, queue: worker.name }, "job completed"),
   );
   worker.on("failed", (job, error) =>
-    logger.error({ jobId: job?.id, queue: worker.name, error }, "job failed"),
+    logger.error({ jobId: job?.id, queue: worker.name, err: error }, "job failed"),
   );
 }
 
@@ -51,12 +51,14 @@ const relayTimer = setInterval(async () => {
   try {
     await relayPendingOutbox();
   } catch (error) {
-    logger.error({ error }, "outbox relay failed");
+    logger.error({ err: error }, "outbox relay failed");
   } finally {
     relayInFlight = false;
   }
 }, 2000);
-void ensureJobSchedulers().catch((error) => logger.error({ error }, "job scheduler setup failed"));
+void ensureJobSchedulers().catch((error) =>
+  logger.error({ err: error }, "job scheduler setup failed"),
+);
 
 async function shutdown() {
   clearInterval(relayTimer);
