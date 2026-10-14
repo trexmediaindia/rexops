@@ -21,6 +21,7 @@
     "db:migrate": "bun run --cwd packages/db migrate",
     "db:push": "bun run --cwd packages/db push",
     "db:seed": "bun run --cwd packages/db seed",
+    "db:bootstrap": "bun run --cwd packages/db bootstrap",
     "db:test:prepare": "bun --env-file=.env.test --env-file=.env.test.local scripts/prepare-test-db.ts",
     "db:studio": "bun run --cwd packages/db studio",
     "gen": "turbo gen",

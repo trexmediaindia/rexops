@@ -33,6 +33,10 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
+    // Accounts are created by an owner inviting people (team/client modules) or by
+    // `bun run db:bootstrap`. Leaving public sign-up on let anyone on the internet create
+    // a login on a live deployment.
+    disableSignUp: true,
   },
   user: {
     additionalFields: {

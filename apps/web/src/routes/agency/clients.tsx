@@ -1,9 +1,10 @@
 import { Button, Callout, EmptyState, SegmentedControl, Skeleton, StatusChip } from "@rexops/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { Archive, Building2, Plus, Search } from "lucide-react";
+import { Archive, Building2, Plus, Search, Users } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AgencyShell } from "../../components/app-shell";
+import { ClientPeopleDialog } from "../../components/clients/client-people-dialog";
 import { ConfirmDialog } from "../../components/ui/confirm-dialog";
 import { FormDialog } from "../../components/ui/form-dialog";
 import { PageHeader } from "../../components/ui/page-header";
@@ -22,6 +23,7 @@ export function ClientsPage() {
   const [scope, setScope] = useState<Scope>("active");
   const [creating, setCreating] = useState(search.new === "1");
   const [archiving, setArchiving] = useState<ClientRecord | null>(null);
+  const [peopleFor, setPeopleFor] = useState<ClientRecord | null>(null);
 
   const clients = useQuery({
     queryKey: ["clients"],
@@ -101,8 +103,8 @@ export function ClientsPage() {
         help={
           <>
             <p>
-              A client is a company, not a person. People from that company are invited separately
-              from the team screen and only ever see their own company's work.
+              A client is a company, not a person. Give people from that company a login with the
+              People button on their row; they only ever see their own company's work.
             </p>
             <p>
               Archiving a client hides it and its projects from these lists. Nothing is deleted and
@@ -228,6 +230,15 @@ export function ClientsPage() {
                     {client.status === "ACTIVE" ? (
                       <button
                         type="button"
+                        aria-label={`People at ${client.name}`}
+                        onClick={() => setPeopleFor(client)}
+                      >
+                        <Users size={14} /> People
+                      </button>
+                    ) : null}
+                    {client.status === "ACTIVE" ? (
+                      <button
+                        type="button"
                         aria-label={`Archive ${client.name}`}
                         disabled={archiveClient.isPending}
                         onClick={() => startArchive(client)}
@@ -265,7 +276,7 @@ export function ClientsPage() {
           pendingLabel="Adding client…"
           pending={createClient.isPending}
           error={createClient.error ? (createClient.error as Error).message : null}
-          footnote="Adding a client does not email anyone. You invite people from that company separately, once there is something for them to look at."
+          footnote="Adding a client does not email anyone. Give people from that company a login with the People button, once there is something for them to look at."
           fields={[
             {
               name: "name",
@@ -320,6 +331,10 @@ export function ClientsPage() {
           onSubmit={(values) => createClient.mutate(values)}
           onClose={closeDialog}
         />
+      ) : null}
+
+      {peopleFor ? (
+        <ClientPeopleDialog client={peopleFor} onClose={() => setPeopleFor(null)} />
       ) : null}
 
       {archiving ? (
