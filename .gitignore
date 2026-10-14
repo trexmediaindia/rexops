@@ -9,3 +9,5 @@ coverage
 .DS_Store
 .data
 dump.rdb
+.env.localrun
+.env.smoke
