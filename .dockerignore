@@ -6,3 +6,9 @@
 .env
 *.log
 .data
+.env.*
+!.env.example
+!.env.production.example
+.playwright-mcp
+*.png
+!apps/**/*.png
