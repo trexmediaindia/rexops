@@ -21,5 +21,14 @@ Health probes:
 Before a pull request, run `bun run check && bun run test && bun run build`.
 
 For end-to-end verification, run `bun run smoke:media` and `bun run smoke:canonical` while the API and ffmpeg
-worker are running. The canonical smoke drives v1 → revision → v2 → signed approval → delivery and asserts the
+worker are running. Both read a sample video from `.data/smoke/rexops-smoke.mov`, which is not committed;
+create one with:
+
+```sh
+mkdir -p .data/smoke && ffmpeg -f lavfi -i testsrc2=size=1280x720:rate=25 -f lavfi -i sine=frequency=440 \
+  -t 6 -c:v libx264 -pix_fmt yuv420p -c:a aac .data/smoke/rexops-smoke.mov
+```
+
+Live presence (cursors, who's viewing) needs `LIVEBLOCKS_SECRET_KEY`. Without it the app runs normally and the
+browser console notes once per room that live presence is off. The canonical smoke drives v1 → revision → v2 → signed approval → delivery and asserts the
 internal/client trust boundary.

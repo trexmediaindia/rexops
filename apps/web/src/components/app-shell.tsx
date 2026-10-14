@@ -131,6 +131,7 @@ const REVIEW_STATUSES = new Set([
 
 /** Live counts for the sidebar badges. These used to be the literals 6 and 3. */
 function useNavBadges() {
+  const features = useFeatures();
   const deliverables = useQuery({
     queryKey: ["deliverables"],
     queryFn: () => request<DeliverableRecord[]>("/api/deliverables"),
@@ -144,6 +145,9 @@ function useNavBadges() {
     },
     staleTime: 30_000,
     retry: false,
+    // The notifications API only exists while collaboration is on; asking anyway 404s on
+    // every page in a deployment without Liveblocks configured.
+    enabled: features.data?.["collaboration.live"] === true,
   });
   return {
     review: (deliverables.data ?? []).filter((item) => REVIEW_STATUSES.has(item.status)).length,

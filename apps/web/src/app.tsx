@@ -20,7 +20,17 @@ export function App() {
             },
           );
           if (!response.ok) throw new Error("Realtime authorization failed.");
-          return response.json();
+          const body = await response.json();
+          // Without LIVEBLOCKS_SECRET_KEY the API answers with a local `dev:` stub that
+          // Liveblocks' servers reject. Tell the client to stop trying this room instead of
+          // retrying with a token that can never work; everything else keeps working.
+          if (body?.development === true) {
+            return {
+              error: "forbidden" as const,
+              reason: "Live presence is off: LIVEBLOCKS_SECRET_KEY is not set on the API.",
+            };
+          }
+          return body;
         }}
       >
         <RouterProvider router={router} />

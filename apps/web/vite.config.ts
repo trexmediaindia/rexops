@@ -3,6 +3,9 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
+  // One .env at the repo root is the contract (see .env.example); without this
+  // Vite only looks in apps/web and the client env check fails at runtime.
+  envDir: "../..",
   server: {
     port: 5173,
   },
