@@ -3,6 +3,7 @@
 #
 #   sudo bash server-setup.sh ops.example.com
 #
+# Works on DigitalOcean, Hetzner, Lightsail and Oracle Cloud (including its free Arm servers).
 # Installs Docker, opens ports 22/80/443, adds swap (image builds need the memory), creates
 # /opt/rexops and writes /opt/rexops/.env.production with fresh random secrets. Safe to re-run:
 # an existing .env.production is never overwritten. The code itself arrives via the GitHub
@@ -22,6 +23,29 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+echo "==> Firewall: allowing SSH, HTTP and HTTPS"
+if [[ -f /etc/iptables/rules.v4 ]]; then
+  # Oracle Cloud's Ubuntu images ship iptables rules that reject everything except SSH, and
+  # Oracle advises against ufw on them. Open 80/443 in those rules instead. (Oracle also needs
+  # ports 80 and 443 opened in the VCN security list, in the web console.)
+  for rule in "-p tcp --dport 80" "-p tcp --dport 443" "-p udp --dport 443"; do
+    # shellcheck disable=SC2086
+    iptables -C INPUT $rule -m state --state NEW -j ACCEPT 2>/dev/null ||
+      iptables -I INPUT 1 $rule -m state --state NEW -j ACCEPT
+  done
+  if command -v netfilter-persistent >/dev/null 2>&1; then
+    netfilter-persistent save >/dev/null
+  else
+    iptables-save >/etc/iptables/rules.v4
+  fi
+elif command -v ufw >/dev/null 2>&1; then
+  ufw allow OpenSSH >/dev/null
+  ufw allow 80/tcp >/dev/null
+  ufw allow 443/tcp >/dev/null
+  ufw allow 443/udp >/dev/null
+  ufw --force enable >/dev/null
+fi
+
 echo "==> Installing Docker"
 if ! command -v docker >/dev/null 2>&1; then
   curl -fsSL https://get.docker.com | sh
@@ -30,15 +54,6 @@ if [[ "$DEPLOY_USER" != "root" ]]; then
   usermod -aG docker "$DEPLOY_USER"
 fi
 apt-get install -y --no-install-recommends rsync >/dev/null
-
-echo "==> Firewall: allowing SSH, HTTP and HTTPS"
-if command -v ufw >/dev/null 2>&1; then
-  ufw allow OpenSSH >/dev/null
-  ufw allow 80/tcp >/dev/null
-  ufw allow 443/tcp >/dev/null
-  ufw allow 443/udp >/dev/null
-  ufw --force enable >/dev/null
-fi
 
 echo "==> Swap (2 GB) so image builds don't run out of memory"
 if ! swapon --show | grep -q /swapfile; then

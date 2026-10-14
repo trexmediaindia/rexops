@@ -19,6 +19,26 @@ Any provider works (DigitalOcean, Hetzner, AWS Lightsail). Choose:
 
 Note the server's public IP address.
 
+### Free option: Oracle Cloud "Always Free"
+
+Oracle's free Arm server (2 CPUs, 12 GB RAM) runs RexOps at no cost. Setting it up differs from the
+others in a few ways:
+
+- **Choose your home region carefully at sign-up** (e.g. India West (Mumbai) or India South
+  (Hyderabad)); free resources only exist there and it can't be changed later.
+- **Create the instance** with image *Canonical Ubuntu 24.04*, shape *VM.Standard.A1.Flex* set
+  to **2 OCPUs / 12 GB**, a boot volume of about 100 GB, and your SSH public key. If it reports
+  "out of capacity", try another availability domain or try again later.
+- **Open the web ports in the console:** Networking → Virtual cloud networks → your VCN →
+  Security Lists → Default Security List → Add Ingress Rules: source `0.0.0.0/0`, TCP,
+  destination port `80`; repeat for `443`. (The setup script opens them on the server itself.)
+- **The login user is `ubuntu`**, not `root`: use `ubuntu@SERVER_IP` below, and `ubuntu` as
+  `DEPLOY_USER` in step 4.
+
+Oracle may reclaim a free instance that stays nearly idle (under 20% CPU, network and memory
+for 7 days). Upgrading the account to Pay As You Go removes that risk and still costs nothing
+within the free limits.
+
 ## 2. Point your subdomain at it
 
 In your domain's DNS settings, add an **A record**:
@@ -50,7 +70,7 @@ Create a key just for deploys, on your own computer:
 
 ```sh
 ssh-keygen -t ed25519 -f rexops-deploy -N "" -C "github-deploy"
-ssh-copy-id -i rexops-deploy.pub root@SERVER_IP
+ssh-copy-id -i rexops-deploy.pub root@SERVER_IP    # ubuntu@SERVER_IP on Oracle
 ```
 
 In GitHub, open the repo → **Settings → Secrets and variables → Actions → New repository
@@ -59,7 +79,7 @@ secret**, and add:
 | Secret           | Value                                                   |
 | ---------------- | ------------------------------------------------------- |
 | `DEPLOY_HOST`    | the server's IP address                                 |
-| `DEPLOY_USER`    | `root` (or the user you ran the setup script as)        |
+| `DEPLOY_USER`    | `root`, or `ubuntu` on Oracle (the user you set up with) |
 | `DEPLOY_SSH_KEY` | the full contents of the **private** file `rexops-deploy` |
 
 Then go to the **Actions** tab (enable workflows if GitHub asks), choose **Deploy**, and click
@@ -72,9 +92,9 @@ Nobody can sign up from the website: accounts are created by an owner. Make the 
 the server:
 
 ```sh
-ssh root@SERVER_IP
+ssh root@SERVER_IP        # ubuntu@SERVER_IP on Oracle
 cd /opt/rexops
-docker compose --env-file .env.production -f docker-compose.prod.yml run --rm \
+sudo docker compose --env-file .env.production -f docker-compose.prod.yml run --rm \
   -e AGENCY_NAME="T-Rex Media" \
   -e OWNER_NAME="Your Name" \
   -e OWNER_EMAIL="you@yourdomain.com" \
