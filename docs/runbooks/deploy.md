@@ -12,7 +12,7 @@ the three values it needs to reach the server.
 
 Any provider works (DigitalOcean, Hetzner, AWS Lightsail). Choose:
 
-- **Ubuntu 24.04** (or 22.04)
+- **Ubuntu 24.04** (or 22.04), or **Oracle Linux 9** on Oracle Cloud
 - **At least 2 GB RAM**; 4 GB is more comfortable for video processing
 - **At least 40 GB disk**: uploaded videos live on this disk unless you set up Cloudflare R2
 - Add your SSH key while creating it
@@ -32,8 +32,9 @@ others in a few ways:
 - **Open the web ports in the console:** Networking → Virtual cloud networks → your VCN →
   Security Lists → Default Security List → Add Ingress Rules: source `0.0.0.0/0`, TCP,
   destination port `80`; repeat for `443`. (The setup script opens them on the server itself.)
-- **The login user is `ubuntu`**, not `root`: use `ubuntu@SERVER_IP` below, and `ubuntu` as
-  `DEPLOY_USER` in step 4.
+- **The login user is not `root`**: it is `ubuntu` on Ubuntu images and `opc` on Oracle Linux
+  (Oracle's default image). Use it in place of `root` below, and as `DEPLOY_USER` in step 4.
+  Either image works with the setup script.
 
 Oracle may reclaim a free instance that stays nearly idle (under 20% CPU, network and memory
 for 7 days). Upgrading the account to Pay As You Go removes that risk and still costs nothing
@@ -70,7 +71,7 @@ Create a key just for deploys, on your own computer:
 
 ```sh
 ssh-keygen -t ed25519 -f rexops-deploy -N "" -C "github-deploy"
-ssh-copy-id -i rexops-deploy.pub root@SERVER_IP    # ubuntu@SERVER_IP on Oracle
+ssh-copy-id -i rexops-deploy.pub root@SERVER_IP    # ubuntu@ or opc@SERVER_IP on Oracle
 ```
 
 In GitHub, open the repo → **Settings → Secrets and variables → Actions → New repository
@@ -79,7 +80,7 @@ secret**, and add:
 | Secret           | Value                                                   |
 | ---------------- | ------------------------------------------------------- |
 | `DEPLOY_HOST`    | the server's IP address                                 |
-| `DEPLOY_USER`    | `root`, or `ubuntu` on Oracle (the user you set up with) |
+| `DEPLOY_USER`    | `root`, or `ubuntu`/`opc` on Oracle (the user you set up with) |
 | `DEPLOY_SSH_KEY` | the full contents of the **private** file `rexops-deploy` |
 
 Then go to the **Actions** tab (enable workflows if GitHub asks), choose **Deploy**, and click
@@ -92,7 +93,7 @@ Nobody can sign up from the website: accounts are created by an owner. Make the 
 the server:
 
 ```sh
-ssh root@SERVER_IP        # ubuntu@SERVER_IP on Oracle
+ssh root@SERVER_IP        # ubuntu@ or opc@SERVER_IP on Oracle
 cd /opt/rexops
 sudo docker compose --env-file .env.production -f docker-compose.prod.yml run --rm \
   -e AGENCY_NAME="T-Rex Media" \
