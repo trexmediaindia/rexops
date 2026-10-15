@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-time setup for a fresh Ubuntu 22.04/24.04 server that will run RexOps.
+# One-time setup for a fresh Ubuntu 22.04/24.04 or Oracle Linux 9 server that will run RexOps.
 #
 #   sudo bash server-setup.sh ops.example.com
 #
@@ -23,8 +23,46 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+# Ubuntu/Debian or the Red Hat family (Oracle Linux, Rocky, AlmaLinux, RHEL).
+# shellcheck disable=SC1091
+. /etc/os-release
+case " ${ID:-} ${ID_LIKE:-} " in
+  *" ubuntu "* | *" debian "*) FAMILY=debian ;;
+  *" rhel "* | *" fedora "* | *" centos "*) FAMILY=rhel ;;
+  *)
+    echo "Unsupported Linux (${PRETTY_NAME:-unknown}). Use Ubuntu or Oracle Linux." >&2
+    exit 1
+    ;;
+esac
+echo "==> Detected ${PRETTY_NAME:-$ID}"
+
+# Oracle Linux images don't always grow the root filesystem to the boot volume size.
+if [[ -x /usr/libexec/oci-growfs ]]; then
+  echo "==> Growing the root filesystem to the full boot volume"
+  /usr/libexec/oci-growfs -y >/dev/null 2>&1 || true
+fi
+
 echo "==> Firewall: allowing SSH, HTTP and HTTPS"
-if [[ -f /etc/iptables/rules.v4 ]]; then
+if [[ "$FAMILY" == rhel ]]; then
+  if systemctl is-active --quiet firewalld; then
+    changed=0
+    for service in http https; do
+      if ! firewall-cmd --permanent --query-service="$service" >/dev/null 2>&1; then
+        firewall-cmd --permanent --add-service="$service" >/dev/null
+        changed=1
+      fi
+    done
+    if ! firewall-cmd --permanent --query-port=443/udp >/dev/null 2>&1; then
+      firewall-cmd --permanent --add-port=443/udp >/dev/null
+      changed=1
+    fi
+    if ((changed)); then
+      firewall-cmd --reload >/dev/null
+      # A reload drops Docker's own rules; restarting Docker puts them back.
+      if systemctl is-active --quiet docker; then systemctl restart docker; fi
+    fi
+  fi
+elif [[ -f /etc/iptables/rules.v4 ]]; then
   # Oracle Cloud's Ubuntu images ship iptables rules that reject everything except SSH, and
   # Oracle advises against ufw on them. Open 80/443 in those rules instead. (Oracle also needs
   # ports 80 and 443 opened in the VCN security list, in the web console.)
@@ -48,20 +86,34 @@ fi
 
 echo "==> Installing Docker"
 if ! command -v docker >/dev/null 2>&1; then
-  curl -fsSL https://get.docker.com | sh
+  if [[ "$FAMILY" == rhel ]]; then
+    # Docker's install script doesn't cover Oracle Linux; its CentOS repository does, on Arm too.
+    dnf -y -q install dnf-plugins-core
+    dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    dnf -y -q install --allowerasing \
+      docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  else
+    curl -fsSL https://get.docker.com | sh
+  fi
 fi
+systemctl enable --now docker >/dev/null 2>&1
 if [[ "$DEPLOY_USER" != "root" ]]; then
   usermod -aG docker "$DEPLOY_USER"
 fi
-apt-get install -y --no-install-recommends rsync >/dev/null
+if [[ "$FAMILY" == rhel ]]; then
+  dnf -y -q install rsync openssl
+else
+  apt-get install -y --no-install-recommends rsync >/dev/null
+fi
 
 echo "==> Swap (2 GB) so image builds don't run out of memory"
 if ! swapon --show | grep -q /swapfile; then
-  fallocate -l 2G /swapfile
+  # dd rather than fallocate: XFS (Oracle Linux's filesystem) won't swap on a fallocated file.
+  dd if=/dev/zero of=/swapfile bs=1M count=2048 status=none
   chmod 600 /swapfile
   mkswap /swapfile >/dev/null
   swapon /swapfile
-  echo '/swapfile none swap sw 0 0' >>/etc/fstab
+  grep -q '^/swapfile ' /etc/fstab || echo '/swapfile none swap sw 0 0' >>/etc/fstab
 fi
 
 echo "==> App directory $APP_DIR"
