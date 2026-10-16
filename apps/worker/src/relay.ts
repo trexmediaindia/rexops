@@ -8,6 +8,9 @@ import {
   type NotifyJobPayload,
 } from "@rexops/jobs";
 import { and, eq, lte } from "drizzle-orm";
+import pino from "pino";
+
+const logger = pino({ name: "rexops-worker" });
 
 type RelayEvent = typeof outbox.$inferSelect;
 let relayQueues:
@@ -93,9 +96,11 @@ export async function relayPendingOutbox() {
         await mediaQueue.add("generate-preview", mediaPayload, { jobId: event.id });
         routed = true;
       }
-      if (notifyPayload && features["collaboration.live"]) {
+      // In-app notifications are plain rows; they don't need live collaboration switched on.
+      if (notifyPayload) {
         await notifyQueue.add(event.eventType, notifyPayload, {
-          jobId: `${event.id}:projection`,
+          // BullMQ rejects custom ids with a single ":" in them, so use a dash.
+          jobId: `${event.id}-projection`,
         });
         routed = true;
       }
@@ -114,7 +119,11 @@ export async function relayPendingOutbox() {
         .update(outbox)
         .set({ status: "SENT", sentAt: new Date(), attempts: event.attempts + 1 })
         .where(eq(outbox.id, event.id));
-    } catch {
+    } catch (error) {
+      logger.error(
+        { err: error, eventId: event.id, eventType: event.eventType },
+        "outbox relay failed",
+      );
       await db
         .update(outbox)
         .set({ status: "FAILED", attempts: event.attempts + 1 })

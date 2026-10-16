@@ -85,6 +85,9 @@ type Deliverable = {
   title: string;
   status: string;
   contentType: string;
+  caption?: string | null;
+  publishAt?: string | null;
+  platforms?: string[] | null;
 };
 type ReviewUser = { id: string; name: string; image: string | null; role: string };
 type RoomData = {
@@ -238,20 +241,49 @@ function DecisionBar({
     },
   });
 
+  // One click from "the team is happy with it" to "the client has it": team approval and
+  // sending happen together. Teams that want a separate team sign-off can still hand it over.
+  const sendToClient = useMutation({
+    mutationFn: () =>
+      request(`/api/reviews/deliverables/${deliverableId}/send-to-client`, { method: "POST" }),
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: ["review-room", deliverableId] });
+      void queryClient.invalidateQueries({ queryKey: ["deliverables"] });
+      broadcastInvalidation({ room: roomId, queryKeys: [["review-room", deliverableId]] });
+    },
+  });
+
   const isAgency = capabilities.side === "AGENCY";
-  if (isAgency && status === "READY_FOR_INTERNAL_REVIEW") {
+  if (
+    isAgency &&
+    ["IN_PROGRESS", "REVISION_REQUESTED", "READY_FOR_INTERNAL_REVIEW"].includes(status)
+  ) {
     return (
-      <div className="decision-bar">
+      <div className="decision-bar decision-bar--send">
         <div>
-          <ShieldCheck size={17} />
+          <Send size={17} />
           <span>
-            Nothing has been approved yet. Handing it over asks your own approvers to decide. The
-            client still sees nothing.
+            {sendToClient.error
+              ? (sendToClient.error as Error).message
+              : status === "REVISION_REQUESTED"
+                ? "Changes made? Upload the new version, then send it back to the client."
+                : "Happy with it? Send it to the client. They get a notification and can approve or ask for changes."}
           </span>
         </div>
-        <Button disabled={workflow.isPending} onClick={() => workflow.mutate("submit-internal")}>
-          {workflow.isPending ? "Handing it over…" : "Hand it to your team to review"}
-        </Button>
+        <div className="decision-bar__actions">
+          {status === "READY_FOR_INTERNAL_REVIEW" ? (
+            <Button
+              variant="ghost"
+              disabled={workflow.isPending || sendToClient.isPending}
+              onClick={() => workflow.mutate("submit-internal")}
+            >
+              Team review first
+            </Button>
+          ) : null}
+          <Button disabled={sendToClient.isPending} onClick={() => sendToClient.mutate()}>
+            <Send size={15} /> {sendToClient.isPending ? "Sending…" : "Send to client"}
+          </Button>
+        </div>
       </div>
     );
   }
@@ -771,9 +803,9 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
             </Button>
             <Link
               className="rx-button rx-button--secondary"
-              to={clientMode ? "/client/home" : "/agency/work"}
+              to={clientMode ? "/client/home" : "/agency/review"}
             >
-              {clientMode ? "Back to what needs you" : "Back to all work"}
+              {clientMode ? "Back to what needs you" : "Back to the review queue"}
             </Link>
           </div>
         </Callout>
@@ -810,9 +842,15 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
           </Link>
           <div>
             <span className="rx-eyebrow">
-              {clientMode
-                ? `Version ${selected.displayVersion.replace(/^v/i, "")}`
-                : `Agency review · ${selected.displayVersion}`}
+              {(() => {
+                // Each major version is a round of feedback (v2.1 is a fix within round 2).
+                const round = Number(/(\d+)/.exec(selected.displayVersion)?.[1] ?? 1);
+                return clientMode
+                  ? round > 1
+                    ? `Round ${round} · updated after feedback`
+                    : "Round 1"
+                  : `Round ${round} · ${selected.displayVersion}`;
+              })()}
             </span>
             <h1>{room.data.deliverable.title}</h1>
           </div>
@@ -1097,6 +1135,20 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
                 ) : null}
               </div>
               <span className="rx-mono">{timecode(duration * 1000)}</span>
+            </div>
+          ) : null}
+          {room.data.deliverable.caption ? (
+            <div className="review-caption">
+              <span className="rx-eyebrow">
+                Caption
+                {room.data.deliverable.platforms?.length
+                  ? ` · ${room.data.deliverable.platforms.join(", ")}`
+                  : ""}
+                {room.data.deliverable.publishAt
+                  ? ` · goes out ${new Date(room.data.deliverable.publishAt).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}`
+                  : ""}
+              </span>
+              <p>{room.data.deliverable.caption}</p>
             </div>
           ) : null}
           {clientMode ? (

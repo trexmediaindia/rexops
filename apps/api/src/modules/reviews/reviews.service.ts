@@ -27,7 +27,7 @@ import {
 } from "@rexops/db";
 import type { CreateCommentInput, ReviewDecisionInput } from "@rexops/validators";
 import { and, asc, desc, eq, inArray, isNull } from "drizzle-orm";
-import { getDeliverable } from "../deliverables/deliverables.service";
+import { getDeliverable, transitionDeliverable } from "../deliverables/deliverables.service";
 
 type StageType = "INTERNAL" | "CLIENT";
 
@@ -1330,6 +1330,22 @@ export async function sendToClient(
     throw new ForbiddenError("Only someone who can approve work can send it to the client.");
   }
   let deliverable = await accessibleDeliverable(principal, deliverableId);
+  // Work still being made (or sent back for changes) is handed to the team first, as
+  // long as there is a file to look at.
+  if (["PENDING", "IN_PROGRESS", "REVISION_REQUESTED"].includes(deliverable.status)) {
+    const [version] = await db
+      .select({ id: fileVersions.id })
+      .from(fileVersions)
+      .where(and(eq(fileVersions.deliverableId, deliverableId), isNull(fileVersions.deletedAt)))
+      .limit(1);
+    if (!version)
+      throw new ForbiddenError("Upload a version first. Then it can be sent to the client.");
+    if (deliverable.status === "PENDING") {
+      await transitionDeliverable(principal, deliverableId, { to: "IN_PROGRESS" });
+    }
+    await transitionDeliverable(principal, deliverableId, { to: "READY_FOR_INTERNAL_REVIEW" });
+    deliverable = await accessibleDeliverable(principal, deliverableId);
+  }
   if (deliverable.status === "READY_FOR_INTERNAL_REVIEW") {
     await submitForInternalReview(principal, deliverableId);
     deliverable = await accessibleDeliverable(principal, deliverableId);
@@ -1360,8 +1376,37 @@ export async function sendToClient(
   }
   if (deliverable.status === "UNDER_INTERNAL_REVIEW") {
     throw new ForbiddenError(
-      "It's now in team review. It goes to the client once the team review stage is approved.",
+      `It's in team review. ${await waitingOn(deliverableId)} It goes to the client automatically once they approve.`,
     );
   }
   throw new ForbiddenError("Upload a version first. Then it can be sent to the client.");
+}
+
+/** "Waiting on Arjun Mehta." — the team approvers who haven't decided on the active stage. */
+async function waitingOn(deliverableId: string) {
+  const run = await latestRun(deliverableId);
+  const [stage] = await db
+    .select()
+    .from(reviewStages)
+    .where(and(eq(reviewStages.reviewRunId, run.id), eq(reviewStages.status, "ACTIVE")))
+    .orderBy(asc(reviewStages.order))
+    .limit(1);
+  if (!stage) return "";
+  const approvers = await db
+    .select({ userId: reviewStageApprovers.userId, name: users.name })
+    .from(reviewStageApprovers)
+    .innerJoin(users, eq(users.id, reviewStageApprovers.userId))
+    .where(eq(reviewStageApprovers.reviewStageId, stage.id))
+    .orderBy(asc(reviewStageApprovers.approverOrder));
+  const decided = new Set(
+    (
+      await db
+        .select({ userId: approvals.decidedByUserId })
+        .from(approvals)
+        .where(eq(approvals.reviewStageId, stage.id))
+    ).map((row) => row.userId),
+  );
+  const pending = approvers.filter((approver) => !decided.has(approver.userId));
+  if (!pending.length) return "";
+  return `Waiting on ${pending.map((approver) => approver.name).join(" and ")}.`;
 }

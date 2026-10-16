@@ -1,7 +1,7 @@
 import { Callout, EmptyState, HelpTip, MetricCard, Skeleton, StatusChip } from "@rexops/ui";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Clock3, Film, Image as ImageIcon, Plus } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Clock3, Film, Image as ImageIcon, Plus } from "lucide-react";
 import { ActivityFeed, type ActivityRow } from "../../components/activity/activity-feed";
 import { AgencyShell } from "../../components/app-shell";
 import { SetupGuide } from "../../components/onboarding/setup-guide";
@@ -58,8 +58,8 @@ export function AgencyDashboard() {
   const activity = useQuery({
     queryKey: ["recent-activity"],
     queryFn: () => request<{ items: ActivityRow[] }>("/api/collaboration/activity/recent?limit=8"),
-    enabled: features.data?.["collaboration.live"] === true,
     retry: false,
+    refetchInterval: 60_000,
   });
   const reviewQueue = useQuery({
     queryKey: ["deliverables"],
@@ -118,8 +118,11 @@ export function AgencyDashboard() {
           </p>
         </div>
         <div className="page-header__actions">
-          <Link className="rx-button rx-button--primary" to="/agency/work" search={{ new: "1" }}>
-            <Plus size={15} /> Add a deliverable
+          <Link className="rx-button rx-button--secondary" to="/agency/calendar">
+            <CalendarDays size={15} /> Calendar
+          </Link>
+          <Link className="rx-button rx-button--primary" to="/agency/projects">
+            <Plus size={15} /> Add work
           </Link>
         </div>
       </div>
@@ -188,17 +191,13 @@ export function AgencyDashboard() {
                 </HelpTip>
               </h2>
             </div>
-            <Link to="/agency/inbox">
-              See everything <ArrowUpRight size={14} />
-            </Link>
+            {features.data?.["collaboration.live"] ? (
+              <Link to="/agency/inbox">
+                See everything <ArrowUpRight size={14} />
+              </Link>
+            ) : null}
           </div>
-          {!features.data?.["collaboration.live"] ? (
-            <EmptyState
-              tone="inset"
-              title="Activity is switched off"
-              body="This workspace does not have live collaboration enabled, so there is no activity feed to show."
-            />
-          ) : activity.isPending ? (
+          {activity.isPending ? (
             <Skeleton lines={4} label="Loading recent activity" />
           ) : activity.isError ? (
             <EmptyState
@@ -219,10 +218,10 @@ export function AgencyDashboard() {
             <EmptyState
               tone="inset"
               title="Nothing has happened yet"
-              body="Uploads, comments and approvals show up here as your team and your clients work. Upload a file to a deliverable to see the first entry."
+              body="Uploads, comments and approvals show up here as your team and your clients work."
               action={
-                <Link className="rx-button rx-button--secondary" to="/agency/work">
-                  Open the work board
+                <Link className="rx-button rx-button--secondary" to="/agency/projects">
+                  Open projects
                 </Link>
               }
             />
@@ -277,8 +276,8 @@ export function AgencyDashboard() {
               title="Nothing is waiting on a decision"
               body="When someone sends a deliverable for internal or client review, it appears here with its due date."
               action={
-                <Link className="rx-button rx-button--secondary" to="/agency/work">
-                  See all work
+                <Link className="rx-button rx-button--secondary" to="/agency/projects">
+                  Open projects
                 </Link>
               }
             />

@@ -11,6 +11,7 @@ import { RealtimeRoom } from "./lib/realtime";
 import { AdminAgencies } from "./routes/admin/agencies";
 import { AdminAudit } from "./routes/admin/audit";
 import { AutomationPage } from "./routes/agency/automation";
+import { CalendarPage } from "./routes/agency/calendar";
 import { ClientsPage } from "./routes/agency/clients";
 import { AgencyDashboard } from "./routes/agency/dashboard";
 import { DeliverableDetailPage } from "./routes/agency/deliverable-detail";
@@ -23,6 +24,7 @@ import { AgencySettingsPage } from "./routes/agency/settings";
 import { TeamPage } from "./routes/agency/team";
 import { WorkPage } from "./routes/agency/work";
 import { ClientApproved } from "./routes/client/approved";
+import { ClientCalendarPage, ClientReportsPage } from "./routes/client/calendar";
 import { ClientHome } from "./routes/client/home";
 import { ClientProjects } from "./routes/client/projects";
 import { ClientReview } from "./routes/client/review";
@@ -161,6 +163,11 @@ const routes = [
   }),
   createRoute({
     getParentRoute: () => rootRoute,
+    path: "/agency/calendar",
+    component: CalendarPage,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
     path: "/agency/team",
     component: TeamPage,
   }),
@@ -220,6 +227,16 @@ const routes = [
         </FeatureGate>
       );
     },
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/client/calendar",
+    component: ClientCalendarPage,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/client/reports",
+    component: ClientReportsPage,
   }),
   createRoute({
     getParentRoute: () => rootRoute,

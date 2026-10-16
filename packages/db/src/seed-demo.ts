@@ -12,6 +12,7 @@ import { inArray, sql as raw } from "drizzle-orm";
 import {
   accounts,
   activityEvents,
+  adReports,
   agencies,
   approvals,
   attachments,
@@ -62,6 +63,12 @@ const day = 24 * 60 * 60 * 1000;
 const now = Date.now();
 const ago = (days: number) => new Date(now - days * day);
 const ahead = (days: number) => new Date(now + days * day);
+/** A clock time `days` from today, for planned posts. */
+const at = (days: number, hour: number, minute: number) => {
+  const date = new Date(now + days * day);
+  date.setHours(hour, minute, 0, 0);
+  return date;
+};
 
 const perm = (over: Record<string, boolean> = {}) => ({
   canApprove: false,
@@ -242,6 +249,7 @@ const clientUsers = [
 const projectRows = [
   {
     id: "project_june_retainer",
+    service: "SOCIAL_MEDIA",
     clientId: "client_imperial",
     name: "June Content Retainer",
     type: "Social Media Retainer",
@@ -254,6 +262,7 @@ const projectRows = [
   },
   {
     id: "project_reels",
+    service: "SOCIAL_MEDIA",
     clientId: "client_imperial",
     parentProjectId: "project_june_retainer",
     name: "Reels",
@@ -265,6 +274,7 @@ const projectRows = [
   },
   {
     id: "project_statics",
+    service: "SOCIAL_MEDIA",
     clientId: "client_imperial",
     parentProjectId: "project_june_retainer",
     name: "Statics & Carousels",
@@ -276,6 +286,7 @@ const projectRows = [
   },
   {
     id: "project_q3_launch",
+    service: "CREATIVES",
     clientId: "client_imperial",
     name: "Q3 Collection Launch",
     type: "Campaign",
@@ -287,7 +298,19 @@ const projectRows = [
     dueDate: ahead(3),
   },
   {
+    id: "project_lead_ads",
+    service: "ADS",
+    clientId: "client_imperial",
+    name: "Always-on Lead Ads",
+    type: "Performance",
+    status: "ACTIVE",
+    priority: "HIGH",
+    description: "Meta and Google lead campaigns for site visits.",
+    startDate: ago(60),
+  },
+  {
     id: "project_brandkit",
+    service: "CREATIVES",
     clientId: "client_imperial",
     name: "Brand Kit Refresh",
     type: "Brand",
@@ -356,7 +379,25 @@ const projectRows = [
 
 const deliverableRows = [
   {
+    id: "deliverable_lead_ad",
+    projectId: "project_lead_ads",
+    clientId: "client_imperial",
+    title: "Site Visit Lead Ad — 15s",
+    description: "Audience: home buyers 28–45 in Mumbai. Offer: free site visit.",
+    contentType: "MOTION",
+    status: "APPROVED",
+    priority: "HIGH",
+    assignedToUserId: "user_riya",
+    dueDate: ahead(2),
+    publishAt: at(3, 10, 0),
+    platforms: ["Meta"],
+    approvedAt: ago(1),
+  },
+  {
     id: "deliverable_beach_vibe",
+    publishAt: at(4, 18, 30),
+    platforms: ["Instagram", "Facebook"],
+    caption: "Salt, sun and slow mornings. The June edit is here 🌊",
     projectId: "project_reels",
     clientId: "client_imperial",
     title: "Beach Vibe Reel",
@@ -370,6 +411,8 @@ const deliverableRows = [
   },
   {
     id: "deliverable_sunset_carousel",
+    publishAt: at(9, 12, 0),
+    platforms: ["Instagram", "LinkedIn"],
     projectId: "project_statics",
     clientId: "client_imperial",
     title: "Sunset Carousel (5 slides)",
@@ -434,6 +477,8 @@ const deliverableRows = [
   },
   {
     id: "deliverable_holiday_teaser",
+    publishAt: at(6, 19, 0),
+    platforms: ["Instagram"],
     projectId: "project_reels",
     clientId: "client_imperial",
     title: "Holiday Teaser",
@@ -516,6 +561,9 @@ const deliverableRows = [
   },
   {
     id: "deliverable_rooftop_still",
+    publishAt: at(2, 11, 0),
+    platforms: ["Instagram"],
+    caption: "Golden hour, fifteen floors up. Swipe for the full view ✨",
     projectId: "project_statics",
     clientId: "client_imperial",
     title: "Rooftop Hero Still",
@@ -856,6 +904,7 @@ async function wipe() {
     raw`delete from milestone where agency_id = ${AGENCY}`,
     raw`delete from file_version where agency_id = ${AGENCY}`,
     raw`delete from deliverable_placement where agency_id = ${AGENCY}`,
+    raw`delete from ad_report where agency_id = ${AGENCY}`,
     raw`delete from deliverable where agency_id = ${AGENCY}`,
     raw`delete from project_member where agency_id = ${AGENCY}`,
     raw`delete from project where agency_id = ${AGENCY}`,
@@ -950,6 +999,7 @@ async function seed() {
       description: p.description ?? null,
       brief: "brief" in p ? (p.brief as string) : null,
       type: "type" in p ? (p.type as string) : null,
+      service: ("service" in p ? p.service : "OTHER") as never,
       status: p.status as never,
       priority: p.priority as never,
       startDate: "startDate" in p ? (p.startDate as Date) : null,
@@ -988,6 +1038,15 @@ async function seed() {
     })),
   );
 
+  await db.insert(projectMembers).values([
+    {
+      agencyId: AGENCY,
+      projectId: "project_lead_ads",
+      userId: "user_manas",
+      roleOnProject: "lead",
+    },
+  ]);
+
   await db.insert(deliverables).values(
     deliverableRows.map((d) => ({
       id: d.id,
@@ -1001,6 +1060,9 @@ async function seed() {
       priority: d.priority as never,
       assignedToUserId: d.assignedToUserId,
       dueDate: d.dueDate,
+      publishAt: "publishAt" in d ? (d.publishAt as Date) : null,
+      platforms: "platforms" in d ? [...(d.platforms as readonly string[])] : [],
+      caption: "caption" in d ? (d.caption as string) : null,
       agencyNote: "agencyNote" in d ? (d.agencyNote as string) : null,
       clientNote: "clientNote" in d ? (d.clientNote as string) : null,
       submittedAt: "submittedAt" in d ? (d.submittedAt as Date) : null,
@@ -1009,6 +1071,47 @@ async function seed() {
       createdByUserId: "user_arjun",
     })),
   );
+
+  // Two months of ad results for the ads project, as the team would type them in.
+  const month = (back: number) => {
+    const start = new Date(now);
+    start.setDate(1);
+    start.setHours(0, 0, 0, 0);
+    start.setMonth(start.getMonth() - back);
+    const end = new Date(start.getFullYear(), start.getMonth() + 1, 0, 23, 59, 59);
+    return { periodStart: start, periodEnd: end };
+  };
+  await db.insert(adReports).values([
+    {
+      id: "demo_report_meta_1",
+      agencyId: AGENCY,
+      clientId: "client_imperial",
+      projectId: "project_lead_ads",
+      platform: "META",
+      ...month(1),
+      spend: "85000",
+      impressions: 412000,
+      reach: 168000,
+      clicks: 6900,
+      leads: 212,
+      summary: "Leads up 18% on the month after moving budget to Reels placements.",
+      createdByUserId: "user_manas",
+    },
+    {
+      id: "demo_report_google_1",
+      agencyId: AGENCY,
+      clientId: "client_imperial",
+      projectId: "project_lead_ads",
+      platform: "GOOGLE",
+      ...month(1),
+      spend: "42000",
+      impressions: 96000,
+      clicks: 3100,
+      leads: 74,
+      conversions: 9,
+      createdByUserId: "user_manas",
+    },
+  ]);
 
   await db.insert(deliverablePlacements).values(
     deliverableRows.map((d) => ({

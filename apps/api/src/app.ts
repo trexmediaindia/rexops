@@ -8,7 +8,7 @@ import { attachmentsRoutes } from "./modules/attachments/attachments.routes";
 import { authRoutes } from "./modules/auth/auth.routes";
 import { automationRoutes, publicIntakeRoutes } from "./modules/automation/automation.routes";
 import { clientsRoutes } from "./modules/clients/clients.routes";
-import { collaborationRoutes } from "./modules/collaboration/collaboration.routes";
+import { activityRoutes, collaborationRoutes } from "./modules/collaboration/collaboration.routes";
 import { deliverablesRoutes } from "./modules/deliverables/deliverables.routes";
 import { featuresRoutes } from "./modules/features/features.routes";
 import {
@@ -81,6 +81,7 @@ export const app = new Elysia({ name: "rexops-api" })
   .use(clientsRoutes)
   .use(teamRoutes)
   .use(storageRoutes)
+  .use(activityRoutes)
   .use(features["collaboration.live"] ? collaborationRoutes : notFound("/api/collaboration"))
   .use(projectsRoutes)
   .use(reportsRoutes)

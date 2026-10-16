@@ -16,12 +16,14 @@ import { useState } from "react";
 import { AgencyShell } from "../../components/app-shell";
 import { PageHeader } from "../../components/ui/page-header";
 import { request } from "../../lib/request";
+import { SERVICES, serviceOf } from "../../lib/services";
 
 type User = { id: string; name: string; role: string; specialty: string | null };
 type Pipeline = {
   id: string;
   name: string;
   isDefault: boolean;
+  projectType?: string | null;
   stages: Array<{
     id: string;
     name: string;
@@ -103,6 +105,7 @@ export function PipelineEditorPage() {
   const queryClient = useQueryClient();
   const [name, setName] = useState("Motion — standard");
   const [isDefault, setIsDefault] = useState(false);
+  const [usedFor, setUsedFor] = useState("");
   const [stages, setStages] = useState<DraftStage[]>([blankStage(0), blankStage(1)]);
   const pipelines = useQuery({
     queryKey: ["review-pipelines"],
@@ -119,6 +122,7 @@ export function PipelineEditorPage() {
         body: JSON.stringify({
           name,
           isDefault,
+          projectType: usedFor || null,
           stages: stages.map((stage) => ({
             name: stage.name,
             type: stage.type,
@@ -161,6 +165,7 @@ export function PipelineEditorPage() {
   function loadFrom(pipeline: Pipeline) {
     setName(`${pipeline.name} copy`);
     setIsDefault(false);
+    setUsedFor(pipeline.projectType ?? "");
     setStages(
       pipeline.stages.map((stage) => ({
         id: crypto.randomUUID(),
@@ -225,6 +230,9 @@ export function PipelineEditorPage() {
                     <strong>{pipeline.name}</strong>
                     <span>
                       {pipeline.stages.length} stage{pipeline.stages.length === 1 ? "" : "s"}
+                      {pipeline.projectType
+                        ? ` · ${SERVICES[serviceOf(pipeline.projectType)].label}`
+                        : ""}
                       {pipeline.isDefault ? (
                         <b>
                           <Star size={10} /> default
@@ -271,6 +279,24 @@ export function PipelineEditorPage() {
                 }}
               />
               <em>What this route will be called when someone picks it for a deliverable.</em>
+            </div>
+            <div className="pipeline-field">
+              <label htmlFor="pipeline-service">Used for</label>
+              <select
+                id="pipeline-service"
+                className="pipeline-select"
+                value={usedFor}
+                onChange={(event) => {
+                  setUsedFor(event.target.value);
+                  save.reset();
+                }}
+              >
+                <option value="">Any service</option>
+                <option value="SOCIAL_MEDIA">{SERVICES.SOCIAL_MEDIA.label}</option>
+                <option value="CREATIVES">{SERVICES.CREATIVES.label}</option>
+                <option value="ADS">{SERVICES.ADS.label}</option>
+              </select>
+              <em>Work in projects of this service goes through these stages automatically.</em>
             </div>
             <label className="pipeline-default">
               <input

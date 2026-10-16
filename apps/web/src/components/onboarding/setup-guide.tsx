@@ -54,21 +54,28 @@ export function SetupGuide() {
     retry: false,
   });
 
+  const team = useQuery({
+    queryKey: ["team"],
+    queryFn: () => request<Array<{ id: string }>>("/api/team"),
+    retry: false,
+  });
+
   const clientCount = clients.data?.length ?? 0;
+  const teamCount = team.data?.length ?? 0;
   const projectCount = projects.data?.length ?? 0;
-  const deliverableCount = deliverables.data?.length ?? 0;
   const versionCount = storage.data?.versionCount ?? 0;
   const submitted = (deliverables.data ?? []).filter((item) => SUBMITTED.has(item.status));
   const approved = (deliverables.data ?? []).filter((item) =>
     ["APPROVED", "DELIVERED"].includes(item.status),
   );
+  const firstProject = projects.data?.[0];
 
   const loading =
     clients.isPending || projects.isPending || deliverables.isPending || storage.isPending;
   const done = [
     clientCount > 0,
+    teamCount > 1,
     projectCount > 0,
-    deliverableCount > 0,
     versionCount > 0,
     submitted.length > 0,
   ];
@@ -84,22 +91,47 @@ export function SetupGuide() {
   const statusFor = (index: number): Step["status"] =>
     done[index] ? "done" : index === firstOpen ? "current" : "todo";
 
+  const projectLink = firstProject ? (
+    <Link
+      className="rx-button rx-button--primary"
+      to="/agency/projects/$projectId"
+      params={{ projectId: firstProject.id }}
+    >
+      Open {firstProject.name} <ArrowUpRight size={14} />
+    </Link>
+  ) : (
+    <Link className="rx-button rx-button--primary" to="/agency/projects">
+      Open projects <ArrowUpRight size={14} />
+    </Link>
+  );
+
   const steps: Step[] = [
     {
-      title: "Add the company you work for",
-      body: "A client is a company. Everything else in RexOps hangs off one, so this comes first.",
+      title: "Add a client and their logins",
+      body: "The company you work for, plus the people there who review and approve. They get an email and password to sign in.",
       status: statusFor(0),
       detail: clientCount ? `${clientCount} added` : undefined,
       action: (
         <Link className="rx-button rx-button--primary" to="/agency/clients" search={{ new: "1" }}>
-          Add your first client <ArrowUpRight size={14} />
+          Add a client <ArrowUpRight size={14} />
         </Link>
       ),
     },
     {
-      title: "Start a project for that client",
-      body: "A project is one job — a campaign, a retainer month, a launch. It holds the deliverables.",
+      title: "Add your team",
+      body: "Designers, editors, account managers. Each gets their own login and role.",
       status: statusFor(1),
+      detail: teamCount ? `${teamCount} on the team` : undefined,
+      action: (
+        <Link className="rx-button rx-button--primary" to="/agency/team">
+          Add team members <ArrowUpRight size={14} />
+        </Link>
+      ),
+    },
+    {
+      title: "Start a project and pick the service",
+      body: "Social media, creatives delivery or ads. The service decides the steps work goes through, and whether it shows on the calendar.",
+      status: statusFor(2),
       detail: projectCount ? `${projectCount} started` : undefined,
       action: (
         <Link className="rx-button rx-button--primary" to="/agency/projects" search={{ new: "1" }}>
@@ -108,43 +140,24 @@ export function SetupGuide() {
       ),
     },
     {
-      title: "Add a deliverable to the project",
-      body: "A deliverable is the single thing that gets reviewed and approved — one cut, one key visual, one edit.",
-      status: statusFor(2),
-      detail: deliverableCount ? `${deliverableCount} created` : undefined,
-      action: (
-        <Link className="rx-button rx-button--primary" to="/agency/work" search={{ new: "1" }}>
-          Add a deliverable <ArrowUpRight size={14} />
-        </Link>
-      ),
-    },
-    {
-      title: "Upload the file people will review",
-      body: "Each upload becomes a numbered version. Reviewers comment on the version, so nobody argues about which cut they saw.",
+      title: "Add a post or creative and upload the file",
+      body: "Inside the project, add the piece of work, then drop the file on its page. Each upload is a new numbered version.",
       status: statusFor(3),
       detail: versionCount
         ? `${versionCount} file version${versionCount === 1 ? "" : "s"}`
         : undefined,
-      action: (
-        <Link className="rx-button rx-button--primary" to="/agency/work">
-          Open a deliverable and upload <ArrowUpRight size={14} />
-        </Link>
-      ),
+      action: projectLink,
     },
     {
-      title: "Send it for review",
-      body: "Work goes through your team first, then to the client. Both sign-offs are recorded against the version they saw.",
+      title: "Press “Send to client”",
+      body: "The client gets a notification, opens it, and approves or asks for changes. Each round of feedback is kept.",
       status: statusFor(4),
       detail: approved.length
         ? `${approved.length} approved`
         : submitted.length
           ? `${submitted.length} in review`
           : undefined,
-      action: (
-        <Link className="rx-button rx-button--primary" to="/agency/work">
-          Move a deliverable into review <ArrowUpRight size={14} />
-        </Link>
-      ),
+      action: projectLink,
     },
   ];
 
@@ -157,9 +170,8 @@ export function SetupGuide() {
           <span className="rx-eyebrow">Getting started</span>
           <h2 id="setup-guide-title">Set up your first piece of work</h2>
           <p>
-            RexOps moves one thing through one path: a deliverable is created, a file is uploaded to
-            it, your team reviews it, the client reviews it, and it is approved. These five steps
-            take you along that path once so the rest of the app makes sense.
+            Client and team first, then a project for each service you run for them. Add the work,
+            upload the file, send it to the client, and they approve or ask for changes.
           </p>
         </div>
         {canManageWorkspace(workspace.data?.user.role) ? (

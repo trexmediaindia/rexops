@@ -372,4 +372,18 @@ describe("one-click send to client", () => {
     const [row] = await db.select().from(deliverables).where(eq(deliverables.id, deliverableId));
     expect(row?.status).toBe("READY_FOR_INTERNAL_REVIEW");
   });
+
+  test("also works on work still in progress, as long as a file is uploaded", async () => {
+    await db
+      .update(deliverables)
+      .set({ status: "IN_PROGRESS" })
+      .where(eq(deliverables.id, deliverableId));
+    const response = await apiRequest(`/api/reviews/deliverables/${deliverableId}/send-to-client`, {
+      method: "POST",
+      principal: adminPrincipal,
+    });
+    expect(response.status).toBe(200);
+    const [row] = await db.select().from(deliverables).where(eq(deliverables.id, deliverableId));
+    expect(row?.status).toBe("UNDER_CLIENT_REVIEW");
+  });
 });

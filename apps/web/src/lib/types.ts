@@ -32,6 +32,7 @@ export type ProjectRecord = {
   description: string | null;
   brief: string | null;
   type: string | null;
+  service: "SOCIAL_MEDIA" | "CREATIVES" | "ADS" | "OTHER";
   status: string;
   priority: Priority;
   startDate: string | null;
@@ -57,6 +58,11 @@ export type DeliverableRecord = {
   submittedAt: string | null;
   reviewedAt: string | null;
   approvedAt: string | null;
+  publishAt: string | null;
+  platforms: string[];
+  caption: string | null;
+  publishedAt: string | null;
+  publishUrl: string | null;
   createdAt: string;
   updatedAt: string;
 };
