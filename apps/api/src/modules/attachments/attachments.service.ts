@@ -5,6 +5,7 @@ import { and, eq } from "drizzle-orm";
 import { assertChannelAccess } from "../collaboration/collaboration.service";
 import { getDeliverable } from "../deliverables/deliverables.service";
 import { objectStorage } from "../file-versions/storage";
+import { reportForPrincipal } from "../reports/reports.service";
 
 export async function initiateAttachment(
   principal: Principal,
@@ -106,6 +107,9 @@ export async function attachmentDownload(principal: Principal, id: string) {
       .limit(1);
     if (!message) throw new NotFoundError();
     await assertChannelAccess(principal, message.channelId);
+  } else if (attachment.parentType === "AD_REPORT") {
+    // Anyone who can see the ads project (its agency, or that client) can open the report.
+    await reportForPrincipal(principal, attachment.parentId ?? "");
   } else {
     throw new NotFoundError();
   }

@@ -97,23 +97,23 @@ const copyByEvent: Record<
 > = {
   INTERNAL_REVIEW_REQUESTED: {
     type: "INTERNAL_REVIEW_REQUESTED",
-    title: "A cut needs internal review",
-    message: "Open the review room and record a decision.",
+    title: "Work needs a team review",
+    message: "Have a look and approve it, or ask for changes.",
   },
   SUBMITTED_TO_CLIENT: {
     type: "SUBMITTED_TO_CLIENT",
-    title: "A new cut is ready for you",
-    message: "Review the latest version and leave precise feedback.",
+    title: "New work is ready for your review",
+    message: "Have a look, then approve it or tell us what to change.",
   },
   REVISION_REQUESTED: {
     type: "REVISION_REQUESTED",
     title: "Changes were requested",
-    message: "Open the review thread for the requested revision.",
+    message: "Open it to see what needs to change.",
   },
   APPROVED: {
     type: "APPROVED",
-    title: "The cut was approved",
-    message: "The approval and signature are recorded.",
+    title: "Work was approved",
+    message: "The approval is saved with the approver's name and the date.",
   },
   DELIVERED: {
     type: "DELIVERED",
@@ -122,8 +122,8 @@ const copyByEvent: Record<
   },
   COMMENT_ADDED: {
     type: "COMMENT_ADDED",
-    title: "New review comment",
-    message: "A new note was added to the review thread.",
+    title: "New comment",
+    message: "Someone left a comment.",
   },
   MENTION: {
     type: "MENTION",
@@ -133,7 +133,7 @@ const copyByEvent: Record<
   SHARE_VIEWED: {
     type: "SHARE_VIEWED",
     title: "A review link was opened",
-    message: "A guest viewed the shared cut.",
+    message: "Someone opened the review link you shared.",
   },
   ASSIGNMENT: {
     type: "ASSIGNMENT",
@@ -250,6 +250,29 @@ async function sendPush(recipientIds: string[], payload: Record<string, unknown>
   );
 }
 
+/** Name the actual piece of work, so the bell reads like a to-do list. */
+export function titleFor(eventType: string, workTitle: string, fallback: string) {
+  const name = `“${workTitle}”`;
+  switch (eventType) {
+    case "SUBMITTED_TO_CLIENT":
+      return `${name} is ready for your review`;
+    case "INTERNAL_REVIEW_REQUESTED":
+      return `${name} needs a team review`;
+    case "REVISION_REQUESTED":
+      return `Changes requested on ${name}`;
+    case "APPROVED":
+      return `${name} was approved`;
+    case "DELIVERED":
+      return `${name} was delivered`;
+    case "COMMENT_ADDED":
+      return `New comment on ${name}`;
+    case "ASSIGNMENT":
+      return `${name} was assigned to you`;
+    default:
+      return fallback;
+  }
+}
+
 async function processEventNotification(job: Job<NotifyJobPayload>) {
   const deliverableId = job.data.payload.deliverableId;
   const [deliverable] =
@@ -279,13 +302,15 @@ async function processEventNotification(job: Job<NotifyJobPayload>) {
               : `/agency/review/${deliverable.id}`
             : client
               ? "/client/home"
-              : "/agency/inbox";
+              : "/agency/dashboard";
           return {
             agencyId: job.data.agencyId,
             recipientUserId,
             sourceEventId: job.data.eventId,
             type: copy.type,
-            title: copy.title,
+            title: deliverable
+              ? titleFor(job.data.eventType, deliverable.title, copy.title)
+              : copy.title,
             message: copy.message,
             url,
             contentType: deliverable?.contentType,

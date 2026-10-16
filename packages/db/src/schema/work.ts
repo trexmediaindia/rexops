@@ -14,6 +14,7 @@ import {
   dependencyTypeEnum,
   priorityEnum,
   projectStatusEnum,
+  serviceTypeEnum,
   taskStatusEnum,
 } from "./enums";
 import { idColumn, softDelete, timestamps } from "./helpers";
@@ -34,6 +35,7 @@ export const projects = pgTable(
     description: text("description"),
     brief: text("brief"),
     type: text("type"),
+    service: serviceTypeEnum("service").default("OTHER").notNull(),
     status: projectStatusEnum("status").default("ACTIVE").notNull(),
     priority: priorityEnum("priority").default("MEDIUM").notNull(),
     startDate: timestamp("start_date", { withTimezone: true }),
@@ -96,12 +98,20 @@ export const deliverables = pgTable(
     submittedAt: timestamp("submitted_at", { withTimezone: true }),
     reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
     approvedAt: timestamp("approved_at", { withTimezone: true }),
+    // Publishing (social posts and ads): when it goes out, where, with what copy, and
+    // proof that it went out. Tracked only; nothing is posted from here.
+    publishAt: timestamp("publish_at", { withTimezone: true }),
+    platforms: text("platforms").array().default([]).notNull(),
+    caption: text("caption"),
+    publishedAt: timestamp("published_at", { withTimezone: true }),
+    publishUrl: text("publish_url"),
     createdByUserId: text("created_by_user_id").references(() => users.id),
     ...timestamps,
     ...softDelete,
   },
   (table) => [
     index("deliverable_agency_idx").on(table.agencyId),
+    index("deliverable_agency_publish_idx").on(table.agencyId, table.publishAt),
     index("deliverable_agency_project_status_idx").on(
       table.agencyId,
       table.projectId,

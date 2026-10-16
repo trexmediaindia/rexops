@@ -36,6 +36,13 @@
       "when": 1750000004000,
       "tag": "0004_clear_lester",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792182577366,
+      "tag": "0005_services_publishing_ad_reports",
+      "breakpoints": true
     }
   ]
 }

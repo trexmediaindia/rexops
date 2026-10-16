@@ -18,6 +18,7 @@ import {
   pipelineStageApprovers,
   pipelineStages,
   pipelines,
+  projects,
   reviewRuns,
   reviewStageApprovers,
   reviewStages,
@@ -163,6 +164,8 @@ export async function createPipeline(
   input: {
     name: string;
     isDefault: boolean;
+    /** The service this pipeline is used for; unset means "any service without its own". */
+    projectType?: "SOCIAL_MEDIA" | "CREATIVES" | "ADS" | null;
     stages: Array<{
       name: string;
       type: StageType;
@@ -221,6 +224,7 @@ export async function createPipeline(
         agencyId: principal.agencyId as string,
         name: input.name,
         isDefault: input.isDefault,
+        projectType: input.projectType ?? null,
       })
       .returning();
     if (!pipeline) throw new Error("Pipeline insert failed.");
@@ -259,6 +263,32 @@ export async function createPipeline(
   return (await listPipelines(principal)).find((pipeline) => pipeline.id === pipelineId);
 }
 
+/**
+ * The review pipeline set up for this project's service (Settings → Review stages, with
+ * "Used for" set to the service), if there is one. Otherwise the default applies.
+ */
+async function pipelineForService(deliverable: typeof deliverables.$inferSelect) {
+  const [project] = await db
+    .select({ service: projects.service })
+    .from(projects)
+    .where(eq(projects.id, deliverable.projectId))
+    .limit(1);
+  if (!project || project.service === "OTHER") return null;
+  const [pipeline] = await db
+    .select()
+    .from(pipelines)
+    .where(
+      and(
+        eq(pipelines.agencyId, deliverable.agencyId),
+        eq(pipelines.projectType, project.service),
+        isNull(pipelines.deletedAt),
+      ),
+    )
+    .orderBy(desc(pipelines.createdAt))
+    .limit(1);
+  return pipeline ?? null;
+}
+
 async function snapshotPipeline(
   principal: Principal,
   deliverable: typeof deliverables.$inferSelect,
@@ -279,7 +309,8 @@ async function snapshotPipeline(
           )
           .limit(1)
       )[0]
-    : await ensureDefaultPipeline(deliverable.agencyId);
+    : ((await pipelineForService(deliverable)) ??
+      (await ensureDefaultPipeline(deliverable.agencyId)));
   if (!defaultPipeline) throw new NotFoundError();
   const templates = await db
     .select()
@@ -1281,4 +1312,56 @@ export async function updateRevisionTask(
   }
   const [updated] = await db.update(tasks).set(input).where(eq(tasks.id, task.id)).returning();
   return updated;
+}
+
+/**
+ * One click from "uploaded" to "with the client", for someone who is allowed to approve.
+ * Runs the same three steps the team would otherwise click through (hand to internal
+ * review → approve internally → send to the client), so every rule still applies and
+ * the audit trail is identical. If the internal stage names other approvers, it stops
+ * at internal review and says who has to sign off.
+ */
+export async function sendToClient(
+  principal: Principal,
+  deliverableId: string,
+  meta: { requestIp?: string; requestUserAgent?: string } = {},
+) {
+  if (!can(principal, "approve", "deliverable") || principal.role.startsWith("CLIENT_")) {
+    throw new ForbiddenError("Only someone who can approve work can send it to the client.");
+  }
+  let deliverable = await accessibleDeliverable(principal, deliverableId);
+  if (deliverable.status === "READY_FOR_INTERNAL_REVIEW") {
+    await submitForInternalReview(principal, deliverableId);
+    deliverable = await accessibleDeliverable(principal, deliverableId);
+  }
+  if (deliverable.status === "UNDER_INTERNAL_REVIEW") {
+    const run = await latestRun(deliverableId);
+    try {
+      await decideReview(principal, deliverableId, {
+        fileVersionId: run.fileVersionId,
+        decision: "APPROVE",
+        ...meta,
+      });
+    } catch (error) {
+      if (error instanceof ForbiddenError) {
+        throw new ForbiddenError(
+          `It's now in team review, but it needs the named team approvers before it can go to the client. (${error.message})`,
+        );
+      }
+      throw error;
+    }
+    deliverable = await accessibleDeliverable(principal, deliverableId);
+  }
+  if (deliverable.status === "INTERNAL_APPROVED") {
+    return promoteToClient(principal, deliverableId);
+  }
+  if (deliverable.status === "UNDER_CLIENT_REVIEW") {
+    return { status: "UNDER_CLIENT_REVIEW" as const };
+  }
+  if (deliverable.status === "UNDER_INTERNAL_REVIEW") {
+    throw new ForbiddenError(
+      "It's now in team review. It goes to the client once the team review stage is approved.",
+    );
+  }
+  throw new ForbiddenError("Upload a version first. Then it can be sent to the client.");
 }

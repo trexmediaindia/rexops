@@ -11,6 +11,7 @@ import {
 import { db, deliverables, outbox, projectMembers, projects } from "@rexops/db";
 import type {
   CreateDeliverableInput,
+  MarkPublishedInput,
   TransitionDeliverableInput,
   UpdateDeliverableInput,
 } from "@rexops/validators";
@@ -163,4 +164,61 @@ export async function transitionDeliverable(
     });
     return stripInternalDeliverableFields(principal, updated);
   });
+}
+
+/**
+ * Records that an approved post or ad went out (the app tracks publishing, it does not
+ * publish). Moves the work to DELIVERED, so it leaves every "to do" list.
+ */
+export async function markPublished(principal: Principal, id: string, input: MarkPublishedInput) {
+  if (!can(principal, "update", "deliverable")) throw new ForbiddenError();
+  assertWritablePrincipal(principal);
+  const current = (await getDeliverable(principal, id)) as typeof deliverables.$inferSelect;
+  if (current.status !== "APPROVED" && current.status !== "DELIVERED") {
+    throw new ForbiddenError("Only approved work can be marked as posted.");
+  }
+  const next =
+    current.status === "APPROVED" ? applyTransition("APPROVED", "DELIVERED") : "DELIVERED";
+  return db.transaction(async (tx) => {
+    const [updated] = await tx
+      .update(deliverables)
+      .set({
+        status: next,
+        publishedAt: current.publishedAt ?? new Date(),
+        publishUrl: input.publishUrl ?? current.publishUrl,
+      })
+      .where(and(eq(deliverables.id, id), eq(deliverables.agencyId, current.agencyId)))
+      .returning();
+    if (!updated) throw new NotFoundError();
+    if (current.status !== next) {
+      await tx.insert(outbox).values({
+        agencyId: updated.agencyId,
+        eventType: "DELIVERABLE_STATUS_CHANGED",
+        payload: {
+          deliverableId: id,
+          from: current.status,
+          to: next,
+          actorUserId: principal.userId,
+        },
+      });
+    }
+    return stripInternalDeliverableFields(principal, updated);
+  });
+}
+
+/** Undo a "posted" marked by mistake: back to approved, with the post link cleared. */
+export async function undoPublished(principal: Principal, id: string) {
+  if (!can(principal, "update", "deliverable")) throw new ForbiddenError();
+  assertWritablePrincipal(principal);
+  const current = (await getDeliverable(principal, id)) as typeof deliverables.$inferSelect;
+  if (current.status !== "DELIVERED" || !current.publishedAt) {
+    throw new ForbiddenError("This work has not been marked as posted.");
+  }
+  const [updated] = await db
+    .update(deliverables)
+    .set({ status: "APPROVED", publishedAt: null, publishUrl: null })
+    .where(and(eq(deliverables.id, id), eq(deliverables.agencyId, current.agencyId)))
+    .returning();
+  if (!updated) throw new NotFoundError();
+  return stripInternalDeliverableFields(principal, updated);
 }

@@ -15,6 +15,7 @@ import {
   promoteToClient,
   reactToComment,
   resolveComment,
+  sendToClient,
   submitForInternalReview,
 } from "./reviews.service";
 
@@ -58,6 +59,9 @@ export const reviewsRoutes = new Elysia({ prefix: "/api/reviews" })
       body: t.Object({
         name: t.String({ minLength: 1, maxLength: 120 }),
         isDefault: t.Optional(t.Boolean()),
+        projectType: t.Optional(
+          t.Union([t.Literal("SOCIAL_MEDIA"), t.Literal("CREATIVES"), t.Literal("ADS"), t.Null()]),
+        ),
         stages: t.Array(
           t.Object({
             name: t.String({ minLength: 1, maxLength: 120 }),
@@ -108,6 +112,14 @@ export const reviewsRoutes = new Elysia({ prefix: "/api/reviews" })
     },
     { body: t.Optional(t.Object({ pipelineId: t.Optional(t.String({ minLength: 1 })) })) },
   )
+  .post("/deliverables/:deliverableId/send-to-client", ({ params, principal, set, request }) => {
+    const actor = requirePrincipal(principal, set);
+    if (!actor) return { error: "UNAUTHORIZED" };
+    return sendToClient(actor, params.deliverableId, {
+      requestIp: request.headers.get("x-forwarded-for")?.split(",")[0]?.trim(),
+      requestUserAgent: request.headers.get("user-agent") ?? undefined,
+    });
+  })
   .post("/deliverables/:deliverableId/promote", ({ params, principal, set }) => {
     const actor = requirePrincipal(principal, set);
     if (!actor) return { error: "UNAUTHORIZED" };
