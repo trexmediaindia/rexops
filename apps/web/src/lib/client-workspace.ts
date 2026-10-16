@@ -80,3 +80,22 @@ export function daysUntil(value: string | null | undefined) {
   const diff = new Date(value).getTime() - Date.now();
   return Math.ceil(diff / 86_400_000);
 }
+
+/** Status wording for the client portal: written from the client's side of the table. */
+const CLIENT_STATUS_LABELS: Record<string, string> = {
+  UNDER_CLIENT_REVIEW: "Waiting for you",
+  REVISION_REQUESTED: "Changes on the way",
+  APPROVED: "Approved",
+  DELIVERED: "Delivered",
+};
+
+export function clientStatusLabel(status: string) {
+  return CLIENT_STATUS_LABELS[status] ?? "Being worked on";
+}
+
+/** "Motion" and "Static" are agency words. */
+export function contentTypeLabel(contentType: string | null | undefined) {
+  if (contentType === "MOTION") return "Video";
+  if (contentType === "STATIC") return "Image";
+  return "File";
+}

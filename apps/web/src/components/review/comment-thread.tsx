@@ -252,17 +252,22 @@ function CommentCard({
             {formatRelativeTime(comment.createdAt)}
           </time>
         </div>
-        <button type="button" className="comment-anchor" onClick={() => onAnchor(comment)}>
-          {comment.anchorType === "TIMECODE" || comment.anchor?.timecodeMs
-            ? `@ ${Math.floor(Number(comment.anchor?.timecodeMs ?? 0) / 60000)}:${String(
-                Math.floor((Number(comment.anchor?.timecodeMs ?? 0) % 60000) / 1000),
-              ).padStart(2, "0")}`
-            : comment.anchorType === "REGION"
-              ? "Pinned region"
-              : comment.anchorType === "WAVEFORM_RANGE"
-                ? "Audio range"
-                : "General"}
-        </button>
+        {/* Clients don't need a "General" tag on comments that aren't pinned to anything. */}
+        {clientMode && comment.anchorType === "NONE" && !comment.anchor?.timecodeMs ? null : (
+          <button type="button" className="comment-anchor" onClick={() => onAnchor(comment)}>
+            {comment.anchorType === "TIMECODE" || comment.anchor?.timecodeMs
+              ? `@ ${Math.floor(Number(comment.anchor?.timecodeMs ?? 0) / 60000)}:${String(
+                  Math.floor((Number(comment.anchor?.timecodeMs ?? 0) % 60000) / 1000),
+                ).padStart(2, "0")}`
+              : comment.anchorType === "REGION"
+                ? clientMode
+                  ? "Show on image"
+                  : "Pinned region"
+                : comment.anchorType === "WAVEFORM_RANGE"
+                  ? "Audio range"
+                  : "General"}
+          </button>
+        )}
       </header>
       <CommentBody message={comment.message} onHashtag={onHashtag} />
       {comment.attachmentRows.length ? (
@@ -290,19 +295,27 @@ function CommentCard({
           ))}
         </div>
       ) : null}
-      <ReactionBar
-        rows={comment.reactionRows}
-        myUserId={myUserId}
-        onToggle={(emoji, remove) => onReact(comment.id, emoji, remove)}
-      />
+      {/* Reactions and resolving are the agency's way of working through feedback;
+          on the client side they were two more buttons on every comment. */}
+      {!clientMode ? (
+        <ReactionBar
+          rows={comment.reactionRows}
+          myUserId={myUserId}
+          onToggle={(emoji, remove) => onReact(comment.id, emoji, remove)}
+        />
+      ) : null}
       <footer>
         <button type="button" onClick={() => setReplying((value) => !value)}>
           <MessageCircleReply size={13} /> Reply
         </button>
-        <button type="button" onClick={() => onResolve(comment.id, Boolean(comment.resolvedAt))}>
-          {comment.resolvedAt ? <RotateCcw size={13} /> : <CheckCircle2 size={13} />}
-          {comment.resolvedAt ? "Reopen" : "Resolve"}
-        </button>
+        {!clientMode ? (
+          <button type="button" onClick={() => onResolve(comment.id, Boolean(comment.resolvedAt))}>
+            {comment.resolvedAt ? <RotateCcw size={13} /> : <CheckCircle2 size={13} />}
+            {comment.resolvedAt ? "Reopen" : "Resolve"}
+          </button>
+        ) : clientMode && comment.resolvedAt ? (
+          <span>Done</span>
+        ) : null}
         {!clientMode ? (
           <button
             type="button"
@@ -377,7 +390,8 @@ export function CommentThread({
   comments: ReviewComment[];
   myUserId: string;
   clientMode: boolean;
-  filter: "OPEN" | "RESOLVED" | "MINE" | "INTERNAL";
+  /** "ALL" is the client view: every comment they are allowed to see, no tabs. */
+  filter: "ALL" | "OPEN" | "RESOLVED" | "MINE" | "INTERNAL";
   hashtag: string | null;
   onReply(parentId: string, message: string, attachmentIds: string[]): Promise<void>;
   onReact(commentId: string, emoji: string, remove: boolean): void;
@@ -392,6 +406,7 @@ export function CommentThread({
   const roots = comments.filter((comment) => !comment.parentId);
   const visible = roots.filter((comment) => {
     if (hashtag && !comment.hashtags.includes(hashtag)) return false;
+    if (filter === "ALL") return true;
     if (filter === "OPEN") return !comment.resolvedAt;
     if (filter === "RESOLVED") return Boolean(comment.resolvedAt);
     if (filter === "MINE") return comment.userId === myUserId;

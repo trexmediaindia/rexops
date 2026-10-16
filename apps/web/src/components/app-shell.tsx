@@ -548,20 +548,28 @@ function UserRow({
  * Four nouns told a client nothing about which tab held the thing they were
  * emailed about, so each now carries the question it answers.
  */
+/* Two tabs. Clients sign in for one job (look at something and approve it) and the
+   old four-tab bar (Needs you / Projects / All work / Approved) made them choose
+   between overlapping lists first. Projects and All work still exist as pages. */
 const clientNav = [
-  { label: "Needs you", to: "/client/home", hint: "Work waiting on your decision right now" },
-  { label: "Projects", to: "/client/projects", hint: "Everything your agency is working on" },
   {
-    label: "All work",
-    to: "/client/review",
-    hint: "Every piece of work shared with you, at whatever stage",
+    label: "To review",
+    to: "/client/home",
+    hint: "Work waiting for you to look at and approve",
+    matches: ["/client/home", "/client/review", "/client/projects"],
   },
-  { label: "Approved", to: "/client/approved", hint: "What you have signed off, and the files" },
+  {
+    label: "Approved",
+    to: "/client/approved",
+    hint: "Everything you have approved, with the files to download",
+    matches: ["/client/approved"],
+  },
 ] as const;
 
 export function ClientShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const workspace = useWorkspace();
+  const features = useFeatures();
   return (
     <div className="client-frame">
       <header className="client-bar">
@@ -571,7 +579,7 @@ export function ClientShell({ children }: { children: ReactNode }) {
         </div>
         <nav aria-label="Client navigation">
           {clientNav.map((item) => {
-            const active = pathname.startsWith(item.to);
+            const active = item.matches.some((prefix) => pathname.startsWith(prefix));
             return (
               <Link
                 key={item.to}
@@ -586,17 +594,15 @@ export function ClientShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="client-bar__account">
-          <HelpTip label="How reviewing works" align="end">
+          <HelpTip label="How this works" align="end">
             <p>
-              Your agency shares a cut with you. Open it, leave comments on the exact frame or
-              region you mean, then approve it or request changes.
+              When there is something for you to look at, it appears under To review. Open it, leave
+              a comment if anything needs changing, then approve it or ask for changes.
             </p>
-            <p>
-              Approving is recorded with your name and the time. Once approved, the files stay
-              available under Approved.
-            </p>
+            <p>Everything you approve stays under Approved, with the files to download.</p>
           </HelpTip>
-          <LiveBell inboxPath="/client/home" />
+          {/* Without live collaboration the bell only linked back to this page. */}
+          {features.data?.["collaboration.live"] ? <LiveBell inboxPath="/client/home" /> : null}
           <UserRow compact />
         </div>
       </header>

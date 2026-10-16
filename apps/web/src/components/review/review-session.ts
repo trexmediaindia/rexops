@@ -21,7 +21,19 @@ export type DecisionCapability = {
    * on the approver list".
    */
   blockedReason: string | null;
+  /** The same reason as a code, so a screen can word it for its own audience. */
+  blockedCode: BlockedCode | null;
 };
+
+export type BlockedCode =
+  | "GUEST"
+  | "NO_ACTIVE_STAGE"
+  | "OTHER_SIDE"
+  | "NOT_APPROVER"
+  | "ALREADY_DECIDED"
+  | "QUORUM_MET"
+  | "NOT_YOUR_TURN"
+  | "NO_PERMISSION";
 
 export type ReviewCapabilities = {
   side: ReviewSide;
@@ -105,6 +117,19 @@ export function resolveCapabilities(args: {
   const isApproverOnActiveStage = eligible;
   const canDecide = isApproverOnActiveStage && side !== "GUEST";
 
+  const blockedCode: BlockedCode | null = (() => {
+    if (canDecide) return null;
+    if (side === "GUEST") return "GUEST";
+    if (!activeStage) return "NO_ACTIVE_STAGE";
+    if (!sideMatchesStage) return "OTHER_SIDE";
+    if (hasExplicitApprovers && !myApprover) return "NOT_APPROVER";
+    if (alreadyDecided) return "ALREADY_DECIDED";
+    if (quorumMet) return "QUORUM_MET";
+    // "Your turn" only exists when the stage names its approvers in order.
+    if (hasExplicitApprovers && !myTurn) return "NOT_YOUR_TURN";
+    return "NO_PERMISSION";
+  })();
+
   const blockedReason = (() => {
     if (canDecide) return null;
     if (side === "GUEST") {
@@ -128,7 +153,7 @@ export function resolveCapabilities(args: {
     if (quorumMet) {
       return "Enough approvals have already been given on this stage, so no further decision is needed.";
     }
-    if (!myTurn) {
+    if (hasExplicitApprovers && !myTurn) {
       return "Approvals on this stage happen in order, and it is not your turn yet. You will be able to decide once the people before you have.";
     }
     return "Your account can comment here but not approve. An owner or admin in your workspace can change that.";
@@ -149,6 +174,7 @@ export function resolveCapabilities(args: {
       canReject: canDecide,
       requiresESignature: side === "CLIENT" && activeStage?.type === "CLIENT",
       blockedReason,
+      blockedCode,
     },
   };
 }

@@ -2359,6 +2359,12 @@
     grid-template-rows: repeat(2, minmax(220px, 1fr));
   }
 
+  /* Side-by-side is also the default mode when nothing is being compared; stacking
+     two rows then left an empty second row under every image on a phone. */
+  .compare-stage[data-mode="side_by_side"]:not(:has(> .compare-stage__pane--b)) {
+    grid-template-rows: minmax(0, 1fr);
+  }
+
   .compare-toolbar {
     align-items: stretch;
     flex-direction: column;
@@ -4810,4 +4816,256 @@ button.user-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+/* ---------------------------------------------------------------------------
+   Client review, simplified. A client gets the work, one line saying how to
+   comment, and two clear buttons. The agency's tools stay on the agency side.
+   ------------------------------------------------------------------------ */
+
+.review-room__grid--no-rail {
+  grid-template-columns: minmax(400px, 1fr) 344px;
+}
+
+@media (max-width: 1250px) {
+  .review-room__grid--no-rail {
+    grid-template-columns: minmax(340px, 1fr) 320px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .review-room__grid--no-rail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.review-media > .client-review-hint {
+  flex: 0 0 auto;
+}
+
+.client-review-hint {
+  margin: 0;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--ash);
+  color: var(--mist);
+  font-size: 0.875rem;
+  background: #181b20;
+}
+
+.review-media > .client-decision {
+  flex: 0 0 auto;
+}
+
+.client-decision {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid var(--ash);
+  background: #181b20;
+}
+
+.client-decision__ask {
+  margin: 0;
+  color: var(--paper);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.client-decision__buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.client-decision__buttons .rx-button {
+  min-height: 48px;
+  font-size: 1rem;
+}
+
+.client-decision__reject,
+.client-decision__link {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.client-decision__reject {
+  color: var(--mist);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.client-decision__link {
+  color: var(--tungsten);
+  text-decoration: none;
+}
+
+.client-decision--form > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.client-decision--form > header strong {
+  color: var(--paper);
+  font-size: 1rem;
+}
+
+.client-decision--form > header button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--mist);
+  background: none;
+  cursor: pointer;
+}
+
+.client-decision--form label {
+  display: grid;
+  gap: 6px;
+  color: var(--paper);
+  font-size: 0.875rem;
+}
+
+.client-decision--form label > span,
+.client-decision--form label > small,
+.client-decision__fineprint {
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.client-decision--form input,
+.client-decision--form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+  color: var(--paper);
+  background: var(--control-bg);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.client-decision--form textarea {
+  resize: vertical;
+}
+
+.client-decision--form > .rx-button {
+  min-height: 48px;
+  font-size: 1rem;
+}
+
+.client-decision__fineprint {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.client-decision--done {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.client-decision--done > svg {
+  flex: none;
+  color: var(--green);
+}
+
+.client-decision--done p {
+  flex: 1 1 220px;
+  margin: 0;
+  color: var(--paper);
+}
+
+/* The whole card opens the review now, not just the button inside it. */
+a.client-review-card {
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 120ms ease;
+}
+
+a.client-review-card:hover,
+a.client-review-card:focus-visible {
+  border-color: var(--tungsten);
+}
+
+.client-review-card__media > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.client-review-card__copy > .rx-button {
+  justify-self: start;
+}
+
+@media (max-width: 760px) {
+  /* On a phone the decision stays in reach while the work is on screen. */
+  .review-room--client .client-decision {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    box-shadow: 0 -10px 24px rgb(0 0 0 / 0.45);
+  }
+}
+
+@media (max-width: 700px) {
+  /* On a phone the sign-in form has to be on the first screen: keep the logo and the
+     one-line promise, drop the three-step explainer. */
+  .login-aside {
+    min-height: 0;
+    padding-bottom: 8px;
+  }
+
+  .login-aside__statement {
+    margin-top: 28px;
+  }
+
+  .login-aside__statement h1 {
+    font-size: 2rem;
+  }
+
+  .login-explainer {
+    display: none;
+  }
+
+  .login-panel {
+    min-height: 0;
+    padding-top: 20px;
+  }
+}
+
+.review-room--client .comment-composer__toolbar {
+  flex-wrap: wrap;
+}
+
+.review-room--client .comment-composer__toolbar > button:last-child {
+  display: inline-flex;
+  width: auto;
+  flex: none;
+  white-space: nowrap;
+  min-height: 34px;
+  padding: 0 14px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .review-room--client .review-comments {
+    min-height: 0;
+  }
 }

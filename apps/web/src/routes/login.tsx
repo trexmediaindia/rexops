@@ -22,7 +22,7 @@ function signInProblem(error: { status?: number; code?: string; message?: string
   if (error.status === 403 || code.includes("BANNED")) {
     return {
       title: "This account has been suspended",
-      body: "An owner in your workspace can lift the suspension. Nothing has been deleted.",
+      body: "Ask your contact at the agency to switch it back on. Nothing has been deleted.",
     };
   }
   if (code.includes("EMAIL_NOT_VERIFIED")) {
@@ -33,13 +33,13 @@ function signInProblem(error: { status?: number; code?: string; message?: string
   }
   if (error.status === 0 || code.includes("FETCH") || code.includes("NETWORK")) {
     return {
-      title: "Could not reach RexOps",
+      title: "Could not connect",
       body: "Your details were not sent. Check your connection and try again.",
     };
   }
   return {
     title: "That email and password do not match",
-    body: "Check for a stray space, and that you are using the address your workspace invited. Passwords are case-sensitive.",
+    body: "Check for a stray space, and that it's the email your agency set you up with. Passwords are case-sensitive.",
   };
 }
 
@@ -78,12 +78,10 @@ export function LoginPage() {
           <span>RexOps</span>
         </div>
         <div className="login-aside__statement">
-          <span className="rx-eyebrow">What this is</span>
-          <h1>Where creative work gets reviewed, approved and signed off.</h1>
+          <h1>Review and approve your work in one place.</h1>
           <p>
-            Agencies upload each cut of a deliverable here. Their team reviews it, the client
-            reviews it, and every comment and approval is recorded against the exact version it was
-            made on.
+            Your agency shares each new version here. You look at it, leave comments, and approve it
+            when you're happy. No more hunting through email and chat.
           </p>
         </div>
 
@@ -93,46 +91,40 @@ export function LoginPage() {
           <li>
             <Upload size={16} aria-hidden="true" />
             <div>
-              <strong>The agency uploads a version</strong>
-              <span>Each upload is numbered, so nobody argues about which cut they saw.</span>
+              <strong>We share the work</strong>
+              <span>Every version is numbered, so it's always clear which one you're seeing.</span>
             </div>
           </li>
           <li>
             <Users size={16} aria-hidden="true" />
             <div>
-              <strong>Reviewers comment on the frame or region</strong>
-              <span>Internal review first, then the client. Comments stick to the timecode.</span>
+              <strong>You comment</strong>
+              <span>Click on the exact spot or moment you mean, and type what to change.</span>
             </div>
           </li>
           <li>
             <CheckCircle2 size={16} aria-hidden="true" />
             <div>
-              <strong>Someone approves it, on the record</strong>
-              <span>Who approved what, and when, is stored and cannot be quietly changed.</span>
+              <strong>You approve</strong>
+              <span>One click. Your approval is saved with your name and the date.</span>
             </div>
           </li>
         </ol>
-
-        <small>RexOps / production system 0.1</small>
       </section>
 
       <section className="login-panel">
         <form className="login-card" onSubmit={signIn} noValidate>
-          <span className="rx-eyebrow">Sign in</span>
-          <h2>Sign in to your workspace</h2>
-          <p>
-            For agency teams and for clients reviewing work. Use the email address your invitation
-            was sent to — the screens you see depend on the role attached to it.
-          </p>
+          <h2>Sign in</h2>
+          <p>Use the email and password your agency gave you.</p>
 
           <label>
-            Work email
+            Email
             <input
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               autoComplete="email"
-              placeholder="you@studio.com"
+              placeholder="you@company.com"
               required
             />
           </label>
@@ -155,10 +147,6 @@ export function LoginPage() {
                 {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
               </button>
             </span>
-            <small className="login-card__hint">
-              If you were invited, this is the temporary password in your invitation email. You can
-              change it once you are in.
-            </small>
           </label>
 
           {problem ? (
@@ -172,17 +160,15 @@ export function LoginPage() {
           ) : null}
 
           <Button type="submit" disabled={busy || !email || !password}>
-            {busy ? "Signing in…" : "Sign in to RexOps"} <MoveRight size={16} />
+            {busy ? "Signing in…" : "Sign in"} <MoveRight size={16} />
           </Button>
 
           {/* RexOps has no self-serve signup: agencies are provisioned by whoever
               runs the install, and everyone else is invited. Saying so beats a
               "Create account" link that cannot work. */}
           <p className="login-card__footnote">
-            <strong>No account yet?</strong> RexOps accounts are created by invitation. If you are a
-            client, your agency invites you. If you are an agency, ask whoever runs this RexOps
-            install to set your workspace up. Lost your password? An owner in your workspace can
-            issue a new one.
+            No login yet, or forgotten your password? Ask your contact at the agency and they'll
+            sort it out.
           </p>
 
           {import.meta.env.DEV ? (
