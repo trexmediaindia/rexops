@@ -61,7 +61,7 @@ jobs:
       - run: |
           set -o pipefail
           bun run test 2>&1 | tee test-output.log || {
-            grep -E "\(fail\)|error:|Error:|expect\(" test-output.log | head -40 | sed 's/^/::error::/'
+            grep -E "@rexops/api:test" test-output.log | grep -vE "\(pass\)" | tail -45 | sed 's/^/::error::/'
             exit 1
           }
       - run: bun run build
