@@ -38,7 +38,13 @@
 
   --surface-popover: #1c2026;
 
-  font-family: "IBM Plex Sans", sans-serif;
+  /* Type. Inter for everything you read; Archivo Black for page and section titles. */
+  --font-body: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Archivo Black", "Inter Variable", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  font-family: var(--font-body);
+  font-feature-settings: "cv11", "ss01";
   background: var(--ink);
   color: var(--paper);
   font-size: 16px;
@@ -288,15 +294,24 @@ p {
   margin-top: 0;
 }
 
+/* Archivo Black for the big titles only; it is a single heavy weight, so smaller
+   headings use Inter at semibold, which reads better at card and panel sizes. */
 h1,
-h2,
-h3,
 .rx-display {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+h2,
+h3 {
+  font-family: var(--font-body);
+  font-weight: 650;
+  letter-spacing: -0.01em;
 }
 
 .rx-mono {
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
@@ -443,14 +458,14 @@ h3,
   border-radius: 50%;
   background: var(--slate);
   color: var(--paper);
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-mono);
   /* Two initials inside a 32px circle — the body rung overflows it. */
   font-size: var(--text-meta);
 }
 
 .rx-eyebrow {
   color: var(--tungsten);
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-mono);
   /* Wide tracking makes an eyebrow read a rung larger than it is set. */
   font-size: var(--text-meta);
   letter-spacing: 0.14em;
@@ -563,10 +578,10 @@ h3,
 .rx-metric strong {
   display: block;
   margin: 18px 0 9px;
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 2.1rem;
   font-weight: 500;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.015em;
 }
 
 .rx-metric small {
@@ -830,7 +845,7 @@ h3,
   color: var(--paper);
   background: transparent;
   cursor: pointer;
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-mono);
   font-size: var(--text-meta);
   font-variant-numeric: tabular-nums;
 }
@@ -1061,7 +1076,7 @@ h3,
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-mono);
   font-size: var(--text-meta);
   border: 1px solid var(--ash);
   color: var(--mist);

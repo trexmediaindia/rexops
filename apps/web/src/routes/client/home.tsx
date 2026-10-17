@@ -1,15 +1,53 @@
-import { Button, Callout, EmptyState, HelpTip, Skeleton, StatusChip } from "@rexops/ui";
+import { Button, Callout, EmptyState, Skeleton, StatusChip } from "@rexops/ui";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Check, Film, Inbox } from "lucide-react";
+import { ArrowRight, Check, FileText, Film, Image as ImageIcon, Inbox } from "lucide-react";
 import { ClientShell } from "../../components/app-shell";
 import {
   AWAITING_CLIENT,
+  clientStatusLabel,
+  contentTypeLabel,
   formatDate,
   SETTLED,
   useClientWorkspace,
   WITH_AGENCY,
 } from "../../lib/client-workspace";
-import { titleCase } from "../../lib/format";
+
+const apiUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+
+async function getJson<T>(path: string): Promise<T | null> {
+  const response = await fetch(`${apiUrl}${path}`, { credentials: "include" });
+  return response.ok ? ((await response.json()) as T) : null;
+}
+
+/** A real picture of the work: the image itself, or a video's poster frame. */
+function WorkThumbnail({
+  deliverableId,
+  contentType,
+}: {
+  deliverableId: string;
+  contentType: string;
+}) {
+  const thumb = useQuery({
+    queryKey: ["client-thumb", deliverableId],
+    queryFn: async () => {
+      const versions = await getJson<Array<{ id: string; fileType: string | null }>>(
+        `/api/file-versions/deliverable/${deliverableId}`,
+      );
+      const latest = versions?.[0];
+      if (!latest) return null;
+      const kind = latest.fileType?.startsWith("image/") ? "preview" : "poster";
+      return (
+        (await getJson<{ url: string }>(`/api/file-versions/${latest.id}/${kind}`))?.url ?? null
+      );
+    },
+    retry: false,
+    staleTime: 5 * 60_000,
+  });
+  if (thumb.data) return <img src={thumb.data} alt="" loading="lazy" />;
+  const Icon = contentType === "MOTION" ? Film : contentType === "STATIC" ? ImageIcon : FileText;
+  return <Icon size={38} aria-hidden="true" />;
+}
 
 /*
  * The client portal's front door. It used to open with "What needs you" and a
@@ -33,24 +71,11 @@ export function ClientHome() {
   return (
     <ClientShell>
       <div className="client-heading">
-        <span className="rx-eyebrow">Your review portal</span>
-        <h1>
-          What needs you
-          <HelpTip label="What needs you">
-            <p>
-              This portal is where your agency shares work for sign-off. Anything they send for your
-              approval appears here, and stays here until you approve it or ask for changes.
-            </p>
-            <p>
-              Nothing you see here is final until you approve it, and nothing is shared with you
-              before your team is happy with it.
-            </p>
-          </HelpTip>
-        </h1>
+        <h1>{forReview.length ? "Ready for your review" : "You're all caught up"}</h1>
         <p>
           {forReview.length
-            ? `${forReview.length} ${forReview.length === 1 ? "piece of work is" : "pieces of work are"} waiting on your decision. Open one to watch it, comment on it, and approve or ask for changes.`
-            : "Nothing is waiting on your decision right now. Your agency will send work here when it is ready for you."}
+            ? `${forReview.length === 1 ? "One thing is" : `${forReview.length} things are`} waiting for you. Open it, have a look, then approve it or tell us what to change.`
+            : "Nothing needs you right now. New work will appear here as soon as it's ready."}
         </p>
       </div>
 
@@ -66,54 +91,46 @@ export function ClientHome() {
       ) : null}
 
       <section className="client-section">
-        <div className="client-section__heading">
-          <h2>
-            Waiting on your decision{" "}
-            <span className="rx-mono">{String(forReview.length).padStart(2, "0")}</span>
-          </h2>
-          <p>
-            Open each one to leave comments pinned to the exact frame or area, then approve it or
-            send it back for changes.
-          </p>
-        </div>
         {workspace.isLoading ? (
           <Skeleton lines={3} label="Loading work that needs your review" />
         ) : forReview.length === 0 ? (
           <EmptyState
             tone="inset"
             icon={<Inbox size={20} />}
-            title="Nothing needs your decision"
+            title="Nothing to review"
             body={
               inProgress.length
-                ? `Your agency is still working on ${inProgress.length} ${inProgress.length === 1 ? "piece" : "pieces"} of work. It arrives here the moment they send it for your approval.`
-                : "When your agency sends work for approval it appears here. You will not need to go looking for it."
-            }
-            action={
-              <Link className="rx-button rx-button--secondary" to="/client/projects">
-                See everything your team is working on
-              </Link>
+                ? `We're working on ${inProgress.length} ${inProgress.length === 1 ? "thing" : "things"} for you. ${inProgress.length === 1 ? "It" : "They"}'ll show up here when ready.`
+                : "When there's something to look at, it will show up here."
             }
           />
         ) : (
           <div className="review-needed-grid">
             {forReview.map((deliverable) => (
-              <article className="client-review-card" key={deliverable.id}>
+              <Link
+                className="client-review-card"
+                key={deliverable.id}
+                to="/client/review/$deliverableId"
+                params={{ deliverableId: deliverable.id }}
+              >
                 <div className="client-review-card__media">
-                  <Film size={38} />
+                  <WorkThumbnail
+                    deliverableId={deliverable.id}
+                    contentType={deliverable.contentType}
+                  />
                 </div>
                 <div className="client-review-card__copy">
-                  <StatusChip status="UNDER_CLIENT_REVIEW" />
+                  <StatusChip
+                    status="UNDER_CLIENT_REVIEW"
+                    label={clientStatusLabel("UNDER_CLIENT_REVIEW")}
+                  />
                   <h3>{deliverable.title}</h3>
-                  <p>{titleCase(deliverable.contentType)}</p>
-                  <Link
-                    className="rx-button rx-button--primary"
-                    to="/client/review/$deliverableId"
-                    params={{ deliverableId: deliverable.id }}
-                  >
-                    Review and decide <ArrowUpRight size={15} />
-                  </Link>
+                  <p>{contentTypeLabel(deliverable.contentType)}</p>
+                  <span className="rx-button rx-button--primary">
+                    Open and review <ArrowRight size={15} />
+                  </span>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         )}
@@ -122,8 +139,7 @@ export function ClientHome() {
       <div className="client-lower-grid">
         <section className="client-section client-section--plain">
           <div className="client-section__heading">
-            <h2>Already approved</h2>
-            <p>Work you have signed off. The files stay available to download.</p>
+            <h2>Recently approved</h2>
           </div>
           <div className="simple-feed">
             {workspace.isLoading ? (
@@ -131,8 +147,8 @@ export function ClientHome() {
             ) : approved.length === 0 ? (
               <EmptyState
                 tone="inset"
-                title="You have not approved anything yet"
-                body="Once you approve a piece of work it moves here, together with the exact files you approved."
+                title="Nothing approved yet"
+                body="Anything you approve moves here, with the files to download."
               />
             ) : (
               approved.slice(0, 6).map((deliverable) => (
@@ -142,16 +158,16 @@ export function ClientHome() {
                   </span>
                   <div>
                     <strong>{deliverable.title}</strong>
-                    <span>{titleCase(deliverable.status)}</span>
+                    <span>{clientStatusLabel(deliverable.status)}</span>
                   </div>
                   <time>{formatDate(deliverable.approvedAt ?? deliverable.updatedAt)}</time>
                 </article>
               ))
             )}
           </div>
-          {approved.length > 6 ? (
+          {approved.length ? (
             <Link className="rx-action" to="/client/approved">
-              See all {approved.length} approved <ArrowUpRight size={14} />
+              See all approved work and download files <ArrowRight size={14} />
             </Link>
           ) : null}
         </section>

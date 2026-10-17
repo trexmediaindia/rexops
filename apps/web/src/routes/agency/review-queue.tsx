@@ -167,8 +167,8 @@ export function ReviewQueuePage() {
           }
           action={
             lane === "ALL" ? (
-              <Link className="rx-button rx-button--primary" to="/agency/work">
-                See everything in flight
+              <Link className="rx-button rx-button--primary" to="/agency/projects">
+                Open projects
               </Link>
             ) : (
               <Button variant="secondary" onClick={() => setLane("ALL")}>

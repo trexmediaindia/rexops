@@ -21,7 +21,9 @@ export function PresenceAvatars({
   const others = useOthers();
   const status = useStatus();
   const [open, setOpen] = useState(false);
-  if (status !== "connected") return <span className="presence-fallback">Fallback</span>;
+  // Not connected (live collaboration off, or still connecting): show nothing. This used
+  // to print the word "Fallback" in the header of every review, clients included.
+  if (status !== "connected") return null;
   if (!others.length) return <span className="presence-alone">You’re the only reviewer here</span>;
   return (
     <div className="presence-avatars">

@@ -33,3 +33,13 @@ describe("notification routing", () => {
     expect(recipients).toEqual(["designer"]);
   });
 });
+
+describe("notification titles name the work", () => {
+  test("clients see which piece of work is waiting", async () => {
+    const { titleFor } = await import("./notify");
+    expect(titleFor("SUBMITTED_TO_CLIENT", "Diwali reel", "x")).toBe(
+      "“Diwali reel” is ready for your review",
+    );
+    expect(titleFor("SOMETHING_ELSE", "Diwali reel", "Fallback title")).toBe("Fallback title");
+  });
+});

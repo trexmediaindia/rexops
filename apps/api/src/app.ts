@@ -8,7 +8,7 @@ import { attachmentsRoutes } from "./modules/attachments/attachments.routes";
 import { authRoutes } from "./modules/auth/auth.routes";
 import { automationRoutes, publicIntakeRoutes } from "./modules/automation/automation.routes";
 import { clientsRoutes } from "./modules/clients/clients.routes";
-import { collaborationRoutes } from "./modules/collaboration/collaboration.routes";
+import { activityRoutes, collaborationRoutes } from "./modules/collaboration/collaboration.routes";
 import { deliverablesRoutes } from "./modules/deliverables/deliverables.routes";
 import { featuresRoutes } from "./modules/features/features.routes";
 import {
@@ -19,6 +19,7 @@ import { healthRoutes } from "./modules/health/health.routes";
 import { liveblocksRoutes } from "./modules/liveblocks/liveblocks.routes";
 import { notificationsRoutes } from "./modules/notifications/notifications.routes";
 import { projectsRoutes } from "./modules/projects/projects.routes";
+import { reportsRoutes } from "./modules/reports/reports.routes";
 import { reviewTaskRoutes } from "./modules/reviews/review-task.routes";
 import { reviewsRoutes } from "./modules/reviews/reviews.routes";
 import { publicShareRoutes, sharesRoutes } from "./modules/shares/shares.routes";
@@ -71,15 +72,19 @@ export const app = new Elysia({ name: "rexops-api" })
   .use(features.automation ? automationRoutes : notFound("/api/automation"))
   .use(features.automation ? publicIntakeRoutes : notFound("/api/public/intake"))
   .use(features["collaboration.live"] ? liveblocksRoutes : notFound("/api/liveblocks-auth"))
-  .use(features["collaboration.live"] ? notificationsRoutes : notFound("/api/notifications"))
+  // In-app notifications are rows in Postgres written by the worker; they never needed
+  // Liveblocks. Only the live "ping" on top of them does, and that stays behind the flag.
+  .use(notificationsRoutes)
   .use(features["review.wedge"] ? attachmentsRoutes : notFound("/api/attachments"))
   .use(agenciesRoutes)
   .use(features.analytics ? analyticsRoutes : notFound("/api/analytics"))
   .use(clientsRoutes)
   .use(teamRoutes)
   .use(storageRoutes)
+  .use(activityRoutes)
   .use(features["collaboration.live"] ? collaborationRoutes : notFound("/api/collaboration"))
   .use(projectsRoutes)
+  .use(reportsRoutes)
   .use(deliverablesRoutes)
   .use(features["files.versioning"] ? fileVersionsRoutes : notFound("/api/file-versions"))
   .use(features["review.wedge"] ? reviewsRoutes : notFound("/api/reviews"))

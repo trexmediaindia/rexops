@@ -95,6 +95,7 @@ export async function createProject(principal: Principal, input: CreateProjectIn
         description: input.description,
         brief: input.brief,
         type: input.type,
+        service: input.service,
         priority: input.priority,
         startDate: input.startDate,
         dueDate: input.dueDate,

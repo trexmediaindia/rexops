@@ -129,7 +129,7 @@ export const attachments = pgTable(
     ownerUserId: text("owner_user_id")
       .notNull()
       .references(() => users.id),
-    parentType: text("parent_type", { enum: ["COMMENT", "MESSAGE"] }),
+    parentType: text("parent_type", { enum: ["COMMENT", "MESSAGE", "AD_REPORT"] }),
     parentId: text("parent_id"),
     expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),

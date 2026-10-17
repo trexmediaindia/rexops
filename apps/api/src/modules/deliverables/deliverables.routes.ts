@@ -1,5 +1,6 @@
 import {
   createDeliverableSchema,
+  markPublishedSchema,
   transitionDeliverableSchema,
   updateDeliverableSchema,
 } from "@rexops/validators";
@@ -9,7 +10,9 @@ import {
   createDeliverable,
   getDeliverable,
   listDeliverables,
+  markPublished,
   transitionDeliverable,
+  undoPublished,
   updateDeliverable,
 } from "./deliverables.service";
 
@@ -42,6 +45,9 @@ export const deliverablesRoutes = new Elysia({ prefix: "/api/deliverables" })
         dueDate: t.Optional(t.Date()),
         agencyNote: t.Optional(t.String()),
         clientNote: t.Optional(t.String()),
+        publishAt: t.Optional(t.Union([t.Date(), t.Null()])),
+        platforms: t.Optional(t.Array(t.String())),
+        caption: t.Optional(t.Union([t.String(), t.Null()])),
       }),
     },
   )
@@ -71,6 +77,9 @@ export const deliverablesRoutes = new Elysia({ prefix: "/api/deliverables" })
         dueDate: t.Optional(t.Date()),
         agencyNote: t.Optional(t.String()),
         clientNote: t.Optional(t.String()),
+        publishAt: t.Optional(t.Union([t.Date(), t.Null()])),
+        platforms: t.Optional(t.Array(t.String())),
+        caption: t.Optional(t.Union([t.String(), t.Null()])),
       }),
     },
   )
@@ -97,4 +106,18 @@ export const deliverablesRoutes = new Elysia({ prefix: "/api/deliverables" })
         ]),
       }),
     },
-  );
+  )
+  .post(
+    "/:id/published",
+    ({ params, body, principal, set }) => {
+      const actor = requirePrincipal(principal, set);
+      if (!actor) return { error: "UNAUTHORIZED" };
+      return markPublished(actor, params.id, markPublishedSchema.parse(body ?? {}));
+    },
+    { body: t.Optional(t.Object({ publishUrl: t.Optional(t.String()) })) },
+  )
+  .delete("/:id/published", ({ params, principal, set }) => {
+    const actor = requirePrincipal(principal, set);
+    if (!actor) return { error: "UNAUTHORIZED" };
+    return undoPublished(actor, params.id);
+  });

@@ -4,6 +4,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Boxes,
   Building2,
+  CalendarDays,
   CheckCircle2,
   ChevronDown,
   CircleUserRound,
@@ -59,13 +60,19 @@ const agencyNav = [
     label: "Clients",
     to: "/agency/clients",
     icon: CircleUserRound,
-    hint: "The companies you work for. Every project belongs to one.",
+    hint: "The companies you work for, and who at each one can log in.",
   },
   {
     label: "Projects",
     to: "/agency/projects",
     icon: FolderKanban,
-    hint: "Pieces of work for a client. Deliverables live inside them.",
+    hint: "Social, creatives or ads work for a client. Posts and creatives live inside.",
+  },
+  {
+    label: "Calendar",
+    to: "/agency/calendar",
+    icon: CalendarDays,
+    hint: "Every post, ad and due date on one month view.",
   },
   {
     label: "Work",
@@ -80,7 +87,7 @@ const agencyNav = [
     icon: CheckCircle2,
     badge: "review" as const,
     feature: "review.wedge",
-    hint: "Deliverables waiting on a decision from you or from a client.",
+    hint: "Work waiting on your team or on a client.",
   },
   {
     label: "Inbox",
@@ -131,7 +138,6 @@ const REVIEW_STATUSES = new Set([
 
 /** Live counts for the sidebar badges. These used to be the literals 6 and 3. */
 function useNavBadges() {
-  const features = useFeatures();
   const deliverables = useQuery({
     queryKey: ["deliverables"],
     queryFn: () => request<DeliverableRecord[]>("/api/deliverables"),
@@ -145,9 +151,6 @@ function useNavBadges() {
     },
     staleTime: 30_000,
     retry: false,
-    // The notifications API only exists while collaboration is on; asking anyway 404s on
-    // every page in a deployment without Liveblocks configured.
-    enabled: features.data?.["collaboration.live"] === true,
   });
   return {
     review: (deliverables.data ?? []).filter((item) => REVIEW_STATUSES.has(item.status)).length,
@@ -185,12 +188,6 @@ const createTargets = [
     to: "/agency/projects",
     icon: FolderKanban,
     hint: "A piece of work for one client",
-  },
-  {
-    label: "Deliverable",
-    to: "/agency/work",
-    icon: Boxes,
-    hint: "One asset that gets reviewed and approved",
   },
 ] as const;
 
@@ -364,7 +361,7 @@ export function AgencyShell({ children }: { children: ReactNode }) {
                   />
                   <div className="create-menu__list" role="menu">
                     <p className="create-menu__note">
-                      Create them in this order — a project needs a client, a deliverable needs a
+                      Start with a client, then a project. Posts and creatives are added inside a
                       project.
                     </p>
                     {createTargets.map((target) => (
@@ -548,20 +545,55 @@ function UserRow({
  * Four nouns told a client nothing about which tab held the thing they were
  * emailed about, so each now carries the question it answers.
  */
+/* Two tabs. Clients sign in for one job (look at something and approve it) and the
+   old four-tab bar (Needs you / Projects / All work / Approved) made them choose
+   between overlapping lists first. Projects and All work still exist as pages. */
 const clientNav = [
-  { label: "Needs you", to: "/client/home", hint: "Work waiting on your decision right now" },
-  { label: "Projects", to: "/client/projects", hint: "Everything your agency is working on" },
   {
-    label: "All work",
-    to: "/client/review",
-    hint: "Every piece of work shared with you, at whatever stage",
+    label: "To review",
+    to: "/client/home",
+    hint: "Work waiting for you to look at and approve",
+    matches: ["/client/home", "/client/review", "/client/projects"],
   },
-  { label: "Approved", to: "/client/approved", hint: "What you have signed off, and the files" },
+  {
+    label: "Calendar",
+    to: "/client/calendar",
+    hint: "When each post or ad goes out",
+    matches: ["/client/calendar"],
+    needs: "publishing",
+  },
+  {
+    label: "Ad results",
+    to: "/client/reports",
+    hint: "Monthly reports for your ads",
+    matches: ["/client/reports"],
+    needs: "ads",
+  },
+  {
+    label: "Approved",
+    to: "/client/approved",
+    hint: "Everything you have approved, with the files to download",
+    matches: ["/client/approved"],
+  },
 ] as const;
 
 export function ClientShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const workspace = useWorkspace();
+  // Calendar and Ad results only appear for clients who have that kind of work.
+  const projects = useQuery({
+    queryKey: ["client-projects"],
+    queryFn: () => request<Array<{ service?: string }>>("/api/projects"),
+    staleTime: 60_000,
+  });
+  const services = new Set((projects.data ?? []).map((project) => project.service));
+  const shown = clientNav.filter(
+    (item) =>
+      !("needs" in item) ||
+      (item.needs === "ads"
+        ? services.has("ADS")
+        : services.has("SOCIAL_MEDIA") || services.has("ADS")),
+  );
   return (
     <div className="client-frame">
       <header className="client-bar">
@@ -570,8 +602,8 @@ export function ClientShell({ children }: { children: ReactNode }) {
           <span>{workspace.data?.agency?.name ?? "RexOps"}</span>
         </div>
         <nav aria-label="Client navigation">
-          {clientNav.map((item) => {
-            const active = pathname.startsWith(item.to);
+          {shown.map((item) => {
+            const active = item.matches.some((prefix) => pathname.startsWith(prefix));
             return (
               <Link
                 key={item.to}
@@ -586,15 +618,12 @@ export function ClientShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="client-bar__account">
-          <HelpTip label="How reviewing works" align="end">
+          <HelpTip label="How this works" align="end">
             <p>
-              Your agency shares a cut with you. Open it, leave comments on the exact frame or
-              region you mean, then approve it or request changes.
+              When there is something for you to look at, it appears under To review. Open it, leave
+              a comment if anything needs changing, then approve it or ask for changes.
             </p>
-            <p>
-              Approving is recorded with your name and the time. Once approved, the files stay
-              available under Approved.
-            </p>
+            <p>Everything you approve stays under Approved, with the files to download.</p>
           </HelpTip>
           <LiveBell inboxPath="/client/home" />
           <UserRow compact />

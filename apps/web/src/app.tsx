@@ -19,6 +19,11 @@ export function App() {
               body: JSON.stringify({ room }),
             },
           );
+          // 404: live collaboration is switched off on this install (no Liveblocks key).
+          // Answering "forbidden" makes the client give up on the room instead of retrying.
+          if (response.status === 404) {
+            return { error: "forbidden" as const, reason: "Live collaboration is switched off." };
+          }
           if (!response.ok) throw new Error("Realtime authorization failed.");
           const body = await response.json();
           // Without LIVEBLOCKS_SECRET_KEY the API answers with a local `dev:` stub that

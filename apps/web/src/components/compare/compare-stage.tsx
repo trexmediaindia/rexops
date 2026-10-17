@@ -212,7 +212,7 @@ export function CompareStage({
             : undefined
         }
       >
-        <span className="compare-stage__label">A · {base.displayVersion}</span>
+        {against ? <span className="compare-stage__label">A · {base.displayVersion}</span> : null}
         <Asset
           version={base}
           currentTime={currentTime}

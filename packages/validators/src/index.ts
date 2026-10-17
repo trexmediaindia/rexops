@@ -6,6 +6,7 @@ export * from "./common";
 export * from "./deliverable";
 export * from "./file-version";
 export * from "./project";
+export * from "./report";
 export * from "./review";
 export * from "./team";
 export * from "./work-management";

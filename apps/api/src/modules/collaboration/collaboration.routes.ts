@@ -13,7 +13,11 @@ import {
   markChannelRead,
 } from "./collaboration.service";
 
-export const collaborationRoutes = new Elysia({ prefix: "/api/collaboration" })
+/**
+ * The activity feed reads rows the API already writes; it never needed Liveblocks, so
+ * it stays on in every deployment. Chat channels below remain behind collaboration.live.
+ */
+export const activityRoutes = new Elysia({ prefix: "/api/collaboration" })
   .use(authGuard)
   .get("/activity/recent", ({ query, principal, set }) => {
     const actor = requirePrincipal(principal, set);
@@ -35,7 +39,10 @@ export const collaborationRoutes = new Elysia({ prefix: "/api/collaboration" })
       cursor: query.cursor,
       limit: query.limit ? Number(query.limit) : undefined,
     });
-  })
+  });
+
+export const collaborationRoutes = new Elysia({ prefix: "/api/collaboration" })
+  .use(authGuard)
   .get("/channels", ({ query, principal, set }) => {
     const actor = requirePrincipal(principal, set);
     if (!actor) return { error: "UNAUTHORIZED" };

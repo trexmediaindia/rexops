@@ -7,6 +7,7 @@ import { AgencyShell } from "../../components/app-shell";
 import { FormDialog } from "../../components/ui/form-dialog";
 import { PageHeader } from "../../components/ui/page-header";
 import { request } from "../../lib/request";
+import { SERVICE_OPTIONS } from "../../lib/services";
 import type { ClientRecord, DeliverableRecord, ProjectRecord } from "../../lib/types";
 
 const ACTIVE_STATUSES = new Set(["DRAFT", "ACTIVE", "IN_PROGRESS", "WAITING_FOR_CLIENT"]);
@@ -328,12 +329,12 @@ export function ProjectsPage() {
       {creating ? (
         <FormDialog
           title="Create a project"
-          description="A project is one job for one client. It holds the deliverables that go to review."
+          description="One project per service you run for a client: e.g. their social media, or their ads."
           submitLabel="Create project"
           pendingLabel="Creating project…"
           pending={createProject.isPending}
           error={createProject.error ? (createProject.error as Error).message : null}
-          footnote="Creating a project does not notify the client. They see work only once a deliverable is sent for their review."
+          footnote="The client isn't told about the project. They only see work once you send it to them."
           fields={[
             {
               name: "name",
@@ -355,10 +356,13 @@ export function ProjectsPage() {
               })),
             },
             {
-              name: "type",
-              label: "Kind of work",
-              placeholder: "Social media retainer",
-              hint: "Free text, for your own reporting. Nothing in the app behaves differently.",
+              name: "service",
+              label: "Service",
+              type: "select",
+              required: true,
+              defaultValue: "SOCIAL_MEDIA",
+              hint: "Decides the steps the work goes through and what the project shows.",
+              options: SERVICE_OPTIONS,
             },
             {
               name: "priority",

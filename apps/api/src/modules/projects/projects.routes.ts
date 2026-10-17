@@ -10,6 +10,14 @@ const projectBody = t.Object({
   description: t.Optional(t.String()),
   brief: t.Optional(t.String()),
   type: t.Optional(t.String()),
+  service: t.Optional(
+    t.Union([
+      t.Literal("SOCIAL_MEDIA"),
+      t.Literal("CREATIVES"),
+      t.Literal("ADS"),
+      t.Literal("OTHER"),
+    ]),
+  ),
   priority: t.Optional(
     t.Union([t.Literal("LOW"), t.Literal("MEDIUM"), t.Literal("HIGH"), t.Literal("URGENT")]),
   ),
@@ -64,6 +72,14 @@ export const projectsRoutes = new Elysia({ prefix: "/api/projects" })
         description: t.Optional(t.String()),
         brief: t.Optional(t.String()),
         type: t.Optional(t.String()),
+        service: t.Optional(
+          t.Union([
+            t.Literal("SOCIAL_MEDIA"),
+            t.Literal("CREATIVES"),
+            t.Literal("ADS"),
+            t.Literal("OTHER"),
+          ]),
+        ),
         priority: t.Optional(
           t.Union([t.Literal("LOW"), t.Literal("MEDIUM"), t.Literal("HIGH"), t.Literal("URGENT")]),
         ),

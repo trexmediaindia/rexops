@@ -9,7 +9,9 @@ import {
   ExternalLink,
   FileArchive,
   MessageSquareText,
+  Pencil,
   RotateCcw,
+  Send,
   SquareCheckBig,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -17,12 +19,14 @@ import { ActivityFeed, type ActivityRow } from "../../components/activity/activi
 import { AgencyShell } from "../../components/app-shell";
 import { type CompareMode, CompareStage } from "../../components/compare/compare-stage";
 import { ConfirmDialog } from "../../components/ui/confirm-dialog";
+import { FormDialog } from "../../components/ui/form-dialog";
 import { PageHeader } from "../../components/ui/page-header";
 import type { FileVersionView } from "../../components/versioning/types";
 import { VersionRail } from "../../components/versioning/version-rail";
 import { RevisionList, type RevisionTask } from "../../components/work/revision-list";
 import { nextSteps, stageMeaning, type TransitionInfo } from "../../lib/deliverable-status";
 import { titleCase } from "../../lib/format";
+import { SERVICES, serviceOf, stepLabel } from "../../lib/services";
 import { enqueueUploads, useUploadStore } from "../../lib/upload-store";
 
 const apiUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
@@ -50,7 +54,29 @@ type Deliverable = {
   contentType: string;
   priority: string;
   dueDate: string | null;
+  publishAt: string | null;
+  platforms: string[] | null;
+  caption: string | null;
+  publishedAt: string | null;
+  publishUrl: string | null;
 };
+
+/** Statuses from which "Send to client" can take the work all the way to the client. */
+const SENDABLE = new Set([
+  "PENDING",
+  "IN_PROGRESS",
+  "REVISION_REQUESTED",
+  "READY_FOR_INTERNAL_REVIEW",
+  "UNDER_INTERNAL_REVIEW",
+  "INTERNAL_APPROVED",
+]);
+
+function toLocalInput(value: string | null) {
+  if (!value) return "";
+  const date = new Date(value);
+  const offset = date.getTimezoneOffset() * 60_000;
+  return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+}
 
 async function apiFetch<T>(path: string, init?: RequestInit) {
   const response = await fetch(`${apiUrl}${path}`, {
@@ -91,6 +117,7 @@ export function DeliverableDetailPage() {
   const [duration, setDuration] = useState(0);
   const [zoom, setZoom] = useState({ scale: 1, x: 0, y: 0 });
   const [confirming, setConfirming] = useState<TransitionInfo | null>(null);
+  const [editingPost, setEditingPost] = useState(false);
   const deliverable = useQuery({
     queryKey: ["deliverable", deliverableId],
     queryFn: () => apiFetch<Deliverable>(`/api/deliverables/${deliverableId}`),
@@ -167,12 +194,44 @@ export function DeliverableDetailPage() {
 
   const projects = useQuery({
     queryKey: ["projects"],
-    queryFn: () => apiFetch<Array<{ id: string; name: string }>>("/api/projects"),
+    queryFn: () => apiFetch<Array<{ id: string; name: string; service?: string }>>("/api/projects"),
     retry: false,
   });
-  const projectName = projects.data?.find(
-    (project) => project.id === deliverable.data?.projectId,
-  )?.name;
+  const project = projects.data?.find((row) => row.id === deliverable.data?.projectId);
+  const projectName = project?.name;
+  const service = serviceOf(project?.service);
+  const definition = SERVICES[service];
+
+  const refresh = () => {
+    queryClient.invalidateQueries({ queryKey: ["deliverable", deliverableId] });
+    queryClient.invalidateQueries({ queryKey: ["deliverables"] });
+    queryClient.invalidateQueries({ queryKey: ["review-room", deliverableId] });
+    queryClient.invalidateQueries({ queryKey: ["work"] });
+  };
+  // One button that takes finished work through team review and on to the client.
+  const sendToClient = useMutation({
+    mutationFn: () =>
+      apiFetch(`/api/reviews/deliverables/${deliverableId}/send-to-client`, { method: "POST" }),
+    // Even a refusal can move the work on (e.g. into team review), so always refresh.
+    onSettled: refresh,
+  });
+  const savePost = useMutation({
+    mutationFn: (values: Record<string, string>) =>
+      apiFetch(`/api/deliverables/${deliverableId}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          publishAt: values.publishAt ? new Date(values.publishAt).toISOString() : null,
+          platforms: values.platforms ? values.platforms.split(",") : [],
+          ...(service === "SOCIAL_MEDIA" ? { caption: values.caption ?? "" } : {}),
+        }),
+      }),
+    onSuccess: () => {
+      refresh();
+      setEditingPost(false);
+    },
+  });
+  const canSend =
+    !!deliverable.data && SENDABLE.has(deliverable.data.status) && !!versions.data?.length;
 
   const steps = nextSteps(deliverable.data?.status);
   const primaryStep = steps.find((step) => step.weight === "primary") ?? null;
@@ -198,7 +257,7 @@ export function DeliverableDetailPage() {
           ...(projectName ? [{ label: projectName }] : []),
           { label: deliverable.data?.title ?? "Deliverable" },
         ]}
-        eyebrow={`${contentWord} deliverable`}
+        eyebrow={project ? `${definition.itemLabel} · ${contentWord}` : contentWord}
         title={deliverable.data?.title ?? "Loading deliverable…"}
         purpose={
           deliverable.data?.description ??
@@ -219,7 +278,10 @@ export function DeliverableDetailPage() {
         status={
           deliverable.data ? (
             <span className="deliverable-stage">
-              <StatusChip status={deliverable.data.status} />
+              <StatusChip
+                status={deliverable.data.status}
+                label={project ? stepLabel(service, deliverable.data) : undefined}
+              />
               <HelpTip label={`What ${statusLabel(deliverable.data.status)} means`}>
                 <p>{stageMeaning(deliverable.data.status)}</p>
               </HelpTip>
@@ -227,7 +289,15 @@ export function DeliverableDetailPage() {
           ) : null
         }
         primary={
-          primaryStep ? (
+          canSend ? (
+            <Button
+              disabled={sendToClient.isPending}
+              title="Approves it for your team and sends it to the client for review"
+              onClick={() => sendToClient.mutate()}
+            >
+              <Send size={16} /> {sendToClient.isPending ? "Sending…" : "Send to client"}
+            </Button>
+          ) : primaryStep ? (
             <Button
               disabled={advance.isPending}
               title={primaryStep.result}
@@ -250,7 +320,7 @@ export function DeliverableDetailPage() {
             >
               <MessageSquareText size={16} /> Open review room
             </Link>
-            {primaryStep ? (
+            {primaryStep || canSend ? (
               <Button variant="secondary" onClick={() => majorInput.current?.click()}>
                 <CloudUpload size={16} /> Upload a new version
               </Button>
@@ -323,6 +393,73 @@ export function DeliverableDetailPage() {
             </Button>
           </div>
         </Callout>
+      ) : null}
+      {sendToClient.isError ? (
+        <Callout tone="warning" title="Not with the client yet">
+          {(sendToClient.error as Error).message}
+        </Callout>
+      ) : null}
+      {sendToClient.isSuccess ? (
+        <Callout tone="success" title="Sent to the client">
+          They'll see it on their home screen with a notification. You'll be notified when they
+          approve or ask for changes.
+        </Callout>
+      ) : null}
+      {deliverable.data && definition.publishes ? (
+        <section className="post-details panel">
+          <dl>
+            <div>
+              <dt>{definition.publishVerb}</dt>
+              <dd>
+                {deliverable.data.publishAt
+                  ? new Date(deliverable.data.publishAt).toLocaleString("en-GB", {
+                      weekday: "short",
+                      day: "numeric",
+                      month: "short",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "Not set"}
+              </dd>
+            </div>
+            <div>
+              <dt>Where</dt>
+              <dd>
+                {deliverable.data.platforms?.length
+                  ? deliverable.data.platforms.join(", ")
+                  : "Not set"}
+              </dd>
+            </div>
+            {service === "SOCIAL_MEDIA" ? (
+              <div className="post-details__caption">
+                <dt>Caption</dt>
+                <dd>{deliverable.data.caption || "No caption yet"}</dd>
+              </div>
+            ) : null}
+            {deliverable.data.publishedAt ? (
+              <div>
+                <dt>{definition.publishedLabel}</dt>
+                <dd>
+                  {new Date(deliverable.data.publishedAt).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                  })}
+                  {deliverable.data.publishUrl ? (
+                    <>
+                      {" · "}
+                      <a href={deliverable.data.publishUrl} target="_blank" rel="noreferrer">
+                        View <ExternalLink size={12} />
+                      </a>
+                    </>
+                  ) : null}
+                </dd>
+              </div>
+            ) : null}
+          </dl>
+          <Button variant="secondary" onClick={() => setEditingPost(true)}>
+            <Pencil size={14} /> Edit
+          </Button>
+        </section>
       ) : null}
       {advance.isError ? (
         <Callout tone="danger" title="The deliverable did not move">
@@ -525,6 +662,46 @@ export function DeliverableDetailPage() {
           <ActivityFeed rows={activity.data?.items ?? []} />
         </section>
       )}
+      {editingPost && deliverable.data ? (
+        <FormDialog
+          title={`${definition.itemLabel} details`}
+          submitLabel="Save"
+          pendingLabel="Saving…"
+          pending={savePost.isPending}
+          error={savePost.error ? (savePost.error as Error).message : null}
+          fields={[
+            {
+              name: "publishAt",
+              label: definition.publishVerb,
+              type: "datetime-local",
+              defaultValue: toLocalInput(deliverable.data.publishAt),
+            },
+            {
+              name: "platforms",
+              label: "Where it goes",
+              type: "checkboxes",
+              defaultValue: (deliverable.data.platforms ?? []).join(","),
+              options: definition.platforms.map((value) => ({ value, label: value })),
+            },
+            ...(service === "SOCIAL_MEDIA"
+              ? [
+                  {
+                    name: "caption",
+                    label: "Caption",
+                    type: "textarea" as const,
+                    defaultValue: deliverable.data.caption ?? "",
+                    hint: "The client approves the caption along with the creative.",
+                  },
+                ]
+              : []),
+          ]}
+          onSubmit={(values) => savePost.mutate(values)}
+          onClose={() => {
+            savePost.reset();
+            setEditingPost(false);
+          }}
+        />
+      ) : null}
       {confirming ? (
         <ConfirmDialog
           title={`${confirming.label}?`}

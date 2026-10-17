@@ -5,7 +5,17 @@ import { type ReactNode, useEffect, useId, useRef, useState } from "react";
 export type DialogField = {
   name: string;
   label: string;
-  type?: "text" | "email" | "url" | "tel" | "date" | "textarea" | "select";
+  type?:
+    | "text"
+    | "email"
+    | "url"
+    | "tel"
+    | "date"
+    | "datetime-local"
+    | "textarea"
+    | "select"
+    /** Several options can be ticked; the value is the ticked values joined by commas. */
+    | "checkboxes";
   required?: boolean;
   placeholder?: string;
   defaultValue?: string;
@@ -190,6 +200,33 @@ export function FormDialog({
                 />
               ) : field.type === "date" ? (
                 <DatePicker id={controlId} value={value} onChange={setValue} />
+              ) : field.type === "checkboxes" ? (
+                <fieldset
+                  className="form-dialog__checks"
+                  id={controlId}
+                  aria-describedby={describedBy || undefined}
+                >
+                  {(field.options ?? []).map((option) => {
+                    const ticked = value.split(",").filter(Boolean);
+                    const checked = ticked.includes(option.value);
+                    return (
+                      <label key={option.value}>
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => {
+                            const next = checked
+                              ? ticked.filter((item) => item !== option.value)
+                              : [...ticked, option.value];
+                            setValue(next.join(","));
+                            markTouched();
+                          }}
+                        />
+                        {option.label}
+                      </label>
+                    );
+                  })}
+                </fieldset>
               ) : field.type === "textarea" ? (
                 <textarea
                   id={controlId}

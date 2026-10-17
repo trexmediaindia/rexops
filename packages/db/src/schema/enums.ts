@@ -146,3 +146,13 @@ export const submissionStatusEnum = pgEnum("submission_status", [
   "PROVISIONED",
   "REJECTED",
 ]);
+
+/** What kind of work a project is. Drives the workflow steps and the extras a project
+ * shows: post scheduling for social media, reports for ads. */
+export const serviceTypeEnum = pgEnum("service_type", [
+  "SOCIAL_MEDIA",
+  "CREATIVES",
+  "ADS",
+  "OTHER",
+]);
+export const adPlatformEnum = pgEnum("ad_platform", ["META", "GOOGLE", "OTHER"]);

@@ -25,3 +25,5 @@ export const permissionFlagsSchema = z.object({
   canViewAllClients: z.boolean().default(false),
   canManageAutomations: z.boolean().default(false),
 });
+
+export const serviceTypeSchema = z.enum(["SOCIAL_MEDIA", "CREATIVES", "ADS", "OTHER"]);

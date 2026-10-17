@@ -53,6 +53,7 @@ import {
   type ReviewRun,
   StageTimeline,
 } from "../components/review/audit/stage-timeline";
+import { ClientDecisionBar } from "../components/review/client-decision";
 import { CommentThread, type ReviewComment } from "../components/review/comment-thread";
 import { type ReviewCapabilities, resolveCapabilities } from "../components/review/review-session";
 import { Field } from "../components/ui/field";
@@ -62,6 +63,7 @@ import { VersionRail } from "../components/versioning/version-rail";
 import type { ViewerFocus } from "../components/viewers/viewer-registry";
 import { uploadAttachment } from "../lib/attachment-upload";
 import { authClient } from "../lib/auth-client";
+import { clientStatusLabel } from "../lib/client-workspace";
 import { titleCase } from "../lib/format";
 import type { RexSelection } from "../lib/liveblocks.config";
 import { broadcastInvalidation, broadcastRoomEvent } from "../lib/realtime";
@@ -83,6 +85,9 @@ type Deliverable = {
   title: string;
   status: string;
   contentType: string;
+  caption?: string | null;
+  publishAt?: string | null;
+  platforms?: string[] | null;
 };
 type ReviewUser = { id: string; name: string; image: string | null; role: string };
 type RoomData = {
@@ -236,20 +241,49 @@ function DecisionBar({
     },
   });
 
+  // One click from "the team is happy with it" to "the client has it": team approval and
+  // sending happen together. Teams that want a separate team sign-off can still hand it over.
+  const sendToClient = useMutation({
+    mutationFn: () =>
+      request(`/api/reviews/deliverables/${deliverableId}/send-to-client`, { method: "POST" }),
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: ["review-room", deliverableId] });
+      void queryClient.invalidateQueries({ queryKey: ["deliverables"] });
+      broadcastInvalidation({ room: roomId, queryKeys: [["review-room", deliverableId]] });
+    },
+  });
+
   const isAgency = capabilities.side === "AGENCY";
-  if (isAgency && status === "READY_FOR_INTERNAL_REVIEW") {
+  if (
+    isAgency &&
+    ["IN_PROGRESS", "REVISION_REQUESTED", "READY_FOR_INTERNAL_REVIEW"].includes(status)
+  ) {
     return (
-      <div className="decision-bar">
+      <div className="decision-bar decision-bar--send">
         <div>
-          <ShieldCheck size={17} />
+          <Send size={17} />
           <span>
-            Nothing has been approved yet. Handing it over asks your own approvers to decide. The
-            client still sees nothing.
+            {sendToClient.error
+              ? (sendToClient.error as Error).message
+              : status === "REVISION_REQUESTED"
+                ? "Changes made? Upload the new version, then send it back to the client."
+                : "Happy with it? Send it to the client. They get a notification and can approve or ask for changes."}
           </span>
         </div>
-        <Button disabled={workflow.isPending} onClick={() => workflow.mutate("submit-internal")}>
-          {workflow.isPending ? "Handing it over…" : "Hand it to your team to review"}
-        </Button>
+        <div className="decision-bar__actions">
+          {status === "READY_FOR_INTERNAL_REVIEW" ? (
+            <Button
+              variant="ghost"
+              disabled={workflow.isPending || sendToClient.isPending}
+              onClick={() => workflow.mutate("submit-internal")}
+            >
+              Team review first
+            </Button>
+          ) : null}
+          <Button disabled={sendToClient.isPending} onClick={() => sendToClient.mutate()}>
+            <Send size={15} /> {sendToClient.isPending ? "Sending…" : "Send to client"}
+          </Button>
+        </div>
       </div>
     );
   }
@@ -461,6 +495,9 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
         isShare: false,
         runs: room.data?.runs ?? [],
         approvals: room.data?.approvals ?? [],
+        // "View and comment" client logins (Clients → People) have no approval right;
+        // the server refuses them anyway, so don't offer them the buttons.
+        canApprovePermission: myRole !== "CLIENT_MEMBER",
       }),
     [myRole, myUserId, room.data?.runs, room.data?.approvals],
   );
@@ -766,9 +803,9 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
             </Button>
             <Link
               className="rx-button rx-button--secondary"
-              to={clientMode ? "/client/home" : "/agency/work"}
+              to={clientMode ? "/client/home" : "/agency/review"}
             >
-              {clientMode ? "Back to what needs you" : "Back to all work"}
+              {clientMode ? "Back to what needs you" : "Back to the review queue"}
             </Link>
           </div>
         </Callout>
@@ -781,8 +818,19 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
     return clientMode ? <ClientShell>{shell}</ClientShell> : <AgencyShell>{shell}</AgencyShell>;
   }
 
+  const medium = mediumFromFileType(selected.fileType);
+  const timed = medium === "video" || medium === "audio";
+  // Clients get one way to point at something: on stills and PDFs a click drops a pin;
+  // on video the comment is tied to the paused moment. No toolbar of six shape tools.
+  const activeTool: AnnotationTool = clientMode
+    ? medium === "image" || medium === "pdf"
+      ? "point"
+      : "select"
+    : tool;
+  const showRail = !clientMode || room.data.versions.length > 1;
+
   const content = (
-    <div className="review-room">
+    <div className={clientMode ? "review-room review-room--client" : "review-room"}>
       <header className="review-room__header">
         <div>
           <Link
@@ -794,21 +842,34 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
           </Link>
           <div>
             <span className="rx-eyebrow">
-              {clientMode ? "Client review" : "Agency review"} · {selected.displayVersion}
+              {(() => {
+                // Each major version is a round of feedback (v2.1 is a fix within round 2).
+                const round = Number(/(\d+)/.exec(selected.displayVersion)?.[1] ?? 1);
+                return clientMode
+                  ? round > 1
+                    ? `Round ${round} · updated after feedback`
+                    : "Round 1"
+                  : `Round ${round} · ${selected.displayVersion}`;
+              })()}
             </span>
             <h1>{room.data.deliverable.title}</h1>
           </div>
         </div>
         <div>
           <PresenceAvatars following={followId} onFollow={setFollowId} />
-          <StatusChip status={room.data.deliverable.status} />
-          <Button
-            variant="secondary"
-            onClick={() => setAuditOpen(true)}
-            title="Every version, comment, approval and status change on this work, with who did it and when"
-          >
-            <Gauge size={15} /> History
-          </Button>
+          <StatusChip
+            status={room.data.deliverable.status}
+            label={clientMode ? clientStatusLabel(room.data.deliverable.status) : undefined}
+          />
+          {!clientMode ? (
+            <Button
+              variant="secondary"
+              onClick={() => setAuditOpen(true)}
+              title="Every version, comment, approval and status change on this work, with who did it and when"
+            >
+              <Gauge size={15} /> History
+            </Button>
+          ) : null}
           {!clientMode ? (
             <Button variant="secondary" onClick={() => setShareOpen(true)}>
               <Share2 size={15} /> Share
@@ -819,36 +880,40 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
       {followed ? (
         <FollowBanner name={followed.info.name} onExit={() => setFollowId(null)} />
       ) : null}
-      <div className="review-room__grid">
-        <aside className="review-version-rail">
-          <span className="rx-eyebrow">Versions</span>
-          <VersionRail
-            versions={room.data.versions}
-            selectedId={selected.id}
-            onSelect={selectVersion}
-            pending={pendingUploads}
-            onFiles={
-              clientMode
-                ? undefined
-                : (files) =>
-                    void enqueueUploads(files, {
-                      deliverableId,
-                      purpose: "VERSION",
-                      versionBump: "MINOR",
-                    })
-            }
-            draggable={!clientMode}
-            viewerDots={(version) => <ViewerDots versionId={version.id} />}
-          />
-          {room.data.versions.length > 1 ? (
-            <Button
-              variant={compare ? "secondary" : "ghost"}
-              onClick={() => (compare ? setCompareId(null) : setCompareDialogOpen(true))}
-            >
-              <Columns2 size={14} /> {compare ? "Exit compare" : "Compare"}
-            </Button>
-          ) : null}
-        </aside>
+      <div
+        className={showRail ? "review-room__grid" : "review-room__grid review-room__grid--no-rail"}
+      >
+        {showRail ? (
+          <aside className="review-version-rail">
+            <span className="rx-eyebrow">Versions</span>
+            <VersionRail
+              versions={room.data.versions}
+              selectedId={selected.id}
+              onSelect={selectVersion}
+              pending={pendingUploads}
+              onFiles={
+                clientMode
+                  ? undefined
+                  : (files) =>
+                      void enqueueUploads(files, {
+                        deliverableId,
+                        purpose: "VERSION",
+                        versionBump: "MINOR",
+                      })
+              }
+              draggable={!clientMode}
+              viewerDots={(version) => <ViewerDots versionId={version.id} />}
+            />
+            {room.data.versions.length > 1 ? (
+              <Button
+                variant={compare ? "secondary" : "ghost"}
+                onClick={() => (compare ? setCompareId(null) : setCompareDialogOpen(true))}
+              >
+                <Columns2 size={14} /> {compare ? "Exit compare" : "Compare"}
+              </Button>
+            ) : null}
+          </aside>
+        ) : null}
         <main
           className="review-media"
           onDragOver={(event) => {
@@ -920,14 +985,18 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
               </div>
             </div>
           ) : null}
-          {capabilities.canAnnotate &&
-          mediumFromFileType(selected.fileType) !== "audio" &&
-          mediumFromFileType(selected.fileType) !== "other" ? (
-            <AnnotationToolbar
-              medium={mediumFromFileType(selected.fileType)}
-              tool={tool}
-              onToolChange={setTool}
-            />
+          {clientMode ? (
+            room.data.deliverable.status === "UNDER_CLIENT_REVIEW" ? (
+              <p className="client-review-hint">
+                {medium === "image" || medium === "pdf"
+                  ? "Something to change? Tap or click that spot, then type your comment."
+                  : medium === "video"
+                    ? "Something to change? Pause at that moment, then type your comment."
+                    : "Have a look, then approve it or tell us what to change."}
+              </p>
+            ) : null
+          ) : capabilities.canAnnotate && medium !== "audio" && medium !== "other" ? (
+            <AnnotationToolbar medium={medium} tool={tool} onToolChange={setTool} />
           ) : null}
           <div className="review-media__canvas" data-compare={Boolean(compare)}>
             <CompareStage
@@ -939,7 +1008,7 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
               onDuration={setDuration}
               zoom={zoom}
               onZoom={setZoom}
-              tool={tool}
+              tool={activeTool}
               activeAnnotationId={activeCommentId}
               annotationsA={annotationsA}
               annotationsB={annotationsB}
@@ -951,17 +1020,19 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
               onActivate={setActiveCommentId}
               focusRef={viewerFocus}
             />
-            <button
-              type="button"
-              className="reaction-fly-trigger"
-              onClick={() => {
-                const event = { type: "REACTION_FLY" as const, emoji: "👍", x: 0.5, y: 0.55 };
-                broadcast(event);
-              }}
-              aria-label="Send a live thumbs up"
-            >
-              <Smile size={15} />
-            </button>
+            {!clientMode ? (
+              <button
+                type="button"
+                className="reaction-fly-trigger"
+                onClick={() => {
+                  const event = { type: "REACTION_FLY" as const, emoji: "👍", x: 0.5, y: 0.55 };
+                  broadcast(event);
+                }}
+                aria-label="Send a live thumbs up"
+              >
+                <Smile size={15} />
+              </button>
+            ) : null}
             {liveReactions.map((reaction) => (
               <span
                 className="reaction-fly"
@@ -972,118 +1043,149 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
               </span>
             ))}
           </div>
-          <div className="review-scrubber">
-            <button
-              type="button"
-              onClick={() => {
-                setFollowId(null);
-                const media = document.querySelector<HTMLMediaElement>(
-                  ".review-media__canvas video, .review-media__canvas audio",
-                );
-                if (media?.paused) void media.play();
-                else media?.pause();
-              }}
-              aria-label="Play or pause"
-            >
-              {document.querySelector<HTMLMediaElement>(".review-media__canvas video")?.paused ===
-              false ? (
-                <Pause size={14} />
-              ) : (
-                <Play size={14} />
-              )}
-            </button>
-            <span className="rx-mono">{timecode(currentTime * 1000)}</span>
-            <div
-              className="scrubber-track"
-              role="slider"
-              tabIndex={0}
-              aria-label="Review playhead"
-              aria-valuemin={0}
-              aria-valuemax={Math.round(duration)}
-              aria-valuenow={Math.round(currentTime)}
-              onPointerMove={(event) => {
-                if (!duration) return;
-                const bounds = event.currentTarget.getBoundingClientRect();
-                const percent = Math.max(
-                  0,
-                  Math.min(100, ((event.clientX - bounds.left) / bounds.width) * 100),
-                );
-                setHover({ percent, time: (percent / 100) * duration });
-              }}
-              onPointerLeave={() => setHover(null)}
-              onClick={(event) => {
-                const bounds = event.currentTarget.getBoundingClientRect();
-                setTime(((event.clientX - bounds.left) / bounds.width) * duration);
-              }}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowLeft") setTime(Math.max(0, currentTime - 1));
-                if (event.key === "ArrowRight") setTime(Math.min(duration, currentTime + 1));
-              }}
-            >
-              <i style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }} />
-              {selectedComments
-                .map((comment) => ({
-                  comment,
-                  ms: anchorTimecodeMs(parseAnchor(comment.anchorType, comment.anchor)),
-                }))
-                .filter((entry) => entry.ms != null)
-                .map(({ comment, ms }) => (
-                  <button
-                    type="button"
-                    key={comment.id}
-                    className="scrubber-marker"
-                    data-resolved={Boolean(comment.resolvedAt)}
-                    data-active={activeCommentId === comment.id}
-                    style={{
-                      left: `${duration ? ((ms as number) / 1000 / duration) * 100 : 0}%`,
-                    }}
-                    title={`${comment.authorName}: ${comment.message}`}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      focusAnchor(comment);
-                    }}
-                  />
-                ))}
-              <GhostPlayheads
-                versionId={selected.id}
-                duration={duration}
-                onJump={(seconds) => setTime(seconds)}
-              />
-              {hover && sprite.data ? (
-                <ScrubPreview
-                  url={sprite.data.url}
-                  hoverTime={hover.time}
-                  positionPercent={hover.percent}
-                  intervalMs={sprite.data.intervalMs}
-                  columns={sprite.data.columns}
-                  rows={sprite.data.rows}
-                  cellWidth={sprite.data.cellWidth}
-                  cellHeight={sprite.data.cellHeight}
+          {timed ? (
+            <div className="review-scrubber">
+              <button
+                type="button"
+                onClick={() => {
+                  setFollowId(null);
+                  const media = document.querySelector<HTMLMediaElement>(
+                    ".review-media__canvas video, .review-media__canvas audio",
+                  );
+                  if (media?.paused) void media.play();
+                  else media?.pause();
+                }}
+                aria-label="Play or pause"
+              >
+                {document.querySelector<HTMLMediaElement>(".review-media__canvas video")?.paused ===
+                false ? (
+                  <Pause size={14} />
+                ) : (
+                  <Play size={14} />
+                )}
+              </button>
+              <span className="rx-mono">{timecode(currentTime * 1000)}</span>
+              <div
+                className="scrubber-track"
+                role="slider"
+                tabIndex={0}
+                aria-label="Review playhead"
+                aria-valuemin={0}
+                aria-valuemax={Math.round(duration)}
+                aria-valuenow={Math.round(currentTime)}
+                onPointerMove={(event) => {
+                  if (!duration) return;
+                  const bounds = event.currentTarget.getBoundingClientRect();
+                  const percent = Math.max(
+                    0,
+                    Math.min(100, ((event.clientX - bounds.left) / bounds.width) * 100),
+                  );
+                  setHover({ percent, time: (percent / 100) * duration });
+                }}
+                onPointerLeave={() => setHover(null)}
+                onClick={(event) => {
+                  const bounds = event.currentTarget.getBoundingClientRect();
+                  setTime(((event.clientX - bounds.left) / bounds.width) * duration);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "ArrowLeft") setTime(Math.max(0, currentTime - 1));
+                  if (event.key === "ArrowRight") setTime(Math.min(duration, currentTime + 1));
+                }}
+              >
+                <i style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }} />
+                {selectedComments
+                  .map((comment) => ({
+                    comment,
+                    ms: anchorTimecodeMs(parseAnchor(comment.anchorType, comment.anchor)),
+                  }))
+                  .filter((entry) => entry.ms != null)
+                  .map(({ comment, ms }) => (
+                    <button
+                      type="button"
+                      key={comment.id}
+                      className="scrubber-marker"
+                      data-resolved={Boolean(comment.resolvedAt)}
+                      data-active={activeCommentId === comment.id}
+                      style={{
+                        left: `${duration ? ((ms as number) / 1000 / duration) * 100 : 0}%`,
+                      }}
+                      title={`${comment.authorName}: ${comment.message}`}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        focusAnchor(comment);
+                      }}
+                    />
+                  ))}
+                <GhostPlayheads
+                  versionId={selected.id}
+                  duration={duration}
+                  onJump={(seconds) => setTime(seconds)}
                 />
-              ) : null}
+                {hover && sprite.data ? (
+                  <ScrubPreview
+                    url={sprite.data.url}
+                    hoverTime={hover.time}
+                    positionPercent={hover.percent}
+                    intervalMs={sprite.data.intervalMs}
+                    columns={sprite.data.columns}
+                    rows={sprite.data.rows}
+                    cellWidth={sprite.data.cellWidth}
+                    cellHeight={sprite.data.cellHeight}
+                  />
+                ) : null}
+              </div>
+              <span className="rx-mono">{timecode(duration * 1000)}</span>
             </div>
-            <span className="rx-mono">{timecode(duration * 1000)}</span>
-          </div>
-          <DecisionBar
-            capabilities={capabilities}
-            status={room.data.deliverable.status}
-            versionId={selected.id}
-            deliverableId={deliverableId}
-            roomId={roomId}
-          />
+          ) : null}
+          {room.data.deliverable.caption ? (
+            <div className="review-caption">
+              <span className="rx-eyebrow">
+                Caption
+                {room.data.deliverable.platforms?.length
+                  ? ` · ${room.data.deliverable.platforms.join(", ")}`
+                  : ""}
+                {room.data.deliverable.publishAt
+                  ? ` · goes out ${new Date(room.data.deliverable.publishAt).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}`
+                  : ""}
+              </span>
+              <p>{room.data.deliverable.caption}</p>
+            </div>
+          ) : null}
+          {clientMode ? (
+            <ClientDecisionBar
+              capabilities={capabilities}
+              status={room.data.deliverable.status}
+              versionId={selected.id}
+              deliverableId={deliverableId}
+              roomId={roomId}
+              title={room.data.deliverable.title}
+              myName={myName === "Reviewer" ? "" : myName}
+            />
+          ) : (
+            <DecisionBar
+              capabilities={capabilities}
+              status={room.data.deliverable.status}
+              versionId={selected.id}
+              deliverableId={deliverableId}
+              roomId={roomId}
+            />
+          )}
         </main>
         <aside className="review-comments">
           <div className="review-comments__heading">
-            <div>
-              <span className="rx-eyebrow">Comments</span>
-              <h2>{selected.displayVersion}</h2>
-            </div>
+            {clientMode ? (
+              <h2>Comments</h2>
+            ) : (
+              <div>
+                <span className="rx-eyebrow">Comments</span>
+                <h2>{selected.displayVersion}</h2>
+              </div>
+            )}
             <span className="rx-mono">{String(selectedComments.length).padStart(2, "0")}</span>
           </div>
-          <div className="comment-filters segmented">
-            {(["OPEN", "RESOLVED", "MINE", "INTERNAL"] as const)
-              .filter((filter) => !clientMode || filter !== "INTERNAL")
-              .map((filter) => (
+          {!clientMode ? (
+            <div className="comment-filters segmented">
+              {(["OPEN", "RESOLVED", "MINE", "INTERNAL"] as const).map((filter) => (
                 <button
                   type="button"
                   key={filter}
@@ -1093,14 +1195,15 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
                   {COMMENT_FILTER_LABELS[filter]}
                 </button>
               ))}
-          </div>
+            </div>
+          ) : null}
           <TypingIndicator kind="commenting" />
           <div className="review-comments__list">
             <CommentThread
               comments={selectedComments}
               myUserId={myUserId}
               clientMode={clientMode}
-              filter={commentFilter}
+              filter={clientMode ? "ALL" : commentFilter}
               hashtag={hashtag}
               onHashtag={setHashtag}
               onReply={async (parentId, reply, replyAttachments) => {
@@ -1119,20 +1222,28 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
             {!selectedComments.length ? (
               <div className="comments-empty">
                 <MessageSquareText size={22} />
-                <span>No notes on this cut yet.</span>
+                <span>{clientMode ? "No comments yet." : "No notes on this cut yet."}</span>
               </div>
             ) : null}
           </div>
           <div className="comment-composer">
             {region ? (
               <span className="anchor-chip">
-                {region.type === "WAVEFORM_RANGE" ? "Audio range pinned" : "Region pinned"}
+                {region.type === "WAVEFORM_RANGE"
+                  ? "Audio range pinned"
+                  : clientMode
+                    ? "Pinned to the spot you clicked"
+                    : "Region pinned"}
                 <button onClick={() => setRegion(null)} type="button">
                   <X size={12} />
                 </button>
               </span>
             ) : selected.fileType?.startsWith("video/") ? (
-              <span className="anchor-chip rx-mono">@ {timecode(currentTime * 1000)}</span>
+              <span className="anchor-chip rx-mono">
+                {clientMode
+                  ? `At ${Math.floor(currentTime / 60)}:${String(Math.floor(currentTime % 60)).padStart(2, "0")}`
+                  : `@ ${timecode(currentTime * 1000)}`}
+              </span>
             ) : null}
             <VersionChips
               versions={room.data.versions}
@@ -1152,7 +1263,7 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
                 setMessage(event.target.value);
                 if (event.target.value.endsWith("@")) setMentionOpen(true);
               }}
-              placeholder="Leave precise feedback…"
+              placeholder={clientMode ? "Write a comment…" : "Leave precise feedback…"}
             />
             {mentionOpen && !clientMode ? (
               <div className="mention-menu" role="listbox">
@@ -1180,13 +1291,15 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
                     <Users size={13} /> Mention
                   </button>
                 ) : null}
-                <VersionPicker
-                  versions={room.data.versions}
-                  selectedIds={refVersionIds}
-                  onChange={setRefVersionIds}
-                />
+                {!clientMode ? (
+                  <VersionPicker
+                    versions={room.data.versions}
+                    selectedIds={refVersionIds}
+                    onChange={setRefVersionIds}
+                  />
+                ) : null}
                 <button type="button" onClick={() => attachmentInput.current?.click()}>
-                  <Paperclip size={13} /> Attach
+                  <Paperclip size={13} /> {clientMode ? "Attach a file" : "Attach"}
                 </button>
                 <input
                   ref={attachmentInput}
@@ -1217,7 +1330,7 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
                   Agency only
                 </label>
               ) : (
-                <span>Visible to the agency</span>
+                <span>The agency sees your comments</span>
               )}
               <button
                 type="button"
@@ -1237,6 +1350,7 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
                 ) : (
                   <Send size={15} />
                 )}
+                {clientMode ? " Send" : null}
               </button>
             </div>
           </div>

@@ -1,9 +1,8 @@
-import { featureRegistry } from "@rexops/core";
 import { createNotifyQueue } from "@rexops/jobs";
 
 export async function ensureJobSchedulers() {
-  const features = featureRegistry();
-  if (!features["collaboration.live"]) return;
+  // Due-date reminders and "stalled review" nudges are in-app notifications, so they run in
+  // every deployment, with or without live collaboration.
   const queue = createNotifyQueue();
   await Promise.all([
     queue.upsertJobScheduler(

@@ -67,12 +67,14 @@ export function statusLabel(status: string) {
   return statusLabels[status] ?? humanize(status);
 }
 
-export function StatusChip({ status }: { status: string }) {
+/** `label` overrides the wording for one audience (the client portal says "Waiting for
+ * you" where the agency says "Waiting on client") while keeping the status colour. */
+export function StatusChip({ status, label }: { status: string; label?: string }) {
   const normalized = status.toLowerCase();
   return (
     <span className="rx-status" data-status={normalized}>
       <span className="rx-status__dot" aria-hidden="true" />
-      {statusLabel(status)}
+      {label ?? statusLabel(status)}
     </span>
   );
 }

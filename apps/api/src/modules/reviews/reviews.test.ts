@@ -342,3 +342,48 @@ describe("review workflow", () => {
     expect(submitted.status).toBe(200);
   });
 });
+
+describe("one-click send to client", () => {
+  test("takes uploaded work straight to the client for someone who can approve", async () => {
+    const response = await apiRequest(`/api/reviews/deliverables/${deliverableId}/send-to-client`, {
+      method: "POST",
+      principal: adminPrincipal,
+    });
+    expect(response.status).toBe(200);
+    expect((await responseJson(response)).status).toBe("UNDER_CLIENT_REVIEW");
+    const [row] = await db.select().from(deliverables).where(eq(deliverables.id, deliverableId));
+    expect(row?.status).toBe("UNDER_CLIENT_REVIEW");
+    // The same audit trail as clicking through: an internal approval by this person.
+    const recorded = await db
+      .select()
+      .from(approvals)
+      .where(eq(approvals.deliverableId, deliverableId));
+    expect(recorded.map((approval) => approval.decidedByUserId)).toContain(adminId);
+  });
+
+  test("refuses clients and team members without approval rights", async () => {
+    for (const principal of [principals.clientOwner, principals.editor]) {
+      const response = await apiRequest(
+        `/api/reviews/deliverables/${deliverableId}/send-to-client`,
+        { method: "POST", principal },
+      );
+      expect([403, 404]).toContain(response.status);
+    }
+    const [row] = await db.select().from(deliverables).where(eq(deliverables.id, deliverableId));
+    expect(row?.status).toBe("READY_FOR_INTERNAL_REVIEW");
+  });
+
+  test("also works on work still in progress, as long as a file is uploaded", async () => {
+    await db
+      .update(deliverables)
+      .set({ status: "IN_PROGRESS" })
+      .where(eq(deliverables.id, deliverableId));
+    const response = await apiRequest(`/api/reviews/deliverables/${deliverableId}/send-to-client`, {
+      method: "POST",
+      principal: adminPrincipal,
+    });
+    expect(response.status).toBe(200);
+    const [row] = await db.select().from(deliverables).where(eq(deliverables.id, deliverableId));
+    expect(row?.status).toBe("UNDER_CLIENT_REVIEW");
+  });
+});

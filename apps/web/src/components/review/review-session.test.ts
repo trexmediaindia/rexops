@@ -214,4 +214,42 @@ describe("resolveCapabilities — the approve leak fix", () => {
     expect(cap.side).toBe("GUEST");
     expect(cap.decision.canApprove).toBe(false);
   });
+
+  test("explains why a decision is blocked with a code", () => {
+    const clientStage = stage({ id: "stage_client", type: "CLIENT", approvers: [] });
+    const agencyOnClientStage = resolveCapabilities({
+      role: "AGENCY_OWNER",
+      userId: "lead",
+      runs: [run([clientStage])],
+      approvals: [],
+    });
+    expect(agencyOnClientStage.decision.blockedCode).toBe("OTHER_SIDE");
+
+    const viewOnlyClient = resolveCapabilities({
+      role: "CLIENT_MEMBER",
+      userId: "viewer",
+      runs: [run([clientStage])],
+      approvals: [],
+      canApprovePermission: false,
+    });
+    expect(viewOnlyClient.decision.canApprove).toBe(false);
+    expect(viewOnlyClient.decision.blockedCode).toBe("NO_PERMISSION");
+
+    const nothingActive = resolveCapabilities({
+      role: "CLIENT_OWNER",
+      userId: "sara",
+      runs: [run([stage({ status: "PASSED" })])],
+      approvals: [],
+    });
+    expect(nothingActive.decision.blockedCode).toBe("NO_ACTIVE_STAGE");
+
+    const approver = resolveCapabilities({
+      role: "CLIENT_OWNER",
+      userId: "sara",
+      runs: [run([clientStage])],
+      approvals: [],
+    });
+    expect(approver.decision.canApprove).toBe(true);
+    expect(approver.decision.blockedCode).toBeNull();
+  });
 });
