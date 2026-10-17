@@ -57,7 +57,13 @@ jobs:
       - run: bun run db:migrate
       - run: bun run db:seed
       - run: bun run check
-      - run: bun run test
+      # Failing tests are also printed as annotations, so they show on the run's summary page.
+      - run: |
+          set -o pipefail
+          bun run test 2>&1 | tee test-output.log || {
+            grep -E "\(fail\)|error:|Error:|expect\(" test-output.log | head -40 | sed 's/^/::error::/'
+            exit 1
+          }
       - run: bun run build
       - run: bun run check:bundle
 
