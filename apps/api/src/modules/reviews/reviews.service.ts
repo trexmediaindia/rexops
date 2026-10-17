@@ -1330,6 +1330,28 @@ export async function sendToClient(
     throw new ForbiddenError("Only someone who can approve work can send it to the client.");
   }
   let deliverable = await accessibleDeliverable(principal, deliverableId);
+  // Older builds could mark work "waiting on client" without sharing a version with them.
+  // Put such work back in the queue so it goes through the proper send below.
+  if (deliverable.status === "UNDER_CLIENT_REVIEW") {
+    const [shared] = await db
+      .select({ id: fileVersions.id })
+      .from(fileVersions)
+      .where(
+        and(
+          eq(fileVersions.deliverableId, deliverableId),
+          eq(fileVersions.visibility, "CLIENT"),
+          isNull(fileVersions.deletedAt),
+        ),
+      )
+      .limit(1);
+    if (!shared) {
+      await db
+        .update(deliverables)
+        .set({ status: "READY_FOR_INTERNAL_REVIEW" })
+        .where(eq(deliverables.id, deliverableId));
+      deliverable = await accessibleDeliverable(principal, deliverableId);
+    }
+  }
   // Work still being made (or sent back for changes) is handed to the team first, as
   // long as there is a file to look at.
   if (["PENDING", "IN_PROGRESS", "REVISION_REQUESTED"].includes(deliverable.status)) {

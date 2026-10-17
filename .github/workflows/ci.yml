@@ -54,10 +54,19 @@ jobs:
         with:
           bun-version: 1.3.5
       - run: bun install --frozen-lockfile
-      - run: bun run db:push
+      - run: bun run db:migrate
       - run: bun run db:seed
       - run: bun run check
-      - run: bun run test
+      # Failing tests are also printed as annotations, so they show on the run's summary page.
+      - name: API tests
+        run: |
+          set -o pipefail
+          cd apps/api
+          bun run test 2>&1 | tee ../../api-test.log || {
+            grep -vE "\(pass\)" ../../api-test.log | tail -45 | sed 's/^/::error::/'
+            exit 1
+          }
+      - run: bun run test -- --filter='!@rexops/api'
       - run: bun run build
       - run: bun run check:bundle
 

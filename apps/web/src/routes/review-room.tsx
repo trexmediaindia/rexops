@@ -789,6 +789,38 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
       ]),
   });
 
+  if (room.data && !room.data.versions.length) {
+    // Nothing to show is an answer, not a reason to spin forever.
+    const empty = (
+      <div className="review-room-loading review-room-loading--failed">
+        <Callout
+          tone="info"
+          title={clientMode ? "Nothing has been shared with you yet" : "No file uploaded yet"}
+        >
+          {clientMode
+            ? "Your agency hasn't shared a version of this yet. You'll get a notification when it's ready for you."
+            : "Upload a version on the deliverable's page, then send it to the client."}
+          <div className="rx-callout__action">
+            {clientMode ? (
+              <Link className="rx-button rx-button--secondary" to="/client/home">
+                Back to what needs you
+              </Link>
+            ) : (
+              <Link
+                className="rx-button rx-button--secondary"
+                to="/agency/deliverables/$deliverableId"
+                params={{ deliverableId }}
+              >
+                Open its page
+              </Link>
+            )}
+          </div>
+        </Callout>
+      </div>
+    );
+    return clientMode ? <ClientShell>{empty}</ClientShell> : <AgencyShell>{empty}</AgencyShell>;
+  }
+
   if (room.isError || room.isLoading || !room.data || !selected) {
     /* The old condition treated a failed load as "still loading" and span
      * forever, which is the worst possible answer to "is this broken or slow?". */

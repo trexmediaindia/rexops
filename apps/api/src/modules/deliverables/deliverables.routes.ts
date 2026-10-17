@@ -6,6 +6,7 @@ import {
 } from "@rexops/validators";
 import { Elysia, t } from "elysia";
 import { authGuard, requirePrincipal } from "../../plugins/auth-guard";
+import { sendToClient } from "../reviews/reviews.service";
 import {
   createDeliverable,
   getDeliverable,
@@ -88,7 +89,11 @@ export const deliverablesRoutes = new Elysia({ prefix: "/api/deliverables" })
     ({ params, body, principal, set }) => {
       const actor = requirePrincipal(principal, set);
       if (!actor) return { error: "UNAUTHORIZED" };
-      return transitionDeliverable(actor, params.id, transitionDeliverableSchema.parse(body));
+      const input = transitionDeliverableSchema.parse(body);
+      // Putting work in front of the client has to share the file and open the client's
+      // review stage too. A bare status change left clients on an empty review room.
+      if (input.to === "UNDER_CLIENT_REVIEW") return sendToClient(actor, params.id);
+      return transitionDeliverable(actor, params.id, input);
     },
     {
       body: t.Object({
