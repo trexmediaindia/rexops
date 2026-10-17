@@ -1074,12 +1074,14 @@ async function seed() {
 
   // Two months of ad results for the ads project, as the team would type them in.
   const month = (back: number) => {
-    const start = new Date(now);
-    start.setDate(1);
-    start.setHours(0, 0, 0, 0);
-    start.setMonth(start.getMonth() - back);
-    const end = new Date(start.getFullYear(), start.getMonth() + 1, 0, 23, 59, 59);
-    return { periodStart: start, periodEnd: end };
+    // Whole calendar months, pinned to midday UTC so no time zone shifts them a day.
+    const today = new Date(now);
+    const y = today.getUTCFullYear();
+    const m = today.getUTCMonth() - back;
+    return {
+      periodStart: new Date(Date.UTC(y, m, 1, 12)),
+      periodEnd: new Date(Date.UTC(y, m + 1, 0, 12)),
+    };
   };
   await db.insert(adReports).values([
     {

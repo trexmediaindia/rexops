@@ -262,13 +262,13 @@ function AppearanceSection({ editable }: { editable: boolean }) {
   const queryClient = useQueryClient();
   const agency = workspace.data?.agency;
 
-  const [color, setColor] = useState("#f2a341");
+  const [color, setColor] = useState("#3d8bff");
   const [logo, setLogo] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!agency) return;
-    setColor(agency.brandColor ?? "#f2a341");
+    setColor(agency.brandColor ?? "#3d8bff");
     setLogo(agency.logoUrl ?? "");
   }, [agency]);
 
@@ -280,7 +280,7 @@ function AppearanceSection({ editable }: { editable: boolean }) {
 
   const dirty =
     Boolean(agency) &&
-    (color !== (agency?.brandColor ?? "#f2a341") || logo !== (agency?.logoUrl ?? ""));
+    (color !== (agency?.brandColor ?? "#3d8bff") || logo !== (agency?.logoUrl ?? ""));
 
   return (
     <SettingsSection
@@ -318,7 +318,7 @@ function AppearanceSection({ editable }: { editable: boolean }) {
               onChange={(event) => setColor(event.target.value)}
             />
             <code>{color}</code>
-            <span>Currently {color === "#f2a341" ? "the RexOps default" : "your own colour"}</span>
+            <span>Currently {color === "#3d8bff" ? "the RexOps default" : "your own colour"}</span>
           </div>
         )}
       </Field>
