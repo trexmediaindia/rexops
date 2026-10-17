@@ -2,15 +2,15 @@
 
 :root {
   color-scheme: dark;
-  --ink: #0e0f12;
-  --graphite: #16181d;
-  --slate: #20242b;
-  --ash: #3a4049;
-  --mist: #9aa2ad;
-  --paper: #e7eaef;
-  --tungsten: #f2a341;
-  --tungsten-press: #d8882a;
-  --blue: #5b8def;
+  --ink: #030406;
+  --graphite: #0a0c11;
+  --slate: #12161e;
+  --ash: #232a37;
+  --mist: #8e9ab0;
+  --paper: #e8edf5;
+  --tungsten: #3d8bff;
+  --tungsten-press: #2a6fe0;
+  --blue: #36c6ee;
   --violet: #8b7cf0;
   --teal: #2fb6a8;
   --orange: #e5733b;
@@ -31,12 +31,12 @@
   --control-height: 40px;
   --control-height-sm: 32px;
   --control-radius: 6px;
-  --control-bg: #14161a;
-  --control-bg-hover: #191c21;
-  --control-border: #3a4049;
-  --control-border-hover: #4d5560;
+  --control-bg: #08090d;
+  --control-bg-hover: #0d1016;
+  --control-border: #232a37;
+  --control-border-hover: #364257;
 
-  --surface-popover: #1c2026;
+  --surface-popover: #0d1017;
 
   /* Type. Inter for everything you read; Archivo Black for page and section titles. */
   --font-body: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -62,7 +62,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 66% -20%, rgba(242, 163, 65, 0.055), transparent 30rem),
+    radial-gradient(circle at 66% -20%, rgba(61, 139, 255, 0.055), transparent 30rem),
     linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px), var(--ink);
   background-size:
     auto,
@@ -145,13 +145,13 @@ button:disabled {
 .rx-action--accent {
   border-color: #a66d2d;
   color: var(--tungsten);
-  background: rgba(242, 163, 65, 0.1);
+  background: rgba(61, 139, 255, 0.1);
 }
 
 .rx-action--accent:hover:not(:disabled) {
   border-color: var(--tungsten);
   color: var(--tungsten);
-  background: rgba(242, 163, 65, 0.16);
+  background: rgba(61, 139, 255, 0.16);
 }
 
 .rx-action--danger:hover:not(:disabled) {
@@ -351,7 +351,7 @@ h3 {
 }
 
 .rx-button--primary:hover {
-  background: #f7b45f;
+  background: #62a2ff;
 }
 
 .rx-button--secondary {
@@ -371,12 +371,12 @@ h3 {
 }
 
 .rx-card {
-  background: rgba(22, 24, 29, 0.94);
+  background: rgba(12, 14, 26, 0.94);
   border: 1px solid rgba(58, 64, 73, 0.72);
   border-radius: 8px;
   box-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.4),
-    0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    0 1px 0 rgba(0, 0, 4, 0.4),
+    0 8px 24px -12px rgba(0, 0, 4, 0.5);
 }
 
 .rx-status {
@@ -479,7 +479,7 @@ h3 {
   padding: 42px;
   border: 1px dashed var(--ash);
   border-radius: 8px;
-  background: rgba(22, 24, 29, 0.54);
+  background: rgba(12, 14, 26, 0.54);
 }
 
 .rx-empty__icon {
@@ -616,7 +616,7 @@ h3 {
   background: var(--surface-popover);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 18px 48px -12px rgba(0, 0, 0, 0.7);
+    0 18px 48px -12px rgba(0, 0, 4, 0.7);
   animation: rx-popover-in 110ms ease-out;
 }
 
@@ -718,7 +718,7 @@ h3 {
 }
 
 .rx-select__menu [role="option"][data-active] {
-  background: rgba(242, 163, 65, 0.14);
+  background: rgba(61, 139, 255, 0.14);
 }
 
 .rx-select__menu [role="option"][aria-selected="true"] {
@@ -933,7 +933,7 @@ h3 {
 .rx-helptip__trigger:hover,
 .rx-helptip__trigger[aria-expanded="true"] {
   color: var(--tungsten);
-  background: rgba(242, 163, 65, 0.12);
+  background: rgba(61, 139, 255, 0.12);
 }
 
 .rx-popover.rx-helptip {
@@ -1091,7 +1091,7 @@ h3 {
 
 .rx-steps li[data-status="current"] .rx-steps__marker {
   border-color: var(--tungsten);
-  background: rgba(242, 163, 65, 0.16);
+  background: rgba(61, 139, 255, 0.16);
   color: var(--tungsten);
 }
 
@@ -1125,7 +1125,7 @@ h3 {
 }
 
 .rx-steps li[data-status="current"] .rx-steps__state {
-  border-color: rgba(242, 163, 65, 0.45);
+  border-color: rgba(61, 139, 255, 0.45);
   color: var(--tungsten);
 }
 
@@ -1206,7 +1206,7 @@ h3 {
 }
 
 .rx-switch[data-on="true"] {
-  background: rgba(242, 163, 65, 0.28);
+  background: rgba(61, 139, 255, 0.28);
   border-color: var(--tungsten);
 }
 
