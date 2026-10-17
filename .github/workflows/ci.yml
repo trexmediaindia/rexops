@@ -58,12 +58,15 @@ jobs:
       - run: bun run db:seed
       - run: bun run check
       # Failing tests are also printed as annotations, so they show on the run's summary page.
-      - run: |
+      - name: API tests
+        run: |
           set -o pipefail
-          bun run test 2>&1 | tee test-output.log || {
-            grep -E "@rexops/api:test" test-output.log | grep -vE "\(pass\)" | tail -45 | sed 's/^/::error::/'
+          cd apps/api
+          bun run test 2>&1 | tee ../../api-test.log || {
+            grep -vE "\(pass\)" ../../api-test.log | tail -45 | sed 's/^/::error::/'
             exit 1
           }
+      - run: bun run test -- --filter='!@rexops/api'
       - run: bun run build
       - run: bun run check:bundle
 
