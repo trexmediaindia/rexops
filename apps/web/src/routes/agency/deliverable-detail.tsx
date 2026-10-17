@@ -230,8 +230,14 @@ export function DeliverableDetailPage() {
       setEditingPost(false);
     },
   });
+  // Also offered for work marked "waiting on client" that was never actually shared.
+  const notShared =
+    deliverable.data?.status === "UNDER_CLIENT_REVIEW" &&
+    !versions.data?.some((version) => version.visibility === "CLIENT");
   const canSend =
-    !!deliverable.data && SENDABLE.has(deliverable.data.status) && !!versions.data?.length;
+    !!deliverable.data &&
+    (SENDABLE.has(deliverable.data.status) || notShared) &&
+    !!versions.data?.length;
 
   const steps = nextSteps(deliverable.data?.status);
   const primaryStep = steps.find((step) => step.weight === "primary") ?? null;

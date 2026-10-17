@@ -54,7 +54,7 @@ jobs:
         with:
           bun-version: 1.3.5
       - run: bun install --frozen-lockfile
-      - run: bun run db:push
+      - run: bun run db:migrate
       - run: bun run db:seed
       - run: bun run check
       - run: bun run test

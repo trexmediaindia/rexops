@@ -386,4 +386,27 @@ describe("one-click send to client", () => {
     const [row] = await db.select().from(deliverables).where(eq(deliverables.id, deliverableId));
     expect(row?.status).toBe("UNDER_CLIENT_REVIEW");
   });
+
+  test("work marked 'waiting on client' without being shared can be sent properly", async () => {
+    // What older builds did: a bare status change, with the version still internal.
+    await db
+      .update(deliverables)
+      .set({ status: "UNDER_CLIENT_REVIEW" })
+      .where(eq(deliverables.id, deliverableId));
+    await db
+      .update(fileVersions)
+      .set({ visibility: "INTERNAL" })
+      .where(eq(fileVersions.deliverableId, deliverableId));
+    const response = await apiRequest(`/api/deliverables/${deliverableId}/transition`, {
+      method: "POST",
+      principal: adminPrincipal,
+      body: { to: "UNDER_CLIENT_REVIEW" },
+    });
+    expect(response.status).toBe(200);
+    const shared = await db
+      .select()
+      .from(fileVersions)
+      .where(eq(fileVersions.deliverableId, deliverableId));
+    expect(shared.some((version) => version.visibility === "CLIENT")).toBe(true);
+  });
 });
