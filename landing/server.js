@@ -36,6 +36,12 @@ if (!ADMIN_PASSWORD)
   console.warn("ADMIN_PASSWORD is not set: /admin is disabled until you set it.");
 
 const INDEX = fs.readFileSync(path.join(PUBLIC, "index.html"));
+const ASSETS = Object.fromEntries(
+  ["favicon.png", "apple-touch-icon.png", "og.png"].map((f) => [
+    `/${f}`,
+    fs.readFileSync(path.join(PUBLIC, f)),
+  ]),
+);
 
 const SECURITY = {
   "X-Content-Type-Options": "nosniff",
@@ -188,7 +194,7 @@ async function notify(rec) {
     "Reply to this email to answer them directly.",
   ].join("\n");
   const html = `<div style="font-family:-apple-system,Helvetica,Arial,sans-serif;color:#0a0a0b;max-width:560px">
-<p style="font-size:13px;color:#2f7bff;font-weight:600;margin:0 0 6px">Creative Dock · New access request</p>
+<p style="font-size:13px;color:#0a88fe;font-weight:600;margin:0 0 6px">Creative Dock · New access request</p>
 <h2 style="font-size:22px;margin:0 0 18px;letter-spacing:-.02em">${esc(rec.name)} from ${esc(rec.company)}</h2>
 <table style="border-collapse:collapse;font-size:14px;width:100%">${rows
     .map(
@@ -198,7 +204,7 @@ async function notify(rec) {
     .join("")}</table>
 <p style="font-size:13px;color:#5d6370;margin:18px 0 6px">Requirements</p>
 <p style="font-size:15px;line-height:1.5;margin:0;white-space:pre-wrap">${esc(rec.requirements)}</p>
-${adminUrl ? `<p style="margin:24px 0 0"><a href="${adminUrl}" style="background:#2f7bff;color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:14px">Open all requests</a></p>` : ""}
+${adminUrl ? `<p style="margin:24px 0 0"><a href="${adminUrl}" style="background:#0a88fe;color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:14px">Open all requests</a></p>` : ""}
 <p style="font-size:12px;color:#7f8592;margin:20px 0 0">Reply to this email to answer ${esc(rec.name.split(" ")[0])} directly.</p>
 </div>`;
   try {
@@ -291,7 +297,7 @@ function adminPage(rows, status) {
 <title>Creative Dock requests</title><meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono&display=swap">
 <style>
-:root{color-scheme:dark;--bg:#000;--line:#1d1f25;--ink:#f4f5f7;--ink2:#c9ccd3;--muted:#7f8592;--blue:#5b9bff}
+:root{color-scheme:dark;--bg:#000;--line:#1d1f25;--ink:#f4f5f7;--ink2:#c9ccd3;--muted:#7f8592;--blue:#0a88fe}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Geist,"Helvetica Neue",Arial,sans-serif}
 .wrap{max-width:1080px;margin:0 auto;padding:48px max(16px,env(safe-area-inset-left))}
 .head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:28px}
@@ -305,7 +311,7 @@ a{color:var(--blue)}
 .when{font-family:"Geist Mono",monospace;font-size:12px;color:var(--muted);margin-top:6px}
 .what{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink2)}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.tag{font-family:"Geist Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;border-radius:6px;background:rgba(47,123,255,.14);color:var(--blue)}
+.tag{font-family:"Geist Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;border-radius:6px;background:rgba(10,136,254,.14);color:var(--blue)}
 .state{font:inherit;font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid #2a2d35;background:transparent;color:var(--ink2);cursor:pointer;white-space:nowrap}
 .state.on{background:var(--ink);color:#000}
 .empty{color:var(--muted);border:1px dashed #2a2d35;border-radius:12px;padding:28px}
@@ -403,6 +409,12 @@ const server = http.createServer(async (req, res) => {
         return send(res, 200, req.method === "HEAD" ? "" : INDEX, {
           "Content-Type": "text/html; charset=utf-8",
           "Cache-Control": "no-cache",
+        });
+      const asset = ASSETS[p];
+      if (asset)
+        return send(res, 200, req.method === "HEAD" ? "" : asset, {
+          "Content-Type": "image/png",
+          "Cache-Control": "public, max-age=86400",
         });
       if (p === "/robots.txt")
         return send(res, 200, "User-agent: *\nDisallow: /admin\n", {
