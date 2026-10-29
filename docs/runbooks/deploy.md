@@ -147,6 +147,20 @@ Then `https://dock.houseoftrex.com` shows the page and `https://dock.houseoftrex
 shows the requests (sign in with the login above). The inbox lets you mark people as
 contacted and download everything as a CSV.
 
+**Email alerts (optional).** To get an email for every new request, add to
+`/opt/rexops/.env.production`, then run the **Deploy** workflow:
+
+```sh
+RESEND_API_KEY=re_...                                  # already there if RexOps sends email
+LANDING_NOTIFY_TO=you@houseoftrex.com,manas@houseoftrex.com
+LANDING_NOTIFY_FROM=Creative Dock <dock@houseoftrex.com>   # a domain verified in Resend
+```
+
+Each email has the person's details and requirements, a button to the inbox, and replying to it
+goes straight to them. Without a verified domain, leave `LANDING_NOTIFY_FROM` blank: Resend's
+test sender then delivers only to the email address that owns the Resend account. If an alert
+fails, the request is still saved; `logs --tail 50 landing` shows why.
+
 To change the page, edit `landing/public/index.html` and merge. Saved requests are kept.
 
 ## Optional services

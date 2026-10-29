@@ -14,12 +14,24 @@ const ADMIN_USER = process.env.ADMIN_USER || "admin";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 const TRUST_PROXY = process.env.TRUST_PROXY !== "false";
 
+// Email alerts for new requests, sent through Resend (the same account RexOps uses).
+const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
+const NOTIFY_TO = (process.env.NOTIFY_TO || "")
+  .split(",")
+  .map((e) => e.trim())
+  .filter(Boolean);
+const NOTIFY_FROM =
+  process.env.NOTIFY_FROM || process.env.EMAIL_FROM || "Creative Dock <onboarding@resend.dev>";
+const SITE_HOST = /^[a-z0-9.-]+$/i.test(process.env.SITE_HOST || "") ? process.env.SITE_HOST : "";
+
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(ROOT, "public");
 const DB_FILE = path.join(DATA_DIR, "requests.jsonl");
 const STATUS_FILE = path.join(DATA_DIR, "status.json");
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
+if (!RESEND_API_KEY || NOTIFY_TO.length === 0)
+  console.warn("Email alerts are off: set RESEND_API_KEY and LANDING_NOTIFY_TO to turn them on.");
 if (!ADMIN_PASSWORD)
   console.warn("ADMIN_PASSWORD is not set: /admin is disabled until you set it.");
 
@@ -142,6 +154,73 @@ const askAuth = (res) =>
     "Content-Type": "text/plain; charset=utf-8",
   });
 
+/* ---------- email alert ---------- */
+async function notify(rec) {
+  if (!RESEND_API_KEY || NOTIFY_TO.length === 0) return;
+  const adminUrl = SITE_HOST ? `https://${SITE_HOST}/admin` : "";
+  const when = new Date(rec.submittedAt).toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const rows = [
+    ["Name", rec.name],
+    ["Agency or brand", rec.company],
+    ["Email", rec.email],
+    ["Phone", rec.phone || "Not given"],
+    ["Signing up as", rec.type],
+    ["Team size", rec.team],
+    ["Creatives per month", rec.volume],
+    ["Wants it for", rec.needs.length ? rec.needs.join(", ") : "Not given"],
+    ["Sent", `${when} IST`],
+  ];
+  const text = [
+    `New Creative Dock access request from ${rec.name} (${rec.company}).`,
+    "",
+    ...rows.map(([k, v]) => `${k}: ${v}`),
+    "",
+    "Requirements:",
+    rec.requirements,
+    "",
+    adminUrl ? `All requests: ${adminUrl}` : "",
+    "Reply to this email to answer them directly.",
+  ].join("\n");
+  const html = `<div style="font-family:-apple-system,Helvetica,Arial,sans-serif;color:#0a0a0b;max-width:560px">
+<p style="font-size:13px;color:#2f7bff;font-weight:600;margin:0 0 6px">Creative Dock · New access request</p>
+<h2 style="font-size:22px;margin:0 0 18px;letter-spacing:-.02em">${esc(rec.name)} from ${esc(rec.company)}</h2>
+<table style="border-collapse:collapse;font-size:14px;width:100%">${rows
+    .map(
+      ([k, v]) =>
+        `<tr><td style="padding:6px 12px 6px 0;color:#5d6370;white-space:nowrap;vertical-align:top">${esc(k)}</td><td style="padding:6px 0">${esc(v)}</td></tr>`,
+    )
+    .join("")}</table>
+<p style="font-size:13px;color:#5d6370;margin:18px 0 6px">Requirements</p>
+<p style="font-size:15px;line-height:1.5;margin:0;white-space:pre-wrap">${esc(rec.requirements)}</p>
+${adminUrl ? `<p style="margin:24px 0 0"><a href="${adminUrl}" style="background:#2f7bff;color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:14px">Open all requests</a></p>` : ""}
+<p style="font-size:12px;color:#7f8592;margin:20px 0 0">Reply to this email to answer ${esc(rec.name.split(" ")[0])} directly.</p>
+</div>`;
+  try {
+    const r = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: NOTIFY_FROM,
+        to: NOTIFY_TO,
+        reply_to: rec.email,
+        subject: `New Creative Dock request: ${rec.company}`,
+        text,
+        html,
+      }),
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!r.ok) console.error(`Email alert failed (${r.status}): ${await r.text()}`);
+  } catch (err) {
+    console.error("Email alert failed:", err.message);
+  }
+}
+
 const TYPES = ["Agency", "Brand", "Freelancer"];
 const NEEDS = ["Client review", "Approvals", "Sharing files", "Tracking work", "Team access"];
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -180,6 +259,7 @@ async function handleRequest(req, res) {
 
   fs.appendFileSync(DB_FILE, JSON.stringify(rec) + "\n");
   console.log(`New request: ${rec.company} <${rec.email}>`);
+  notify(rec); // the visitor never waits on the email
   return json(res, 201, { ok: true });
 }
 

@@ -112,6 +112,11 @@ services:
     environment:
       ADMIN_USER: ${LANDING_ADMIN_USER:-admin}
       ADMIN_PASSWORD: ${LANDING_ADMIN_PASSWORD:-}
+      SITE_HOST: ${LANDING_ADDRESS:-}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      NOTIFY_TO: ${LANDING_NOTIFY_TO:-}
+      NOTIFY_FROM: ${LANDING_NOTIFY_FROM:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
     volumes:
       - rexops-landing:/data
     expose:
