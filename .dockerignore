@@ -12,3 +12,4 @@
 .playwright-mcp
 *.png
 !apps/**/*.png
+!landing/**/*.png

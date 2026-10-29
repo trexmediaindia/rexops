@@ -1,0 +1,12 @@
+# Creative Dock landing page (landing/): the public early-access page and its request inbox.
+# Plain Node with no dependencies, so it builds in seconds and never touches the workspace.
+FROM node:22-alpine
+WORKDIR /app
+COPY landing/server.js ./server.js
+COPY landing/public ./public
+RUN printf '{"type":"module"}\n' > package.json && mkdir -p /data && chown node:node /data
+ENV NODE_ENV=production PORT=3000 DATA_DIR=/data
+USER node
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://127.0.0.1:3000/healthz || exit 1
+CMD ["node", "server.js"]

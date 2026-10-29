@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Creative Dock is the operating system for creative agencies: one workspace for your team, a dedicated portal for your clients. Coming soon from T-Rex Media.">
+<meta property="og:title" content="Creative Dock">
+<meta property="og:description" content="The operating system for creative agencies. Coming soon.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:image" content="https://dock.houseoftrex.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://dock.houseoftrex.com/">
+<meta name="twitter:card" content="summary_large_image">
+<title>Creative Dock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a dark, centred film strip — each section is one scene from the teaser (eyebrow, silver headline, live UI stage on a blue glow), ending in the request form. */
+:root{
+  color-scheme:dark;
+  --bg:#000000; --panel:#0c0d10; --panel-2:#121318; --line:#1d1f25; --line-2:#2a2d35;
+  --ink:#f4f5f7; --ink-2:#c9ccd3; --muted:#7f8592; --faint:#4a4f5a;
+  --blue:#0a88fe; --blue-2:#0a88fe; --blue-glow:rgba(10,136,254,.22); --blue-soft:rgba(10,136,254,.14);
+  --ok:#46c27a; --err:#ff6b61;
+  --logo-white:#f3f2f2; --logo-blue:#0a88fe;
+  --display:"Geist","Helvetica Neue",Arial,sans-serif;
+  --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
+
+/* ---------- shared type ---------- */
+.eyebrow{font-size:14px;font-weight:600;color:var(--blue-2);margin:0 0 14px;letter-spacing:-.005em}
+.silver{background:linear-gradient(180deg,#ffffff 0%,#d9dbe0 55%,#9fa4ae 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.h2{font-size:clamp(36px,6vw,68px);font-weight:600;letter-spacing:-.045em;line-height:1.02;margin:0;text-wrap:balance}
+.blue{color:var(--blue-2);-webkit-text-fill-color:var(--blue-2)}
+.dim{opacity:.38}
+.sub{font-size:clamp(17px,2vw,20px);color:var(--ink-2);margin:18px auto 0;max-width:40ch}
+
+/* word blur-in (hero only, runs on load) */
+.w{display:inline-block;filter:blur(0);opacity:1;transform:none}
+.play .w{animation:wordIn .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i) * 110ms + var(--d, 0ms))}
+@keyframes wordIn{from{opacity:0;filter:blur(14px);transform:translateY(.12em)}to{opacity:1;filter:blur(0);transform:none}}
+
+/* ---------- header ---------- */
+header{position:relative;z-index:5;padding-block:22px}
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px}
+/* The Creative Dock logo: "Creative" in white, "Dock" in blue, heavy and tightly set. */
+.logo{font-weight:700;letter-spacing:-.035em;color:var(--logo-white)}
+.logo .dock{color:var(--logo-blue);-webkit-text-fill-color:var(--logo-blue)}
+.wordmark{font-size:20px;line-height:1}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);padding:7px 12px;border:1px solid var(--line-2);border-radius:999px;background:rgba(255,255,255,.02)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 0 var(--blue-glow);animation:pulse 2.2s ease-out infinite;display:inline-block;flex:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(10,136,254,.6)}70%{box-shadow:0 0 0 8px rgba(10,136,254,0)}100%{box-shadow:0 0 0 0 rgba(10,136,254,0)}}
+
+/* ---------- scenes ---------- */
+.scene{position:relative;overflow-x:clip;padding-block:110px;text-align:center;isolation:isolate}
+.scene::before{content:"";position:absolute;left:50%;top:58%;width:min(900px,120vw);aspect-ratio:1;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(28,74,160,.30),rgba(10,30,70,.12) 55%,transparent 75%);z-index:-1;pointer-events:none}
+.stage{margin:56px auto 0;max-width:760px;position:relative;text-align:left}
+
+/* hero */
+.hero{padding-block:120px 120px}
+.horizon{width:min(520px,80%);height:2px;margin:0 auto 46px;background:linear-gradient(90deg,transparent,var(--blue-2) 50%,transparent);box-shadow:0 0 24px 4px rgba(10,136,254,.45);border-radius:2px;transform-origin:center}
+.play .horizon{animation:horizon 1.4s cubic-bezier(.2,.7,.2,1) both}
+@keyframes horizon{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}
+.intro{font-size:18px;color:var(--ink-2);margin:0 0 6px}
+.hero h1 .w{padding-bottom:.06em}
+.hero h1{font-size:clamp(52px,10vw,124px);line-height:1;margin:0}
+.hero .lede{font-size:clamp(17px,2.1vw,21px);color:var(--ink-2);margin:20px 0 34px}
+.cta-row{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{font:inherit;font-weight:500;font-size:16px;border:0;border-radius:999px;padding:13px 24px;background:var(--blue);color:#fff;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:transform .15s ease,background .15s}
+.btn:hover{transform:translateY(-1px);background:#3a9dff}
+.btn:disabled{opacity:.5;cursor:default;transform:none}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2)}
+
+/* generic panel */
+.win{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
+.k{font-size:11px;color:var(--muted)}
+.mono{font-family:var(--mono)}
+
+/* scene 2: chaos */
+.chaos{height:490px;max-width:560px}
+.app{position:absolute;width:44%;height:110px;padding:10px 12px;opacity:.55;animation:float 7s ease-in-out infinite}
+.app .bar{display:flex;gap:5px;align-items:center;font-size:11px;color:var(--muted)}
+.app .bar i{width:5px;height:5px;border-radius:50%;background:var(--faint)}
+.app .ln{height:5px;border-radius:3px;background:var(--line-2);margin-top:9px}
+@keyframes float{50%{transform:translateY(-6px)}}
+.unread{position:absolute;right:4%;top:180px;font-size:11px;padding:4px 9px;border-radius:999px;background:#0a0b0e;border:1px solid var(--line-2);display:flex;gap:6px;align-items:center;font-variant-numeric:tabular-nums;z-index:2}
+.unread i{width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.notes{position:absolute;left:0;right:0;top:210px;display:grid;gap:8px;z-index:3}
+.note{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:center;padding:10px 14px;border-radius:14px;background:rgba(28,29,34,.92);border:1px solid var(--line-2);backdrop-filter:blur(8px);transition:opacity .5s,transform .5s}
+.note.enter{animation:noteIn .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes noteIn{from{opacity:0;transform:translateY(-14px) scale(.97);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+.av{width:30px;height:30px;border-radius:50%;background:#2b2d33;display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--ink-2)}
+.note .src{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.note b{display:block;font-size:13px;font-weight:600;line-height:1.2}
+.note span{font-size:12.5px;color:var(--ink-2)}
+.note .now{font-size:10px;color:var(--muted);align-self:start}
+.note.old{opacity:.25}
+.question{margin-top:72px}
+.question .h2{font-size:clamp(44px,8vw,92px)}
+
+/* scene 3: portals */
+.portals{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:640px}
+.side{padding:16px}
+.side h4,.client h4{margin:0 0 12px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px}
+.side h4 i,.client h4 i{width:6px;height:6px;border-radius:50%;background:var(--ink)}
+.client h4 i{background:var(--blue)}
+.nav{display:grid;gap:3px}
+.nav div{font-size:13px;padding:6px 9px;border-radius:7px;color:var(--ink-2);display:flex;gap:9px;align-items:center;border:1px solid transparent;transition:background .35s,border-color .35s,color .35s}
+.nav div::before{content:"";width:10px;height:10px;border-radius:3px;border:1px solid var(--faint)}
+.nav div.on{background:rgba(10,136,254,.16);border-color:rgba(10,136,254,.35);color:var(--ink)}
+.pend{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:7px}
+.pend p{margin:0 0 2px;font-size:11px;color:var(--muted)}
+.pend div{display:flex;justify-content:space-between;gap:8px;font-size:12px}
+.pend div span:first-child::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--faint);margin-right:8px;vertical-align:middle}
+.pend div.hot span:first-child::before{background:var(--blue)}
+.pend div span:last-child{color:var(--muted);font-size:10.5px}
+.client{padding:16px;display:flex;flex-direction:column}
+.client .big{font-size:24px;font-weight:600;letter-spacing:-.03em;line-height:1.05;margin:0 0 12px}
+.client .row{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:var(--muted);margin-bottom:8px}
+.client .row b{font-size:22px;color:var(--blue-2);font-weight:600;font-variant-numeric:tabular-nums}
+.item{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;padding:8px;border-radius:10px;background:rgba(255,255,255,.025);margin-bottom:6px;font-size:12px;transition:opacity .4s}
+.thumb{width:22px;height:30px;border-radius:4px;background:linear-gradient(180deg,#1b2f6b,#4f7fe0)}
+.thumb.g{background:linear-gradient(180deg,#2a2b30,#6a6d75)}
+.ap{font:inherit;font-size:10.5px;font-weight:600;border:0;padding:4px 10px;border-radius:999px;background:var(--blue);color:#fff;transition:all .3s;pointer-events:none}
+.ap.done{background:transparent;color:var(--blue-2);box-shadow:inset 0 0 0 1px rgba(10,136,254,.4)}
+.client .foot{margin-top:auto;padding-top:10px;font-size:10.5px;color:var(--muted)}
+.sync{grid-column:1/-1;justify-self:center}
+
+/* scene 4: review room */
+.review{display:grid;grid-template-columns:200px 1fr;gap:18px;padding:16px;max-width:640px}
+.poster{position:relative;height:280px;border-radius:10px;overflow:hidden;background:linear-gradient(180deg,#05070d 0%,#0e1a3d 55%,#1d3d9a 100%);transition:background 1s}
+.poster.v4{background:linear-gradient(180deg,#0a1430 0%,#1d3d9a 50%,#3b6be0 100%)}
+.moon{position:absolute;left:50%;top:34%;width:36px;height:36px;border-radius:50%;background:#d6d8de;transform:translate(-50%,-50%);transition:box-shadow .8s,background .8s}
+.poster.v4 .moon{background:#fff;box-shadow:0 0 30px 6px rgba(255,255,255,.35)}
+.poster .t1{position:absolute;bottom:34px;left:0;right:0;text-align:center;font-weight:600;letter-spacing:.32em;font-size:14px}
+.poster .t2{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:8px;letter-spacing:.3em;color:var(--ink-2)}
+.pin{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;font-weight:600;display:grid;place-items:center;box-shadow:0 0 0 4px rgba(10,136,254,.25);transform:scale(0);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.pin.show{transform:scale(1)}
+.check{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:var(--blue);display:grid;place-items:center;box-shadow:0 0 0 14px rgba(10,136,254,.18);transform:scale(0);transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.check.show{transform:scale(1)}
+.track{margin-top:12px;height:2px;background:var(--line-2);border-radius:2px;position:relative}
+.track .fill{position:absolute;inset:0 auto 0 0;width:0;background:#fff;border-radius:2px;transition:width .9s linear}
+.track .m{position:absolute;top:-4px;width:2px;height:10px;background:var(--blue-2)}
+.time{font-size:10px;color:var(--muted);margin-top:8px;font-variant-numeric:tabular-nums}
+.comments{display:grid;gap:8px;align-content:start}
+.cm{padding:9px 11px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--line);font-size:12.5px;opacity:.15;transition:opacity .45s,border-color .45s}
+.cm.show{opacity:1}
+.cm.res{opacity:.5}
+.cm .top{display:flex;justify-content:space-between;margin-bottom:4px;font-size:10px;color:var(--muted)}
+.tc{font-family:var(--mono);font-size:9.5px;padding:1px 6px;border-radius:4px;background:var(--blue);color:#fff}
+.cm.res .tc{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2)}
+.cm.res .tc::before{content:"✓ Resolved ";}
+.vers{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.vers span{font-size:11px;text-align:center;padding:5px 0;border-radius:7px;border:1px solid var(--line);color:var(--muted);transition:all .35s}
+.vers span.on{border-color:var(--ink-2);color:var(--ink)}
+.vers span.final{border-color:var(--blue);color:var(--blue-2);background:var(--blue-soft)}
+
+/* scene 5: dashboard */
+.dash{max-width:640px;position:relative}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi{padding:12px 14px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:4px}
+.kpi .k{grid-column:1/-1}
+.kpi b{font-size:28px;font-weight:600;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.kpi svg{width:70px;height:24px}
+.kpi path{fill:none;stroke:var(--ink-2);stroke-width:1.4;stroke-linecap:round;stroke-dasharray:120;stroke-dashoffset:0}
+.kpi.hi path{stroke:var(--blue-2)}
+.drawing .kpi path{animation:draw 1.4s ease-out both}
+@keyframes draw{from{stroke-dashoffset:120}to{stroke-dashoffset:0}}
+.board{margin-top:10px;padding:12px}
+.tabs{display:flex;gap:4px;margin-bottom:10px;font-size:12px}
+.tabs span{flex:1;text-align:center;padding:6px;border-radius:7px;color:var(--muted)}
+.tabs span.on{background:rgba(10,136,254,.2);color:var(--ink)}
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.col{min-height:150px;border-radius:9px;background:rgba(255,255,255,.02);padding:8px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.col > p{margin:0 0 2px;font-size:10px;color:var(--muted)}
+.col:last-child > p{color:var(--blue-2)}
+.card{padding:8px;border-radius:7px;background:var(--panel-2);border:1px solid var(--line);transition:opacity .35s,transform .35s}
+.card i{display:block;height:4px;border-radius:2px;background:var(--line-2)}
+.card i+i{margin-top:5px;width:60%}
+.col:nth-child(3) .card i:first-child{background:#cfd2d8}
+.col:last-child .card i:first-child{background:var(--blue)}
+.card.fly{opacity:0;transform:translateX(14px)}
+.cmdk{position:absolute;left:50%;top:84px;width:min(420px,92%);transform:translateX(-50%) translateY(6px) scale(.98);opacity:0;padding:10px;transition:opacity .3s,transform .3s;z-index:3;background:rgba(18,19,24,.96);backdrop-filter:blur(12px)}
+.cmdk.show{opacity:1;transform:translateX(-50%)}
+.cmdk .in{display:flex;gap:10px;align-items:center;font-size:14px;padding:4px 6px 10px;border-bottom:1px solid var(--line)}
+.cmdk .in kbd{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.cmdk .in span::after{content:"";display:inline-block;width:1px;height:15px;background:var(--ink);margin-left:2px;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.opt{font-size:12.5px;padding:8px 10px;border-radius:7px;margin-top:6px;color:var(--ink-2);display:flex;justify-content:space-between}
+.opt.sel{background:var(--blue);color:#fff}
+
+/* scene 6: two lines */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;text-align:left;max-width:900px;margin:0 auto}
+.pair .h3{font-size:clamp(30px,4vw,44px);font-weight:600;letter-spacing:-.04em;line-height:1.05;margin:0 0 22px}
+.pair p.d{color:var(--ink-2);margin:16px 0 0;font-size:15px}
+.rv{display:grid;grid-template-columns:56px 1fr;gap:14px;padding:14px;align-items:center}
+.rv .thumb{width:56px;height:76px;border-radius:7px}
+.rv h5{margin:0;font-size:17px;font-weight:600;letter-spacing:-.02em}
+.rv .acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.rv .acts span{font-size:12px;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.06)}
+.rv .acts span.go{background:var(--blue);color:#fff;transition:all .3s}
+.rv .acts span.go.done{background:transparent;color:var(--blue-2);box-shadow:inset 0 0 0 1px rgba(10,136,254,.4)}
+.mini{padding:12px}
+.mini .cols{grid-template-columns:repeat(3,1fr)}
+.mini .col{min-height:120px}
+.price{margin:72px auto 0;max-width:620px;padding:22px 24px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;text-align:left}
+.price b{font-size:20px;letter-spacing:-.02em}
+.price p{margin:2px 0 0;color:var(--ink-2);font-size:14px}
+
+/* request */
+.request{padding-block:110px;border-top:1px solid var(--line)}
+.request .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px}
+.request .intro p{color:var(--ink-2);margin:16px 0 0;max-width:38ch}
+.steps{list-style:none;padding:0;margin:32px 0 0;display:grid;gap:14px}
+.steps li{display:grid;grid-template-columns:28px 1fr;gap:12px;color:var(--ink-2);font-size:15px}
+.steps b{font-family:var(--mono);font-weight:500;color:var(--blue-2);font-size:13px;padding-top:2px}
+form{display:grid;gap:22px;min-width:0;padding:28px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:grid;gap:8px;min-width:0}
+.field > label,.field legend{font-size:14px;font-weight:500}
+.opt-l{color:var(--muted);font-weight:400}
+input[type=text],input[type=email],input[type=tel],select,textarea{font:inherit;font-size:16px;color:var(--ink);background:#08090b;border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;width:100%;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+textarea{min-height:120px;resize:vertical}
+::placeholder{color:var(--faint)}
+fieldset{border:0;padding:0;margin:0;min-width:0}
+legend{padding:0;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-block;padding:8px 15px;border-radius:999px;border:1px solid var(--line-2);font-size:14px;cursor:pointer;transition:all .15s;user-select:none;color:var(--ink-2)}
+.chip input:checked + span{background:var(--ink);color:#000;border-color:var(--ink)}
+.chip input:focus-visible + span{outline:2px solid var(--blue);outline-offset:2px}
+.submit-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.msg{font-size:14px;color:var(--ink-2)}
+.msg.err{color:var(--err)}
+.done{display:grid;gap:14px;align-content:start;padding:28px}
+.done h3{font-size:30px;letter-spacing:-.03em;margin:0}
+.done p{margin:0;color:var(--ink-2);max-width:44ch}
+.tick{width:48px;height:48px;border-radius:50%;background:var(--blue);display:grid;place-items:center;box-shadow:0 0 0 10px rgba(10,136,254,.15)}
+
+/* inbox */
+.inbox{padding-block:72px;border-top:1px solid var(--line)}
+.inbox-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.inbox h2{font-size:28px;letter-spacing:-.03em;margin:0}
+.count{font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.empty{color:var(--muted);border:1px dashed var(--line-2);border-radius:12px;padding:28px}
+.req{border-top:1px solid var(--line);padding-block:22px;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,5fr) auto;gap:24px;align-items:start}
+.req:last-child{border-bottom:1px solid var(--line)}
+.req .who b{display:block;font-weight:600}
+.req .who span{display:block;color:var(--ink-2);font-size:14px;overflow-wrap:anywhere}
+.req .what{font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink-2)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--blue-soft);color:var(--blue-2)}
+.state{font:inherit;font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line-2);background:transparent;color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.state.on{background:var(--ink);color:#000;border-color:var(--ink)}
+.when{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:6px}
+
+footer{padding-block:80px 48px;text-align:center;border-top:1px solid var(--line)}
+footer .end{font-size:clamp(34px,5vw,52px);line-height:1.1;margin:0}
+footer .soon{margin:8px 0 4px;font-size:18px;font-weight:500}
+footer .tuned{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+footer .by{margin-top:44px;font-weight:700;font-style:italic;letter-spacing:.02em;font-size:15px}
+
+@media (max-width:820px){
+  .request .wrap{grid-template-columns:1fr;gap:36px}
+  .pair{grid-template-columns:1fr;gap:56px}
+  .req{grid-template-columns:1fr;gap:10px}
+  .scene{padding-block:84px}
+}
+@media (max-width:600px){
+  .portals{grid-template-columns:1fr}
+  .review{grid-template-columns:1fr}
+  .poster{height:240px}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .cols{grid-template-columns:repeat(2,1fr)}
+  .mini .cols{grid-template-columns:repeat(3,1fr)}
+  .frow{grid-template-columns:1fr}
+  form,.done{padding:20px}
+  .chaos{height:500px}
+  .app{width:47%}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+<style>body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="wordmark logo" role="img" aria-label="Creative Dock">Creative <span class="dock">Dock</span></div>
+    <span class="pill"><span class="dot"></span>Coming soon</span>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="scene hero" id="hero">
+    <div class="wrap">
+      <div class="horizon"></div>
+      <p class="intro"><span class="w" style="--i:0;--d:500ms">Introducing</span></p>
+      <h1 class="logo"><span class="w" style="--i:0;--d:800ms">Creative</span> <span class="w dock" style="--i:1;--d:800ms">Dock</span></h1>
+      <p class="lede"><span class="w" style="--i:0;--d:1300ms">The</span> <span class="w" style="--i:1;--d:1300ms">operating</span> <span class="w" style="--i:2;--d:1300ms">system</span> <span class="w" style="--i:3;--d:1300ms">for</span> <span class="w" style="--i:4;--d:1300ms">creative</span> <span class="w" style="--i:5;--d:1300ms">agencies.</span></p>
+      <div class="cta-row">
+        <a class="btn" href="#request">Request early access</a>
+        <span class="pill"><span class="dot"></span>Stay tuned.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAOS -->
+  <section class="scene" data-scene="chaos">
+    <div class="wrap">
+      <h2 class="h2 silver">Five apps.<br>Ten teammates.</h2>
+      <p class="sub">And one question nobody can answer.</p>
+      <div class="stage chaos" id="chaos">
+        <div class="app win" style="left:0;top:20px;animation-delay:-1s"><div class="bar"><i></i><i></i><i></i>WhatsApp</div><div class="ln" style="width:80%"></div><div class="ln" style="width:60%"></div><div class="ln" style="width:70%"></div></div>
+        <div class="app win" style="right:0;top:0;animation-delay:-3s"><div class="bar"><i></i><i></i><i></i>Gmail</div><div class="ln" style="width:75%"></div><div class="ln" style="width:85%"></div><div class="ln" style="width:50%"></div></div>
+        <div class="app win" style="left:28%;top:60px;animation-delay:-5s"><div class="bar"><i></i><i></i><i></i>Calls</div><div class="ln" style="width:70%"></div><div class="ln" style="width:55%"></div><div class="ln" style="width:80%"></div></div>
+        <div class="app win" style="right:0;top:95px;animation-delay:-2s"><div class="bar"><i></i><i></i><i></i>Slack</div><div class="ln" style="width:80%"></div><div class="ln" style="width:65%"></div><div class="ln" style="width:72%"></div></div>
+        <div class="app win" style="left:-2%;top:120px;animation-delay:-4s"><div class="bar"><i></i><i></i><i></i>Drive</div><div class="ln" style="width:60%"></div><div class="ln" style="width:78%"></div><div class="ln" style="width:52%"></div></div>
+        <div class="app win" style="left:36%;top:150px;animation-delay:-6s"><div class="bar"><i></i><i></i><i></i>Notes</div><div class="ln" style="width:68%"></div><div class="ln" style="width:58%"></div></div>
+        <div class="unread"><i></i><span id="unread">12</span> unread</div>
+        <div class="notes" id="notes"></div>
+      </div>
+      <div class="question">
+        <h2 class="h2 silver">Which version<br>is <span class="blue">final?</span></h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTALS -->
+  <section class="scene" data-scene="portals">
+    <div class="wrap">
+      <p class="eyebrow">Two portals. One source of truth.</p>
+      <h2 class="h2 silver">One workspace<br>for your team.</h2>
+      <h2 class="h2 silver" style="margin-top:14px">A dedicated <span class="blue">portal</span><br>for your clients.</h2>
+      <div class="stage portals">
+        <div class="win side">
+          <h4><i></i>Agency</h4>
+          <div class="nav" id="nav"><div class="on">Dashboard</div><div>Clients</div><div>Projects</div><div>Work</div><div>Review queue</div><div>Inbox</div><div>Team</div></div>
+          <div class="pend"><p>Pending on our side</p>
+            <div class="hot"><span>After Hours reel</span><span>Internal review</span></div>
+            <div><span>Founder video</span><span>Revisions</span></div>
+            <div><span>Menu static</span><span>Due today</span></div>
+          </div>
+        </div>
+        <div class="win client">
+          <h4><i></i>Client</h4>
+          <p class="big">What needs you</p>
+          <div class="row"><span>For your review</span><b id="needs">3</b></div>
+          <div id="clientItems">
+            <div class="item"><span class="thumb"></span><span>After Hours · v4</span><button type="button" class="ap" tabindex="-1">Approve</button></div>
+            <div class="item"><span class="thumb g"></span><span>Room Tour · v2</span><button type="button" class="ap" tabindex="-1">Approve</button></div>
+            <div class="item"><span class="thumb"></span><span>Static Post · v1</span><button type="button" class="ap" tabindex="-1">Approve</button></div>
+          </div>
+          <div class="foot">Clients only see what you send.</div>
+        </div>
+        <span class="pill sync"><span class="dot"></span>Synced live, both sides</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEW ROOM -->
+  <section class="scene" data-scene="review">
+    <div class="wrap">
+      <p class="eyebrow">Review room</p>
+      <h2 class="h2 silver">Frame-accurate<br>feedback.</h2>
+      <p class="sub">Every version, tracked and approved.</p>
+      <div class="stage win review" id="review">
+        <div>
+          <div class="poster" id="poster">
+            <div class="moon"></div>
+            <span class="pin" style="left:46%;top:27%" data-pin="0">1</span>
+            <span class="pin" style="left:22%;bottom:68px" data-pin="1">2</span>
+            <span class="pin" style="right:24%;bottom:12px" data-pin="2">3</span>
+            <div class="t1">AFTER HOURS</div><div class="t2">SALT CO.</div>
+            <div class="check" id="check"><svg width="26" height="26" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div class="track"><div class="fill" id="fill"></div><span class="m" style="left:20%"></span><span class="m" style="left:50%"></span><span class="m" style="left:70%"></span></div>
+          <div class="time" id="time">0:00 / 0:10</div>
+        </div>
+        <div class="comments">
+          <div class="cm" data-c="0"><div class="top"><span class="tc">1 · 0:02</span><span>Client</span></div>Brighten the moon slightly</div>
+          <div class="cm" data-c="1"><div class="top"><span class="tc">2 · 0:05</span><span>Internal</span></div>Logo lockup 25% bigger</div>
+          <div class="cm" data-c="2"><div class="top"><span class="tc">3 · 0:07</span><span>Client</span></div>Love this transition.</div>
+          <div class="vers" id="vers"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section class="scene" data-scene="dash">
+    <div class="wrap">
+      <p class="eyebrow">Agency dashboard</p>
+      <h2 class="h2 silver">Your whole pipeline.<br><span class="blue">Live.</span> At a glance.</h2>
+      <div class="stage dash" id="dash">
+        <div class="kpis">
+          <div class="win kpi"><span class="k">Waiting on client</span><b data-n="4">4</b><svg viewBox="0 0 70 24" aria-hidden="true"><path d="M2 18 C12 6,20 6,28 14 S44 22,52 12 S64 6,68 9"/></svg></div>
+          <div class="win kpi"><span class="k">Internal review</span><b data-n="7">7</b><svg viewBox="0 0 70 24" aria-hidden="true"><path d="M2 12 C10 4,18 4,26 12 S42 20,50 12 S62 8,68 14"/></svg></div>
+          <div class="win kpi"><span class="k">Revisions</span><b data-n="3">3</b><svg viewBox="0 0 70 24" aria-hidden="true"><path d="M2 16 C10 8,20 6,30 14 S46 20,56 12 S64 10,68 12"/></svg></div>
+          <div class="win kpi hi"><span class="k">Approved this week</span><b data-n="18">18</b><svg viewBox="0 0 70 24" aria-hidden="true"><path d="M2 18 C12 20,18 6,30 10 S46 20,54 10 S64 6,68 6"/></svg></div>
+          <div class="win kpi"><span class="k">Due this week</span><b data-n="5">5</b><svg viewBox="0 0 70 24" aria-hidden="true"><path d="M2 20 C12 14,20 8,30 14 S46 16,56 10 S64 8,68 4"/></svg></div>
+          <div class="win kpi"><span class="k">Active projects</span><b data-n="12">12</b><svg viewBox="0 0 70 24" aria-hidden="true"><path d="M2 20 C14 16,22 12,32 14 S48 8,58 8 S64 4,68 3"/></svg></div>
+        </div>
+        <div class="win board">
+          <div class="tabs"><span class="on">Board</span><span>List</span><span>Calendar</span><span>Timeline</span></div>
+          <div class="cols" id="cols">
+            <div class="col"><p>To do</p><div class="card"><i></i><i></i></div><div class="card"><i></i><i></i></div></div>
+            <div class="col"><p>In review</p><div class="card"><i></i><i></i></div><div class="card"><i></i><i></i></div></div>
+            <div class="col"><p>With client</p><div class="card"><i></i><i></i></div></div>
+            <div class="col"><p>Approved</p><div class="card"><i></i><i></i></div><div class="card"><i></i><i></i></div></div>
+          </div>
+        </div>
+        <div class="win cmdk" id="cmdk">
+          <div class="in"><kbd>⌘K</kbd><span id="typed"></span></div>
+          <div class="opt sel"><span>Send to client · After Hours v4</span><span>↵</span></div>
+          <div class="opt"><span>Open review queue</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENTS / AGENCIES -->
+  <section class="scene" data-scene="pair">
+    <div class="wrap">
+      <div class="pair">
+        <div>
+          <p class="eyebrow">For clients</p>
+          <h3 class="h3 silver">Simpler to review.</h3>
+          <div class="win rv">
+            <span class="thumb"></span>
+            <div><span class="k">For your review</span><h5>After Hours · v4</h5><span class="k">Reel · 0:10 · from T-Rex Media</span>
+              <div class="acts"><span class="go" id="approveBtn">Approve</span><span>Request changes</span></div>
+            </div>
+          </div>
+          <p class="d">One link, one button. No logins to remember, no file names to decode.</p>
+        </div>
+        <div>
+          <p class="eyebrow">For agencies</p>
+          <h3 class="h3 silver">Effortless to <span class="blue">manage.</span></h3>
+          <div class="win mini">
+            <div class="cols" id="mini">
+              <div class="col"><p>In review</p><div class="card"><i></i><i></i></div><div class="card"><i></i><i></i></div><div class="card"><i></i><i></i></div></div>
+              <div class="col"><p>With client</p></div>
+              <div class="col"><p>Approved</p></div>
+            </div>
+          </div>
+          <p class="d">Every piece of work moves from review to client to approved in one place.</p>
+        </div>
+      </div>
+      <div class="win price">
+        <div><b>Pay as you go.</b><p>No fixed seats or yearly plans. Built for small agencies and brands.</p></div>
+        <a class="btn" href="#request">Request access</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- REQUEST -->
+  <section class="request" id="request">
+    <div class="wrap">
+      <div class="intro">
+        <p class="eyebrow">Early access</p>
+        <h2 class="h2 silver" style="font-size:clamp(34px,4.6vw,52px)">Tell us what you need.</h2>
+        <p>We are opening Creative Dock to a small group first. Share how your team works and we will set up access around it.</p>
+        <ol class="steps">
+          <li><b>1</b><span>Send your request.</span></li>
+          <li><b>2</b><span>Our team reviews it and gets back to you by email or phone.</span></li>
+          <li><b>3</b><span>We set up your agency or client portal.</span></li>
+        </ol>
+      </div>
+      <div class="win" id="formHost">
+        <form id="reqForm" novalidate>
+          <div class="frow">
+            <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="f-company">Agency or brand</label><input id="f-company" name="company" type="text" autocomplete="organization" required></div>
+          </div>
+          <div class="frow">
+            <div class="field"><label for="f-email">Work email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+            <div class="field"><label for="f-phone">Phone <span class="opt-l">(optional)</span></label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
+          </div>
+          <fieldset class="field">
+            <legend>I am signing up as</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="type" id="t-agency" value="Agency" checked><span>An agency</span></label>
+              <label class="chip"><input type="radio" name="type" id="t-brand" value="Brand"><span>A brand</span></label>
+              <label class="chip"><input type="radio" name="type" id="t-free" value="Freelancer"><span>A freelancer</span></label>
+            </div>
+          </fieldset>
+          <div class="frow">
+            <div class="field"><label for="f-team">Team size</label>
+              <select id="f-team" name="team"><option>Just me</option><option selected>2 to 5</option><option>6 to 15</option><option>16 to 50</option><option>More than 50</option></select></div>
+            <div class="field"><label for="f-volume">Creatives per month</label>
+              <select id="f-volume" name="volume"><option>Under 20</option><option selected>20 to 100</option><option>100 to 300</option><option>Over 300</option></select></div>
+          </div>
+          <fieldset class="field">
+            <legend>What do you want to use it for? <span class="opt-l">(pick any)</span></legend>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="needs" id="n-review" value="Client review"><span>Client review</span></label>
+              <label class="chip"><input type="checkbox" name="needs" id="n-approve" value="Approvals"><span>Approvals</span></label>
+              <label class="chip"><input type="checkbox" name="needs" id="n-share" value="Sharing files"><span>Sharing files</span></label>
+              <label class="chip"><input type="checkbox" name="needs" id="n-track" value="Tracking work"><span>Tracking work</span></label>
+              <label class="chip"><input type="checkbox" name="needs" id="n-team" value="Team access"><span>Team access</span></label>
+            </div>
+          </fieldset>
+          <div class="field"><label for="f-req">Your requirements</label>
+            <textarea id="f-req" name="requirements" placeholder="How many clients you handle, how reviews work today, what slows you down." required></textarea></div>
+          <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="f-website">Website</label><input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+          <div class="submit-row">
+            <button class="btn" type="submit" id="submitBtn">Send request</button>
+            <span class="msg" id="msg" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="end logo">Creative <span class="dock">Dock</span></p>
+    <p class="soon">Coming soon.</p>
+    <span class="tuned"><span class="dot"></span>Stay tuned.</span>
+    <div class="by">TREXMEDIA</div>
+  </div>
+</footer>
+
+<script>
+/* ===== Where requests go =====
+   1. Inside claude.ai: saved to this page's private database.
+   2. Embedded on Wix (HTML iframe): sent to the Wix page, which saves it to a CMS collection.
+   3. Hosted on your own server: set ENDPOINT to a URL that accepts a JSON POST. */
+const ENDPOINT = '/api/request';
+
+(()=> {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  /* ---------- hero reveal ---------- */
+  if (!reduce) document.getElementById('hero').classList.add('play');
+
+  /* ---------- scene loops (run while visible) ---------- */
+  const scenes = {};
+  function loop(name, fn, ms){ scenes[name] = {fn, ms, t:null, step:0}; }
+
+  // Chaos: notifications pile up, unread climbs to 47
+  const msgs = [
+    ['R','WhatsApp','Riya','which one is final?'],['A','Slack','Arjun','client wants it warmer'],
+    ['C','Gmail','Client','did you get my voice note?'],['D','WhatsApp','Dev','v3 or v3_final_FINAL?'],
+    ['K','Slack','Kavya','posting at 6, need approval'],['C','Calls','Client','missed call (2)'],
+    ['R','Gmail','Riya','sent on Drive, check mail'],['A','Slack','Arjun','which comments do I follow?'],
+    ['N','WhatsApp','Neha','is this billable?'],['D','Slack','Dev','who approved this cut?']
+  ];
+  const notes = $('#notes'), unread = $('#unread');
+  let uCount = 12;
+  function addNote(i, animate){
+    const m = msgs[i % msgs.length];
+    const el = document.createElement('div');
+    el.className = 'note' + (animate ? ' enter' : '');
+    el.innerHTML = '<span class="av">'+m[0]+'</span><div><div class="src">'+m[1]+'</div><b>'+m[2]+'</b><span>'+m[3]+'</span></div><span class="now">now</span>';
+    notes.prepend(el);
+    const all = notes.children;
+    while (all.length > 4) all[all.length-1].remove();
+    for (let k = 0; k < all.length; k++) all[k].classList.toggle('old', k === 3);
+  }
+  for (let i = 0; i < 4; i++) addNote(i, false);
+  loop('chaos', s => {
+    addNote(s.step + 4, true);
+    uCount = uCount >= 47 ? 12 : Math.min(47, uCount + 3 + (s.step % 4));
+    unread.textContent = uCount;
+  }, 1300);
+
+  // Portals: sidebar cycles, client approves one by one
+  const navItems = $$('#nav div'), aps = $$('#clientItems .ap'), needs = $('#needs');
+  loop('portals', s => {
+    navItems.forEach((n,i) => { n.classList.toggle('on', i === s.step % navItems.length); });
+    const k = s.step % 5;
+    aps.forEach((b,i) => { const d = i < k && k < 4; b.classList.toggle('done', d); b.textContent = d ? '✓ Approved' : 'Approve'; });
+    needs.textContent = k < 4 ? 3 - Math.min(k,3) : 3;
+  }, 1100);
+
+  // Review room: playhead, pins, comments, versions, approve
+  const fill = $('#fill'), time = $('#time'), pins = $$('#review .pin'), cms = $$('#review .cm'),
+        vers = $$('#vers span'), check = $('#check'), poster = $('#poster');
+  function reviewStep(t){
+    // t: 0..13 ; 0-9 playback, 10-12 resolve + versions, 13 approved
+    const sec = Math.min(t, 10);
+    fill.style.width = (sec*10) + '%';
+    time.textContent = '0:' + String(sec).padStart(2,'0') + ' / 0:10';
+    const at = [2,5,7];
+    pins.forEach((p,i) => { p.classList.toggle('show', t >= at[i]); });
+    cms.forEach((c,i) => { c.classList.toggle('show', t >= at[i]); c.classList.toggle('res', t >= 10 + i); });
+    const v = t < 10 ? 0 : Math.min(3, t - 10);
+    vers.forEach((s,i) => { s.classList.toggle('on', i === v && t < 13); s.classList.toggle('final', t >= 13 && i === 3); });
+    poster.classList.toggle('v4', t >= 12);
+    check.classList.toggle('show', t >= 13);
+  }
+  reviewStep(8);
+  loop('review', s => reviewStep(s.step % 16), 750);
+
+  // Dashboard: count up, sparklines, ⌘K, card to Approved
+  const dash = $('#dash'), cmdk = $('#cmdk'), typed = $('#typed'), cols = $$('#cols .col');
+  const phrase = 'send to client';
+  function countUp(){
+    $$('.kpi b', dash).forEach(b => {
+      const n = +b.dataset.n; let c = 0;
+      const id = setInterval(() => { c++; b.textContent = Math.min(c, n); if (c >= n) clearInterval(id); }, Math.max(40, 700 / n));
+    });
+    dash.classList.remove('drawing'); void dash.offsetWidth; dash.classList.add('drawing');
+  }
+  loop('dash', s => {
+    const t = s.step % 24;
+    if (t === 0) countUp();
+    if (t === 4) cmdk.classList.add('show');
+    if (t >= 4 && t <= 18) typed.textContent = phrase.slice(0, t - 4);
+    if (t === 20) {
+      cmdk.classList.remove('show');
+      const from = cols[1].querySelector('.card');
+      if (from) { from.classList.add('fly'); setTimeout(() => { from.classList.remove('fly'); cols[2].appendChild(from); }, 350); }
+    }
+    if (t === 22) {
+      const from = cols[2].querySelector('.card');
+      if (from) { from.classList.add('fly'); setTimeout(() => { from.classList.remove('fly'); cols[3].appendChild(from); }, 350); }
+    }
+    if (t === 23) { typed.textContent = '';
+      // rebalance so the board never empties
+      while (cols[3].querySelectorAll('.card').length > 3) cols[1].appendChild(cols[3].querySelector('.card'));
+      if (!cols[1].querySelector('.card')) cols[1].appendChild(cols[0].querySelector('.card') || cols[3].querySelector('.card'));
+    }
+  }, 170);
+
+  // Clients/agencies: approve toggle, mini board flow
+  const approveBtn = $('#approveBtn'), mini = $$('#mini .col');
+  loop('pair', s => {
+    const t = s.step % 8;
+    const d = t >= 2 && t < 7;
+    approveBtn.classList.toggle('done', d); approveBtn.textContent = d ? '✓ Approved' : 'Approve';
+    const src = t === 7 ? null : (s.step % 2 ? mini[1] : mini[0]);
+    if (t === 7) { $$('.card', mini[2]).forEach(c => { mini[0].appendChild(c); }); return; }
+    const card = src.querySelector('.card');
+    if (card) { card.classList.add('fly'); setTimeout(() => { card.classList.remove('fly'); (src === mini[0] ? mini[1] : mini[2]).appendChild(card); }, 300); }
+  }, 1100);
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      const sc = scenes[e.target.dataset.scene]; if (!sc) return;
+      if (e.isIntersecting && !sc.t) { sc.fn(sc); sc.t = setInterval(() => { sc.step++; sc.fn(sc); }, sc.ms); }
+      else if (!e.isIntersecting && sc.t) { clearInterval(sc.t); sc.t = null; }
+    }), {threshold: .25});
+    $$('[data-scene]').forEach(el => { io.observe(el); });
+  }
+
+  /* ---------- request form ---------- */
+  const form = $('#reqForm'), msg = $('#msg'), btn = $('#submitBtn'), host = $('#formHost');
+  const db = null, uid = null;
+  const inFrame = (() => { try { return window.self !== window.top; } catch(e) { return true; } })();
+
+  function showDone(name){
+    host.innerHTML = '<div class="done"><div class="tick"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'
+      + '<h3>Request received' + (name ? ', ' + esc(name.split(' ')[0]) : '') + '.</h3>'
+      + '<p>Our team will review your requirements and get back to you soon.</p>'
+      + '<div><button class="btn ghost" type="button" id="again">Send another request</button></div></div>';
+    $('#again').onclick = () => { host.innerHTML = ''; host.appendChild(form); form.reset(); msg.textContent = ''; };
+  }
+
+  function sendToWix(data){
+    return new Promise((resolve, reject) => {
+      const id = 'cd' + Date.now();
+      const onMsg = e => { if (e.data && e.data.type === 'creative-dock-ack' && e.data.id === id) { cleanup(); e.data.ok ? resolve() : reject(new Error('rejected')); } };
+      const timer = setTimeout(() => { cleanup(); reject(new Error('timeout')); }, 8000);
+      function cleanup(){ clearTimeout(timer); window.removeEventListener('message', onMsg); }
+      window.addEventListener('message', onMsg);
+      window.parent.postMessage({type:'creative-dock-request', id, data}, '*');
+    });
+  }
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    msg.className = 'msg'; msg.textContent = '';
+    const fd = new FormData(form);
+    const data = {
+      name:(fd.get('name')||'').trim(), company:(fd.get('company')||'').trim(),
+      email:(fd.get('email')||'').trim(), phone:(fd.get('phone')||'').trim(),
+      type:fd.get('type'), team:fd.get('team'), volume:fd.get('volume'),
+      needs:fd.getAll('needs'), requirements:(fd.get('requirements')||'').trim(), website:(fd.get('website')||'')
+    };
+    if (!data.name || !data.company || !data.requirements) { msg.className='msg err'; msg.textContent='Add your name, agency or brand, and requirements.'; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { msg.className='msg err'; msg.textContent='Enter a valid email so we can reach you.'; $('#f-email').focus(); return; }
+    data.status = 'new'; data.submittedAt = new Date().toISOString();
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      if (db && uid) await db.collection('requests').doc(uid).set(data);
+      else if (ENDPOINT) { const r = await fetch(ENDPOINT, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)}); if (r.status === 429) throw new Error('slow'); if (!r.ok) throw new Error('http'); }
+      else if (inFrame && !window.claude) await sendToWix(data);
+      else throw new Error('nowhere');
+      showDone(data.name);
+    } catch(err) {
+      msg.className = 'msg err';
+      msg.textContent = err && err.message === 'nowhere'
+        ? 'Requests can only be sent when you are signed in to this page.'
+        : err && err.message === 'slow' ? 'Too many requests from your connection. Wait a few minutes and try again.' : 'The request did not go through. Check your connection and send it again.';
+    } finally { btn.disabled = false; btn.textContent = 'Send request'; }
+  });
+
+})();
+</script>
+
+</body>
+</html>

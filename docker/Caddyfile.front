@@ -39,3 +39,10 @@
 {$LEGACY_ADDRESS:http://127.0.0.1:8099} {
 	redir {$PUBLIC_ORIGIN:http://localhost}{uri} permanent
 }
+
+# Creative Dock landing page (landing/), on its own subdomain, e.g. dock.houseoftrex.com.
+# Set LANDING_ADDRESS in .env.production to turn it on; left unset, it only listens locally.
+{$LANDING_ADDRESS:http://127.0.0.1:8098} {
+	encode zstd gzip
+	reverse_proxy landing:3000
+}
