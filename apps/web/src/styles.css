@@ -342,7 +342,7 @@
 .version-rail__list > button:hover,
 .version-rail__list > button[data-selected="true"] {
   border-left-color: var(--tungsten);
-  background: rgba(61, 139, 255, 0.055);
+  background: rgba(10, 136, 254, 0.055);
 }
 
 .version-number {
@@ -450,7 +450,7 @@
 .upload-dropzone[data-dragging="true"] {
   border-color: var(--tungsten);
   color: var(--paper);
-  background: rgba(61, 139, 255, 0.07);
+  background: rgba(10, 136, 254, 0.07);
 }
 
 .upload-dropzone strong {
@@ -768,7 +768,7 @@
   height: 24px;
   border: 2px solid var(--tungsten);
   border-radius: 50%;
-  background: rgba(61, 139, 255, 0.16);
+  background: rgba(10, 136, 254, 0.16);
   transform: translate(-50%, -50%);
   pointer-events: none;
 }
@@ -908,7 +908,7 @@
 
 .decision-bar--decisions > button:first-child {
   border-color: #a87032;
-  background: rgba(61, 139, 255, 0.14);
+  background: rgba(10, 136, 254, 0.14);
 }
 
 .decision-bar > .decision-confirm {
@@ -1548,7 +1548,7 @@
 .inbox-tabs button[data-active="true"] {
   border-color: #a66d2d;
   color: var(--paper);
-  background: rgba(61, 139, 255, 0.1);
+  background: rgba(10, 136, 254, 0.1);
 }
 
 /* The saved-view picker is a trailing control, not a field — it should not eat the
@@ -1765,7 +1765,7 @@
   border-radius: 4px;
   padding: 2px 6px;
   color: #e2a566;
-  background: rgba(61, 139, 255, 0.12);
+  background: rgba(10, 136, 254, 0.12);
   font-size: var(--text-micro);
 }
 
@@ -1956,7 +1956,7 @@
    at a glance instead of being one undifferentiated column of grey cards. */
 .chat-feed .chat-message[data-mine] {
   margin-left: auto;
-  border-color: rgba(61, 139, 255, 0.32);
+  border-color: rgba(10, 136, 254, 0.32);
   background: color-mix(in srgb, var(--tungsten) 7%, #111111);
 }
 
@@ -2303,7 +2303,7 @@
 
 .command-palette a:hover {
   color: var(--paper);
-  background: rgba(61, 139, 255, 0.08);
+  background: rgba(10, 136, 254, 0.08);
 }
 
 .command-palette small {
@@ -2928,7 +2928,7 @@
 
 .clients-table .data-table__row button:hover,
 .project-row > button:hover {
-  background: rgba(61, 139, 255, 0.1);
+  background: rgba(10, 136, 254, 0.1);
 }
 
 .sr-only {
@@ -3222,7 +3222,7 @@
 }
 
 .new-icon {
-  border-color: rgba(61, 139, 255, 0.35);
+  border-color: rgba(10, 136, 254, 0.35);
   color: var(--tungsten);
 }
 
@@ -3377,7 +3377,7 @@
   width: min(42vw, 590px);
   height: min(38vw, 520px);
   padding: 28px;
-  border: 1px solid rgba(61, 139, 255, 0.18);
+  border: 1px solid rgba(10, 136, 254, 0.18);
   color: rgba(231, 234, 239, 0.16);
   transform: rotate(-7deg);
 }

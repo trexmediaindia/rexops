@@ -11,7 +11,7 @@ import "./theme.css";
 import { App } from "./app";
 
 const rootElement = document.getElementById("root");
-if (!rootElement) throw new Error("RexOps root element was not found.");
+if (!rootElement) throw new Error("Creative Dock root element was not found.");
 
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>

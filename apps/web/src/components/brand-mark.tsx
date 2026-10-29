@@ -1,28 +1,21 @@
 /**
- * The Creative Dock mark: a frame with a piece of work docked into its corner. Drawn
- * in the accent so the product has a face of its own rather than a letter in a box.
+ * The Creative Dock mark: the blue "D" of the logo on a black tile, the same as the
+ * app icon and the landing page's tab icon.
  */
-export function BrandMark({ size = 24 }: { size?: number }) {
+export function BrandMark() {
   return (
-    <svg
-      className="brand-mark"
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <rect
-        x="2"
-        y="2"
-        width="20"
-        height="20"
-        rx="5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <rect x="10" y="10" width="8" height="8" rx="2" fill="currentColor" />
-    </svg>
+    <span className="wordmark__mark brand-mark" aria-hidden="true">
+      D
+    </span>
+  );
+}
+
+/** The logo as the landing page sets it: "Creative" in white, "Dock" in blue. */
+export function BrandWord({ suffix }: { suffix?: string }) {
+  return (
+    <span className="brand-word">
+      Creative <span>Dock</span>
+      {suffix ? <small> {suffix}</small> : null}
+    </span>
   );
 }

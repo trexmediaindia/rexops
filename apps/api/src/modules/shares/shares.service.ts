@@ -315,7 +315,7 @@ export async function accessShare(token: string, passphrase?: string) {
     })),
     watermarkText:
       share.watermark === "STANDARD"
-        ? `Shared via RexOps · ${token.slice(-8).toUpperCase()}`
+        ? `Shared via Creative Dock · ${token.slice(-8).toUpperCase()}`
         : null,
   };
 }

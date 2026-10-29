@@ -1,6 +1,6 @@
 # 05 — Build Blocks Roadmap
 
-> How RexOps is built across many Claude sessions: one foundation block, then independent feature blocks that each
+> How Creative Dock is built across many Claude sessions: one foundation block, then independent feature blocks that each
 > fill one or more **seams** (01 §12) without disturbing the others. Every block is tagged with the **v4 Part D
 > phase** and **v4 Part B requirements** it delivers (and the v2 §9 phase it descends from), so adherence to
 > `creative-dock-enhanced-build-plan-v4.md` is auditable at a glance. Schema is already defined in full (02), so a

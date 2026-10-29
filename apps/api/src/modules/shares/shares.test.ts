@@ -85,7 +85,7 @@ describe("review shares", () => {
     expect(allowed.status).toBe(200);
     const access = await responseJson(allowed);
     expect((access.fileVersion as { downloadUrl: string | null }).downloadUrl).toBeNull();
-    expect(access.watermarkText).toContain("Shared via RexOps");
+    expect(access.watermarkText).toContain("Shared via Creative Dock");
 
     const commented = await apiRequest(`/api/public/shares/${share.token}/comments`, {
       method: "POST",

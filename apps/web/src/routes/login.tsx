@@ -2,7 +2,7 @@ import { Button } from "@rexops/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { CheckCircle2, Eye, EyeOff, MoveRight, TriangleAlert, Upload, Users } from "lucide-react";
 import { useState } from "react";
-import { BrandMark } from "../components/brand-mark";
+import { BrandMark, BrandWord } from "../components/brand-mark";
 import { authClient } from "../lib/auth-client";
 import { routeForRole } from "../lib/role-route";
 
@@ -76,7 +76,7 @@ export function LoginPage() {
       <section className="login-aside">
         <div className="wordmark wordmark--large">
           <BrandMark />
-          <span>Creative Dock</span>
+          <BrandWord />
         </div>
         <div className="login-aside__statement">
           <h1>Review and approve your work in one place.</h1>
@@ -86,7 +86,7 @@ export function LoginPage() {
           </p>
         </div>
 
-        {/* Three lines, in pipeline order, so someone who has never used RexOps
+        {/* Three lines, in pipeline order, so someone who has never used Creative Dock
             can tell from the sign-in screen what they are signing in to do. */}
         <ol className="login-explainer">
           <li>
@@ -164,7 +164,7 @@ export function LoginPage() {
             {busy ? "Signing in…" : "Sign in"} <MoveRight size={16} />
           </Button>
 
-          {/* RexOps has no self-serve signup: agencies are provisioned by whoever
+          {/* Creative Dock has no self-serve signup: agencies are provisioned by whoever
               runs the install, and everyone else is invited. Saying so beats a
               "Create account" link that cannot work. */}
           <p className="login-card__footnote">

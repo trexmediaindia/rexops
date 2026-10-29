@@ -52,7 +52,7 @@ function RouteError({ error, reset }: { error: Error; reset: () => void }) {
           Try again
         </button>
         <a className="not-found__link" href="/">
-          Return to RexOps
+          Return to Creative Dock
         </a>
       </div>
     </main>
@@ -69,7 +69,7 @@ const rootRoute = createRootRoute({
         The link may be stale, or the record it pointed at has been archived.
       </p>
       <a className="not-found__link" href="/">
-        Return to RexOps
+        Return to Creative Dock
       </a>
     </main>
   ),

@@ -1,10 +1,10 @@
-# RexOps UX audit — the 20 biggest sources of user confusion
+# Creative Dock UX audit — the 20 biggest sources of user confusion
 
 Audit performed before any code change, against the running app and the full source of
 `apps/web`, `apps/api` and `packages/ui`. Three personas: **agency staff** (owner, admin,
 member), **client reviewer**, **super admin**.
 
-The governing problem: RexOps is a pipeline product whose pipeline is invisible. Nothing on
+The governing problem: Creative Dock is a pipeline product whose pipeline is invisible. Nothing on
 screen ever states the one sentence a new user needs — *work is created as a deliverable,
 a file version is uploaded to it, it moves through internal review, then client review,
 then it is approved and delivered.* Every confusion below is a symptom of that sentence
@@ -27,7 +27,7 @@ dismissible and re-openable.
 **Where:** `apps/web/src/routes/agency/dashboard.tsx`, new
 `apps/web/src/components/onboarding/setup-guide.tsx`.
 
-## 2. The sign-in screen never says what RexOps is or who signs in here
+## 2. The sign-in screen never says what Creative Dock is or who signs in here
 
 **Confusing:** A marketing line ("The clean handoff between making and approving"), an
 email field, a password field, and a row of "Preview shells" buttons that jump into the app

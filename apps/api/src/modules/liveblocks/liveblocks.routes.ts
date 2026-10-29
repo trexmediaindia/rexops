@@ -60,7 +60,7 @@ export const liveblocksRoutes = new Elysia().use(authGuard).post(
       .where(eq(users.id, actor.userId))
       .limit(1);
     const userInfo = {
-      name: identity?.name ?? "RexOps user",
+      name: identity?.name ?? "Creative Dock user",
       color: colorForUser(actor.userId),
       avatarUrl: identity?.image ?? null,
       role: actor.role,

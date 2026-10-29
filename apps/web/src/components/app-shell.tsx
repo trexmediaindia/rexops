@@ -38,7 +38,7 @@ import {
   roleLabel,
   useWorkspace,
 } from "../lib/workspace";
-import { BrandMark } from "./brand-mark";
+import { BrandMark, BrandWord } from "./brand-mark";
 import { LiveBell } from "./notifications/live-bell";
 import { UploadManager } from "./upload/upload-manager";
 
@@ -263,7 +263,7 @@ export function AgencyShell({ children }: { children: ReactNode }) {
       <aside className="sidebar">
         <div className="wordmark">
           <BrandMark />
-          <span>Creative Dock</span>
+          <BrandWord />
           <button
             className="icon-button sidebar__collapse"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -599,8 +599,7 @@ export function ClientShell({ children }: { children: ReactNode }) {
     <div className="client-frame">
       <header className="client-bar">
         <div className="wordmark">
-          <BrandMark />
-          <span>{workspace.data?.agency?.name ?? "RexOps"}</span>
+          <span>{workspace.data?.agency?.name ?? "Creative Dock"}</span>
         </div>
         <nav aria-label="Client navigation">
           {shown.map((item) => {
@@ -657,7 +656,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
       <aside className="admin-rail">
         <div className="wordmark">
           <BrandMark />
-          <span>Creative Dock / platform</span>
+          <BrandWord suffix="platform" />
         </div>
         <nav aria-label="Platform administration">
           {adminNav.map((item) => {

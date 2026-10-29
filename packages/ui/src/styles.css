@@ -9,7 +9,7 @@
   --mist: #b4b4b4; /* secondary text */
   --faint: #949494; /* meta; still 4.5:1 on #1c1c1c */
   --paper: #f2f2f2;
-  --tungsten: #3d8bff;
+  --tungsten: #0a88fe; /* the logo blue */
   --tungsten-press: #2a6fe0;
   --blue: #36c6ee;
   --violet: #8b7cf0;
@@ -141,13 +141,13 @@ button:disabled {
 .rx-action--accent {
   border-color: #a66d2d;
   color: var(--tungsten);
-  background: rgba(61, 139, 255, 0.1);
+  background: rgba(10, 136, 254, 0.1);
 }
 
 .rx-action--accent:hover:not(:disabled) {
   border-color: var(--tungsten);
   color: var(--tungsten);
-  background: rgba(61, 139, 255, 0.16);
+  background: rgba(10, 136, 254, 0.16);
 }
 
 .rx-action--danger:hover:not(:disabled) {
@@ -706,7 +706,7 @@ h3 {
 }
 
 .rx-select__menu [role="option"][data-active] {
-  background: rgba(61, 139, 255, 0.14);
+  background: rgba(10, 136, 254, 0.14);
 }
 
 .rx-select__menu [role="option"][aria-selected="true"] {
@@ -920,7 +920,7 @@ h3 {
 .rx-helptip__trigger:hover,
 .rx-helptip__trigger[aria-expanded="true"] {
   color: var(--tungsten);
-  background: rgba(61, 139, 255, 0.12);
+  background: rgba(10, 136, 254, 0.12);
 }
 
 .rx-popover.rx-helptip {
@@ -1078,7 +1078,7 @@ h3 {
 
 .rx-steps li[data-status="current"] .rx-steps__marker {
   border-color: var(--tungsten);
-  background: rgba(61, 139, 255, 0.16);
+  background: rgba(10, 136, 254, 0.16);
   color: var(--tungsten);
 }
 
@@ -1112,7 +1112,7 @@ h3 {
 }
 
 .rx-steps li[data-status="current"] .rx-steps__state {
-  border-color: rgba(61, 139, 255, 0.45);
+  border-color: rgba(10, 136, 254, 0.45);
   color: var(--tungsten);
 }
 
@@ -1193,7 +1193,7 @@ h3 {
 }
 
 .rx-switch[data-on="true"] {
-  background: rgba(61, 139, 255, 0.28);
+  background: rgba(10, 136, 254, 0.28);
   border-color: var(--tungsten);
 }
 

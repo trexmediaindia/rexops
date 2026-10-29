@@ -105,7 +105,7 @@ export function AdminAudit() {
                 const target = describeTarget(row.log.targetType, row.log.targetId);
                 return (
                   <tr className="data-table__row" key={row.log.id}>
-                    <th scope="row">{row.actorName ?? "RexOps itself"}</th>
+                    <th scope="row">{row.actorName ?? "Creative Dock itself"}</th>
                     <td>{humanize(row.log.action)}</td>
                     <td>
                       {target.label}

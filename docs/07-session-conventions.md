@@ -1,6 +1,6 @@
 # 07 — Session Conventions (the multi-session contract)
 
-> RexOps is built across many Claude sessions, each owning one block (05). This doc is how a *fresh* session picks
+> Creative Dock is built across many Claude sessions, each owning one block (05). This doc is how a *fresh* session picks
 > up cold and finishes a block without drifting from the plan or breaking a seam. Follow it exactly — it's what
 > keeps independently-built blocks connecting perfectly.
 

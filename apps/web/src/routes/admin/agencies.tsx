@@ -41,7 +41,7 @@ export function AdminAgencies() {
       <PageHeader
         eyebrow="Platform administration"
         title="Agencies"
-        purpose="Every agency using this installation of RexOps. Each one is a separate workspace: its people, clients and files are invisible to the others."
+        purpose="Every agency using this installation of Creative Dock. Each one is a separate workspace: its people, clients and files are invisible to the others."
         help={
           <>
             <p>

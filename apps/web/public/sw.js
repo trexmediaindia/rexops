@@ -3,15 +3,15 @@ self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim(
 
 self.addEventListener("push", (event) => {
   const payload = event.data?.json() ?? {
-    title: "RexOps",
+    title: "Creative Dock",
     body: "A production update is ready.",
     data: { url: "/agency/inbox" },
   };
   event.waitUntil(
     self.registration.showNotification(payload.title, {
       body: payload.body,
-      icon: payload.icon ?? "/icons/rexops.svg",
-      badge: payload.badge ?? "/icons/rexops.svg",
+      icon: payload.icon ?? "/icons/icon-192.png",
+      badge: payload.badge ?? "/icons/badge-96.png",
       data: payload.data,
       tag: payload.data?.url,
     }),

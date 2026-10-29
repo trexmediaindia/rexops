@@ -6,7 +6,7 @@ Accepted — 2026-06-22.
 
 ## Context
 
-RexOps must run locally without cloud credentials while preserving the same private-media and asynchronous
+Creative Dock must run locally without cloud credentials while preserving the same private-media and asynchronous
 contracts used with R2, ffmpeg, notifications, and automation.
 
 ## Decision

@@ -71,7 +71,7 @@ export function FeatureGate({
         <h1>That feature is not in this release.</h1>
         <p className="not-found__body">This workspace does not have it switched on yet.</p>
         <a className="not-found__link" href="/">
-          Return to RexOps
+          Return to Creative Dock
         </a>
       </main>
     );

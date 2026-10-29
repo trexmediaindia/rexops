@@ -1,6 +1,6 @@
-# Deploying RexOps
+# Deploying Creative Dock
 
-RexOps runs on one Linux server with Docker: Postgres, Redis, the API, the media worker, the
+Creative Dock runs on one Linux server with Docker: Postgres, Redis, the API, the media worker, the
 web app, and Caddy in front (which gets the HTTPS certificate automatically). GitHub deploys to
 it: every merge to `main` that passes CI is copied to the server and restarted by
 `.github/workflows/deploy.yml`.
@@ -21,7 +21,7 @@ Note the server's public IP address.
 
 ### Free option: Oracle Cloud "Always Free"
 
-Oracle's free Arm server (2 CPUs, 12 GB RAM) runs RexOps at no cost. Setting it up differs from the
+Oracle's free Arm server (2 CPUs, 12 GB RAM) runs Creative Dock at no cost. Setting it up differs from the
 others in a few ways:
 
 - **Choose your home region carefully at sign-up** (e.g. India West (Mumbai) or India South
@@ -151,7 +151,7 @@ contacted and download everything as a CSV.
 `/opt/rexops/.env.production`, then run the **Deploy** workflow:
 
 ```sh
-RESEND_API_KEY=re_...                                  # already there if RexOps sends email
+RESEND_API_KEY=re_...                                  # already there if Creative Dock sends email
 LANDING_NOTIFY_TO=you@houseoftrex.com,manas@houseoftrex.com
 LANDING_NOTIFY_FROM=Creative Dock <dock@houseoftrex.com>   # a domain verified in Resend
 ```

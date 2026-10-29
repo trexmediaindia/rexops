@@ -1,6 +1,6 @@
-# RexOps — Documentation
+# Creative Dock — Documentation
 
-> **RexOps** is a multi-tenant, enterprise creative operating system for agencies and their clients.
+> **Creative Dock** is a multi-tenant, enterprise creative operating system for agencies and their clients.
 > It replaces the scattered WhatsApp / Drive / email / "which version was approved?" workflow with one
 > system: `Agency → Clients → Projects → Deliverables → File Versions → Reviews/Approvals`, with a hard
 > agency↔client trust boundary and a Frame.io-grade review-and-approval engine as the wedge.

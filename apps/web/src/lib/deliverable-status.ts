@@ -87,7 +87,7 @@ const TRANSITIONS: Record<string, readonly TransitionInfo[]> = {
       to: "APPROVED",
       label: "Record the client's approval",
       result:
-        "Signs this exact version off against your name and the time. Use it when the client approved outside RexOps.",
+        "Signs this exact version off against your name and the time. Use it when the client approved outside Creative Dock.",
       weight: "primary",
     },
     {

@@ -262,13 +262,13 @@ function AppearanceSection({ editable }: { editable: boolean }) {
   const queryClient = useQueryClient();
   const agency = workspace.data?.agency;
 
-  const [color, setColor] = useState("#3d8bff");
+  const [color, setColor] = useState("#0a88fe");
   const [logo, setLogo] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!agency) return;
-    setColor(agency.brandColor ?? "#3d8bff");
+    setColor(agency.brandColor ?? "#0a88fe");
     setLogo(agency.logoUrl ?? "");
   }, [agency]);
 
@@ -280,7 +280,7 @@ function AppearanceSection({ editable }: { editable: boolean }) {
 
   const dirty =
     Boolean(agency) &&
-    (color !== (agency?.brandColor ?? "#3d8bff") || logo !== (agency?.logoUrl ?? ""));
+    (color !== (agency?.brandColor ?? "#0a88fe") || logo !== (agency?.logoUrl ?? ""));
 
   return (
     <SettingsSection
@@ -318,7 +318,9 @@ function AppearanceSection({ editable }: { editable: boolean }) {
               onChange={(event) => setColor(event.target.value)}
             />
             <code>{color}</code>
-            <span>Currently {color === "#3d8bff" ? "the RexOps default" : "your own colour"}</span>
+            <span>
+              Currently {color === "#0a88fe" ? "the Creative Dock default" : "your own colour"}
+            </span>
           </div>
         )}
       </Field>
@@ -326,7 +328,7 @@ function AppearanceSection({ editable }: { editable: boolean }) {
       <Field
         label="Logo image address"
         optional
-        hint="A link to your logo, shown to clients instead of the RexOps mark. PNG or SVG on a transparent background works best."
+        hint="A link to your logo, shown to clients instead of the Creative Dock mark. PNG or SVG on a transparent background works best."
         error={error}
       >
         {(props) => (
@@ -513,7 +515,7 @@ function BehaviorSection({ editable }: { editable: boolean }) {
 
       <Field
         label="Share links stop working after"
-        hint="The default lifetime of a link you send to someone outside RexOps. You can still set a different date on an individual link."
+        hint="The default lifetime of a link you send to someone outside Creative Dock. You can still set a different date on an individual link."
         error={expiryError}
       >
         {(props) => (
@@ -631,8 +633,8 @@ function AdvancedSection({ storage }: { storage?: StorageUsage }) {
           </div>
 
           <Callout tone="info" title="Closing this workspace">
-            Workspaces are created and removed by whoever runs this RexOps install. Ask them if you
-            need this one closed.
+            Workspaces are created and removed by whoever runs this Creative Dock install. Ask them
+            if you need this one closed.
             <div className="rx-callout__action">
               <a className="rx-action" href="mailto:support@rexops.app">
                 Email support <ExternalLink size={13} />

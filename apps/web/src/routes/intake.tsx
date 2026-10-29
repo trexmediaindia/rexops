@@ -17,7 +17,7 @@ type FormField = {
 type Form = { name: string; fields: FormField[] };
 
 /*
- * A public form filled in by someone who has never heard of RexOps and will
+ * A public form filled in by someone who has never heard of Creative Dock and will
  * never sign in. It asked them to "Submit request" against unexplained fields,
  * said nothing while it loaded or failed, and confirmed success with "A
  * structured deliverable will be created from this submission." Every sentence

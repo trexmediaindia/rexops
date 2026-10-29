@@ -155,7 +155,7 @@ DATABASE_URL_UNPOOLED=postgres://…/db?sslmode=require # migrations (direct)
 BETTER_AUTH_SECRET=                                   # api (openssl rand -base64 32)
 BETTER_AUTH_URL=http://localhost:3000                 # api
 GOOGLE_CLIENT_ID= / GOOGLE_CLIENT_SECRET=             # api (optional social)
-RESEND_API_KEY= / EMAIL_FROM="RexOps <noreply@…>"     # api, worker (auth verify / invites)
+RESEND_API_KEY= / EMAIL_FROM="Creative Dock <noreply@…>"     # api, worker (auth verify / invites)
 R2_ACCOUNT_ID= / R2_ACCESS_KEY_ID= / R2_SECRET_ACCESS_KEY= / R2_BUCKET=rexops-media
 R2_ENDPOINT=https://<acct>.r2.cloudflarestorage.com / R2_PUBLIC_BASE_URL=https://media.…   # api, worker (+web)
 LIVEBLOCKS_SECRET_KEY=sk_dev_…                        # api (NEVER shipped to client)

@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { lazy, Suspense, useRef, useState } from "react";
-import { BrandMark } from "../components/brand-mark";
+import { BrandMark, BrandWord } from "../components/brand-mark";
 import {
   type Anchor,
   type AnnotationTool,
@@ -211,7 +211,7 @@ export function ShareReviewPage() {
       <header>
         <div className="wordmark">
           <BrandMark />
-          <span>Creative Dock review</span>
+          <BrandWord suffix="review" />
         </div>
         <div>
           <ShieldCheck size={15} /> Shared link · version {payload.fileVersion.versionNumber}

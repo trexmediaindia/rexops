@@ -1,5 +1,5 @@
 /* biome-ignore-all lint/style/noDescendingSpecificity: Component sections are grouped by feature so their responsive overrides remain local. */
-/* Blocks 2–4: dense production tooling layered over the core RexOps theme. */
+/* Blocks 2–4: dense production tooling layered over the core Creative Dock theme. */
 
 .pagination-action {
   width: 100%;
@@ -1696,7 +1696,7 @@
   border-radius: 4px;
   padding: 1px 5px;
   color: var(--tungsten);
-  background: rgba(61, 139, 255, 0.12);
+  background: rgba(10, 136, 254, 0.12);
   font-size: var(--text-micro);
   font-weight: 500;
 }
@@ -1745,7 +1745,7 @@
 }
 
 .pipeline-library__new:hover {
-  background: rgba(61, 139, 255, 0.07);
+  background: rgba(10, 136, 254, 0.07);
 }
 
 .pipeline-editor {
@@ -1848,7 +1848,7 @@
   border-radius: 5px;
   padding: 4px 8px;
   color: var(--tungsten);
-  background: rgba(61, 139, 255, 0.12);
+  background: rgba(10, 136, 254, 0.12);
   font-family: var(--font-mono);
   font-size: var(--text-micro);
   letter-spacing: 0;
@@ -1978,7 +1978,7 @@
 
 .stage-approvers label[data-picked] {
   border-color: #a66d2d;
-  background: rgba(61, 139, 255, 0.09);
+  background: rgba(10, 136, 254, 0.09);
 }
 
 /* The position badge replaces the tick when the stage runs sequentially, so the
@@ -2114,7 +2114,7 @@
 .channel-row[data-active="true"] {
   border-color: #a66d2d;
   color: var(--paper);
-  background: rgba(61, 139, 255, 0.1);
+  background: rgba(10, 136, 254, 0.1);
 }
 
 .channel-switcher > div > button b {
@@ -3515,7 +3515,7 @@ button.user-row {
 .admin-rail nav a[data-active="true"] {
   border-left-color: var(--tungsten);
   color: var(--paper);
-  background: rgba(61, 139, 255, 0.08);
+  background: rgba(10, 136, 254, 0.08);
 }
 
 .admin-rail .root-badge {
@@ -3852,7 +3852,7 @@ button.user-row {
 }
 
 .settings-link:hover {
-  border-color: rgba(61, 139, 255, 0.4);
+  border-color: rgba(10, 136, 254, 0.4);
   background: rgba(255, 255, 255, 0.03);
 }
 
@@ -3956,7 +3956,7 @@ button.user-row {
 /* ------------------------------------------------------------------ */
 
 .setup-guide {
-  border: 1px solid rgba(61, 139, 255, 0.28);
+  border: 1px solid rgba(10, 136, 254, 0.28);
   border-radius: 10px;
   background: var(--graphite);
   padding: 20px 22px;
@@ -4331,9 +4331,9 @@ button.user-row {
 .rule-preview {
   margin: 4px 0 0;
   padding: 12px 14px;
-  border: 1px solid rgba(61, 139, 255, 0.3);
+  border: 1px solid rgba(10, 136, 254, 0.3);
   border-radius: 6px;
-  background: rgba(61, 139, 255, 0.07);
+  background: rgba(10, 136, 254, 0.07);
 }
 
 .rule-preview span {
@@ -4577,7 +4577,7 @@ button.user-row {
    :first-child rule gave it before the prompt moved into that slot. */
 .decision-bar--decisions > .decision-bar__ask + button {
   border-color: #a87032;
-  background: rgba(61, 139, 255, 0.14);
+  background: rgba(10, 136, 254, 0.14);
 }
 
 /* One column now: labelled fields stack, they do not sit beside each other. */
@@ -4661,8 +4661,8 @@ button.user-row {
 .admin-main .root-warning {
   align-items: flex-start;
   max-width: 78ch;
-  border-color: rgba(61, 139, 255, 0.24);
-  background: rgba(61, 139, 255, 0.05);
+  border-color: rgba(10, 136, 254, 0.24);
+  background: rgba(10, 136, 254, 0.05);
   color: #c8ac84;
   line-height: 1.5;
 }
@@ -4670,13 +4670,13 @@ button.user-row {
 .admin-main .root-warning > svg {
   flex: 0 0 auto;
   margin-top: 1px;
-  color: var(--tungsten, #3d8bff);
+  color: var(--tungsten, #0a88fe);
 }
 
 /* ---------------------------------------------------------------------------
  * Guest share link: the one screen with no prior context at all
  *
- * A guest arrives from an email knowing nothing about RexOps. The gate and the
+ * A guest arrives from an email knowing nothing about Creative Dock. The gate and the
  * comment box now carry real labels rather than placeholders, and the reason a
  * control is unavailable is stated instead of implied by a grey button.
  * ------------------------------------------------------------------------- */
@@ -4707,10 +4707,10 @@ button.user-row {
 .shared-comment-form__blocked {
   margin: 0;
   padding: 8px 10px;
-  border: 1px solid rgba(61, 139, 255, 0.24);
+  border: 1px solid rgba(10, 136, 254, 0.24);
   border-radius: 4px;
   color: #c8ac84;
-  background: rgba(61, 139, 255, 0.05);
+  background: rgba(10, 136, 254, 0.05);
   font-size: 0.8125rem;
   line-height: 1.5;
 }
