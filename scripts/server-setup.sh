@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-time setup for a fresh Ubuntu 22.04/24.04 or Oracle Linux 9 server that will run RexOps.
+# One-time setup for a fresh Ubuntu 22.04/24.04 or Oracle Linux 9 server that will run Creative Dock.
 #
 #   sudo bash server-setup.sh ops.example.com
 #

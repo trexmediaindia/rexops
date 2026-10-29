@@ -10,7 +10,7 @@ The public early-access page for Creative Dock, served on its own subdomain (for
 - Optional: an email to the team for every new request, through Resend (`RESEND_API_KEY`,
   `LANDING_NOTIFY_TO`, `LANDING_NOTIFY_FROM`).
 
-It deploys with the rest of RexOps: `docker/Dockerfile.landing` builds it, the `landing` service in
+It deploys with the rest of Creative Dock: `docker/Dockerfile.landing` builds it, the `landing` service in
 `docker-compose.prod.yml` runs it, and Caddy routes `LANDING_ADDRESS` to it. Setup steps are in
 `docs/runbooks/deploy.md` under "Creative Dock landing page".
 

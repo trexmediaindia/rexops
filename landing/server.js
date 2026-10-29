@@ -14,7 +14,7 @@ const ADMIN_USER = process.env.ADMIN_USER || "admin";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 const TRUST_PROXY = process.env.TRUST_PROXY !== "false";
 
-// Email alerts for new requests, sent through Resend (the same account RexOps uses).
+// Email alerts for new requests, sent through Resend (the same account Creative Dock uses).
 const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
 const NOTIFY_TO = (process.env.NOTIFY_TO || "")
   .split(",")

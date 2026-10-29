@@ -41,7 +41,7 @@ export function AdminAgencies() {
       <PageHeader
         eyebrow="Platform administration"
         title="Agencies"
-        purpose="Every agency using this installation of RexOps. Each one is a separate workspace: its people, clients and files are invisible to the others."
+        purpose="Every agency using this installation of Creative Dock. Each one is a separate workspace: its people, clients and files are invisible to the others."
         help={
           <>
             <p>
@@ -114,7 +114,7 @@ export function AdminAgencies() {
                     {agency.name} <small>{agency.slug}</small>
                   </th>
                   <td className="rx-mono">{agency.slug}</td>
-                  <td className="rx-mono">{String(agency.memberCount).padStart(2, "0")}</td>
+                  <td className="rx-mono">{agency.memberCount}</td>
                   <td className="rx-mono">
                     {new Date(agency.createdAt)
                       .toLocaleDateString("en-GB", {

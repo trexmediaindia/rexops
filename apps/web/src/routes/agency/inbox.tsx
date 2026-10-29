@@ -186,7 +186,6 @@ function NotificationPanel() {
     <section className="panel notification-inbox">
       <div className="panel__heading">
         <div>
-          <span className="rx-eyebrow">Latest signal</span>
           <h2>{notificationItems.filter((item) => !item.isRead).length} unread</h2>
         </div>
         <div>
@@ -591,7 +590,6 @@ function ChatPanel({ channel, users }: { channel: Channel; users: ChatUser[] }) 
               <ChevronLeft size={14} />
             </button>
             <div>
-              <span className="rx-eyebrow">Thread</span>
               <strong>{thread.authorName}</strong>
             </div>
             <button type="button" onClick={() => setThreadId(null)}>

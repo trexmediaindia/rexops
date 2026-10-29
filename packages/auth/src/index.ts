@@ -14,7 +14,7 @@ const superAdminRole = adminAccess.newRole({
 });
 
 export const auth = betterAuth({
-  appName: "RexOps",
+  appName: "Creative Dock",
   baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",
   secret: process.env.BETTER_AUTH_SECRET ?? "development-secret-replace-before-production",
   trustedOrigins: [process.env.WEB_URL ?? "http://localhost:5173"],

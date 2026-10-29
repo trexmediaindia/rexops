@@ -52,7 +52,6 @@ export function ClientApproved() {
   return (
     <ClientShell>
       <div className="client-heading">
-        <span className="rx-eyebrow">Signed off</span>
         <h1>
           Approved
           <HelpTip label="Approved">
@@ -100,8 +99,7 @@ export function ClientApproved() {
           <section className="client-section client-section--plain" key={projectId}>
             <div className="client-section__heading">
               <h2>
-                {projectName(projectId)}{" "}
-                <span className="rx-mono">{String(items.length).padStart(2, "0")}</span>
+                {projectName(projectId)} <span className="rx-mono">{items.length}</span>
               </h2>
             </div>
             <div className="approved-list">

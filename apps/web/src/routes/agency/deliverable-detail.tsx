@@ -341,12 +341,10 @@ export function DeliverableDetailPage() {
       {deliverable.data ? (
         <section className="stage-panel">
           <div className="stage-panel__now">
-            <span className="rx-eyebrow">Where this is</span>
             <p>{stageMeaning(deliverable.data.status)}</p>
           </div>
           {otherSteps.length ? (
             <div className="stage-panel__moves">
-              <span className="rx-eyebrow">Other moves from here</span>
               <ul>
                 {otherSteps.map((step) => (
                   <li key={step.to} data-weight={step.weight}>
@@ -604,7 +602,6 @@ export function DeliverableDetailPage() {
           <aside className="version-rail panel">
             <div className="panel__heading">
               <div>
-                <span className="rx-eyebrow">Version stack</span>
                 <h2>{versions.data?.length ?? 0} cuts</h2>
               </div>
               <RotateCcw size={15} />
@@ -660,7 +657,6 @@ export function DeliverableDetailPage() {
         <section className="panel deliverable-activity-panel">
           <div className="panel__heading">
             <div>
-              <span className="rx-eyebrow">Chatter</span>
               <h2>Deliverable activity</h2>
             </div>
             <Activity size={16} />

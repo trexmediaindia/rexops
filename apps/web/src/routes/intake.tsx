@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import { Check, Send } from "lucide-react";
 import { useState } from "react";
+import { BrandMark } from "../components/brand-mark";
 import { Field } from "../components/ui/field";
 
 const apiUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
@@ -16,7 +17,7 @@ type FormField = {
 type Form = { name: string; fields: FormField[] };
 
 /*
- * A public form filled in by someone who has never heard of RexOps and will
+ * A public form filled in by someone who has never heard of Creative Dock and will
  * never sign in. It asked them to "Submit request" against unexplained fields,
  * said nothing while it loaded or failed, and confirmed success with "A
  * structured deliverable will be created from this submission." Every sentence
@@ -69,14 +70,13 @@ export function IntakePage() {
   return (
     <main className="intake-page">
       <header>
-        <span className="wordmark__mark">R</span>
+        <BrandMark />
         <span>Request form</span>
       </header>
       <section>
         {complete ? (
           <div className="intake-complete">
             <Check size={28} />
-            <span className="rx-eyebrow">Sent</span>
             <h1>Your request is with the team</h1>
             <p>
               They can see everything you filled in. They will turn it into a piece of work and come
@@ -86,7 +86,6 @@ export function IntakePage() {
           </div>
         ) : (
           <>
-            <span className="rx-eyebrow">New request</span>
             <h1>{form.data?.name ?? "Opening the request form…"}</h1>
             <p>
               Fill this in and it goes straight to the team who will do the work. The more specific

@@ -218,7 +218,6 @@ export function PipelineEditorPage() {
         <aside className="panel pipeline-library">
           <div className="panel__heading">
             <div>
-              <span className="rx-eyebrow">Saved pipelines</span>
               <h2>{pipelines.data?.length ?? 0} in the library</h2>
             </div>
           </div>

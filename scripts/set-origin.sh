@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Re-point the deployed RexOps stack at a new public origin.
+# Re-point the deployed Creative Dock stack at a new public origin.
 #
 #   ./scripts/set-origin.sh https://app.example.com   # domain + automatic HTTPS
 #   ./scripts/set-origin.sh http://34.131.58.28       # bare IP over plain HTTP

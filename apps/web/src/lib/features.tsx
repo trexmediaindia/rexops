@@ -45,7 +45,6 @@ export function FeatureGate({
   if (features.isError) {
     return (
       <main className="not-found">
-        <span className="rx-eyebrow">Error / unavailable</span>
         <h1>Could not check this workspace.</h1>
         <p className="not-found__body">
           The feature list did not load, so this screen is being held back rather than shown in an
@@ -69,11 +68,10 @@ export function FeatureGate({
   if (!features.data?.[feature]) {
     return (
       <main className="not-found">
-        <span className="rx-eyebrow">404 / unreleased</span>
         <h1>That feature is not in this release.</h1>
         <p className="not-found__body">This workspace does not have it switched on yet.</p>
         <a className="not-found__link" href="/">
-          Return to RexOps
+          Return to Creative Dock
         </a>
       </main>
     );

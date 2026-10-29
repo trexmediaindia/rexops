@@ -814,7 +814,7 @@ Each phase is independently shippable behind the `review.wedge` flag and verifia
 | a11y | accesslint | thread tree, mention combobox, toolbar, audit region clean; status never color-only |
 
 **Manual verification (per `superpowers:verification-before-completion`):** run the stack locally
-(`docs/runbooks/local-development.md`; see project memory "RexOps Docker local run"), open a deliverable with one
+(`docs/runbooks/local-development.md`; see project memory "Creative Dock Docker local run"), open a deliverable with one
 asset per medium, and walk §16's four flows. Use the Playwright MCP to drive: annotate a video box, post a
 comment, click it from the thread, confirm the frame seeks + region highlights; open Compare, pick two versions,
 verify the slider + both-pane annotations; log in as an agency non-approver and confirm **no** Approve button,

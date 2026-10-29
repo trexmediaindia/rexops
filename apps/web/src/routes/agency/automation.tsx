@@ -81,7 +81,7 @@ type DetailField = {
 
 type ActionOption = {
   value: string;
-  /** Reads as the middle of "… then RexOps will …". */
+  /** Reads as the middle of "… then Creative Dock will …". */
   does: string;
   hint: string;
   detail: DetailField[];
@@ -123,7 +123,7 @@ const ACTIONS: ActionOption[] = [
   {
     value: "NOTIFY",
     does: "send a notification",
-    hint: "A message in RexOps for the people following that deliverable.",
+    hint: "A message in Creative Dock for the people following that deliverable.",
     detail: [
       {
         name: "title",
@@ -160,7 +160,7 @@ const ACTIONS: ActionOption[] = [
       {
         name: "userId",
         label: "Person's user ID",
-        hint: "Copy it from the team screen. RexOps does not look people up by name here yet.",
+        hint: "Copy it from the team screen. Creative Dock does not look people up by name here yet.",
         placeholder: "usr_8f2c…",
         required: true,
       },
@@ -199,7 +199,7 @@ const ACTIONS: ActionOption[] = [
       {
         name: "url",
         label: "Web address to call",
-        hint: "RexOps sends a POST request with the deliverable and the event.",
+        hint: "Creative Dock sends a POST request with the deliverable and the event.",
         placeholder: "https://hooks.example.com/rexops",
         kind: "url",
         required: true,
@@ -288,7 +288,7 @@ function describeRule(rule: Rule) {
     );
     return action.sentence(values);
   });
-  return `When ${when}, RexOps will ${parts.join(", then ") || "do nothing"}.`;
+  return `When ${when}, Creative Dock will ${parts.join(", then ") || "do nothing"}.`;
 }
 
 export function AutomationPage() {
@@ -372,7 +372,10 @@ export function AutomationPage() {
           <div className="panel__heading">
             <div>
               <h2>Your rules</h2>
-              <p>Each one is read as a sentence: when something happens, RexOps does something.</p>
+              <p>
+                Each one is read as a sentence: when something happens, Creative Dock does
+                something.
+              </p>
             </div>
           </div>
 
@@ -514,7 +517,7 @@ function RuleDialog({
     return gaps;
   }, [draft, action]);
 
-  const preview = `When ${trigger.when}, RexOps will ${action.sentence(draft.detail)}.`;
+  const preview = `When ${trigger.when}, Creative Dock will ${action.sentence(draft.detail)}.`;
 
   const submit = () => {
     setSubmitted(true);
@@ -565,8 +568,8 @@ function RuleDialog({
           </button>
         </div>
         <small>
-          Two choices make a rule: what RexOps watches for, and what it does about it. The sentence
-          at the bottom is exactly what will run.
+          Two choices make a rule: what Creative Dock watches for, and what it does about it. The
+          sentence at the bottom is exactly what will run.
         </small>
 
         <form
@@ -606,7 +609,7 @@ function RuleDialog({
             )}
           </Field>
 
-          <Field label="RexOps will" hint={action.hint}>
+          <Field label="Creative Dock will" hint={action.hint}>
             {(props) => (
               <Select
                 id={props.id}

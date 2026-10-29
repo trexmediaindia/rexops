@@ -18,7 +18,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
   });
 
   plop.setGenerator("module", {
-    description: "Create a tenant-guarded RexOps resource module",
+    description: "Create a tenant-guarded Creative Dock resource module",
     prompts: [
       {
         type: "input",

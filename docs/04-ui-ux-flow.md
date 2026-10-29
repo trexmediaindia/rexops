@@ -10,7 +10,7 @@
 ## 1. Design thesis (the point of view)
 
 **A review tool must never compete with the work it shows.** Color-grading suites are painted neutral 18% grey so
-a colorist can judge color truthfully. RexOps borrows that discipline: **the interface chrome is a calibrated,
+a colorist can judge color truthfully. Creative Dock borrows that discipline: **the interface chrome is a calibrated,
 desaturated graphite; the only saturated color on screen is (a) the client's media and (b) tiny semantic status
 dots.** Actions glow in a single warm "tungsten" accent — like a light coming on in a darkened edit bay.
 

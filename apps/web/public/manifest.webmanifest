@@ -1,11 +1,11 @@
 {
-  "name": "RexOps",
-  "short_name": "RexOps",
-  "description": "Creative operations, versioning, and review.",
+  "name": "Creative Dock",
+  "short_name": "Creative Dock",
+  "description": "Creative review, approvals and delivery for agencies and their clients.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0e0f12",
-  "theme_color": "#14171b",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -17,12 +17,6 @@
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/rexops.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ]

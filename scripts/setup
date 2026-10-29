@@ -14,4 +14,4 @@ bun run db:seed
 # you are looking at in the browser; it has to exist before `bun run test` works.
 bun run db:test:prepare
 
-echo "RexOps is ready. Run: bun run dev"
+echo "Creative Dock is ready. Run: bun run dev"

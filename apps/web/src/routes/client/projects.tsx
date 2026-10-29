@@ -50,7 +50,6 @@ export function ClientProjects() {
   return (
     <ClientShell>
       <div className="client-heading">
-        <span className="rx-eyebrow">Your work</span>
         <h1>
           Projects
           <HelpTip label="Projects">

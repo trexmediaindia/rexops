@@ -6,7 +6,7 @@ Accepted — 2026-06-22.
 
 ## Context
 
-RexOps needs one type spine across an authenticated SPA, a tenant-aware API, and background media/notification
+Creative Dock needs one type spine across an authenticated SPA, a tenant-aware API, and background media/notification
 workers. The review workflow requires transactions, server-originated realtime authorization, and independently
 scalable workers.
 

@@ -873,7 +873,8 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
             <ArrowLeft size={14} />
           </Link>
           <div>
-            <span className="rx-eyebrow">
+            <h1>{room.data.deliverable.title}</h1>
+            <p className="review-room__round">
               {(() => {
                 // Each major version is a round of feedback (v2.1 is a fix within round 2).
                 const round = Number(/(\d+)/.exec(selected.displayVersion)?.[1] ?? 1);
@@ -883,8 +884,7 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
                     : "Round 1"
                   : `Round ${round} · ${selected.displayVersion}`;
               })()}
-            </span>
-            <h1>{room.data.deliverable.title}</h1>
+            </p>
           </div>
         </div>
         <div>
@@ -917,7 +917,6 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
       >
         {showRail ? (
           <aside className="review-version-rail">
-            <span className="rx-eyebrow">Versions</span>
             <VersionRail
               versions={room.data.versions}
               selectedId={selected.id}
@@ -1209,11 +1208,10 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
               <h2>Comments</h2>
             ) : (
               <div>
-                <span className="rx-eyebrow">Comments</span>
                 <h2>{selected.displayVersion}</h2>
               </div>
             )}
-            <span className="rx-mono">{String(selectedComments.length).padStart(2, "0")}</span>
+            <span className="rx-mono">{selectedComments.length}</span>
           </div>
           {!clientMode ? (
             <div className="comment-filters segmented">
@@ -1398,7 +1396,6 @@ export function ReviewRoom({ clientMode = false }: { clientMode?: boolean }) {
           <section aria-label="Approval trail">
             <header>
               <div>
-                <span className="rx-eyebrow">Compliant record</span>
                 <h2>Approval trail</h2>
               </div>
               <button type="button" onClick={() => setAuditOpen(false)}>
@@ -1476,7 +1473,6 @@ function ShareDialog({
       />
       <section>
         <div>
-          <span className="rx-eyebrow">Controlled review link</span>
           <button type="button" onClick={onClose} aria-label="Close">
             <X size={16} />
           </button>

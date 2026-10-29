@@ -7,7 +7,7 @@
 
 ## 1. Vision
 
-RexOps is the **operating system for creative agencies**. An agency should be able to answer, at any moment and
+Creative Dock is the **operating system for creative agencies**. An agency should be able to answer, at any moment and
 without a meeting:
 
 - Which client has pending work? Which project is delayed?
@@ -33,7 +33,7 @@ enforced by hope, not software.
 
 ## 3. Positioning — what we borrow, and the wedge
 
-RexOps is deliberately a synthesis of four proven models, plus one thing it does better than all of them:
+Creative Dock is deliberately a synthesis of four proven models, plus one thing it does better than all of them:
 
 | Borrowed from | What we take |
 |---|---|
@@ -42,7 +42,7 @@ RexOps is deliberately a synthesis of four proven models, plus one thing it does
 | **Trello** | Ruthless client-surface simplicity + **legible** automation (manual buttons, not just background rules) |
 | **Frame.io** | **Frame-accurate review** — timecode-anchored comments, version stacks, share governance |
 
-**The wedge = the review & approval engine.** This is the one thing RexOps must do better than a project tool
+**The wedge = the review & approval engine.** This is the one thing Creative Dock must do better than a project tool
 and at least as well as a dedicated proofing tool (Ziflow / Filestage / PageProof). Concretely:
 
 - Per-medium comment anchoring: **video timecode**, **image region**, **PDF markup**, **audio waveform/time-range**.
@@ -51,7 +51,7 @@ and at least as well as a dedicated proofing tool (Ziflow / Filestage / PageProo
 - The agency↔client trust boundary: clients **never** see internal versions, comments, notes, or other clients.
 - A first-class **Share** model (passphrase, expiry, download/comment toggles, watermark) for guest review.
 
-If RexOps wins, it wins because the review room is the best place a client has ever given feedback, and the best
+If Creative Dock wins, it wins because the review room is the best place a client has ever given feedback, and the best
 place an agency has ever tracked it.
 
 ## 4. Core hierarchy

@@ -31,7 +31,6 @@ export function ClientReview() {
   return (
     <ClientShell>
       <div className="client-heading">
-        <span className="rx-eyebrow">Everything in one list</span>
         <h1>
           All work
           <HelpTip label="All work">
@@ -85,8 +84,7 @@ export function ClientReview() {
         <section className="client-section">
           <div className="client-section__heading">
             <h2>
-              Waiting on your decision{" "}
-              <span className="rx-mono">{String(waiting.length).padStart(2, "0")}</span>
+              Waiting on your decision <span className="rx-mono">{waiting.length}</span>
             </h2>
             <p>
               Open one to comment on the exact frame or area, then approve it or ask for changes.
@@ -108,8 +106,7 @@ export function ClientReview() {
         <section className="client-section client-section--plain">
           <div className="client-section__heading">
             <h2>
-              With your agency{" "}
-              <span className="rx-mono">{String(inFlight.length).padStart(2, "0")}</span>
+              With your agency <span className="rx-mono">{inFlight.length}</span>
             </h2>
             <p>
               Being made or reviewed internally. Nothing is needed from you until it reaches the
@@ -137,8 +134,7 @@ export function ClientReview() {
         <section className="client-section client-section--plain">
           <div className="client-section__heading">
             <h2>
-              Already approved{" "}
-              <span className="rx-mono">{String(approved.length).padStart(2, "0")}</span>
+              Already approved <span className="rx-mono">{approved.length}</span>
             </h2>
             <p>Signed off by you. The files you approved stay available to download.</p>
           </div>

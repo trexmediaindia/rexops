@@ -58,7 +58,7 @@ export const app = new Elysia({ name: "rexops-api" })
     openapi({
       documentation: {
         info: {
-          title: "RexOps API",
+          title: "Creative Dock API",
           version: "0.1.0",
           description: "Tenant-isolated creative operations API.",
         },

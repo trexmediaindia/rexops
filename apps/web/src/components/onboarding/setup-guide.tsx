@@ -167,7 +167,6 @@ export function SetupGuide() {
     <section className="setup-guide" aria-labelledby="setup-guide-title">
       <header>
         <div>
-          <span className="rx-eyebrow">Getting started</span>
           <h2 id="setup-guide-title">Set up your first piece of work</h2>
           <p>
             Client and team first, then a project for each service you run for them. Add the work,

@@ -57,7 +57,7 @@ describe("notification routes", () => {
       body: {
         endpoint,
         keys: { p256dh: "public-key", auth: "auth-secret" },
-        userAgent: "RexOps test",
+        userAgent: "Creative Dock test",
       },
     });
     expect(saved.status).toBe(200);

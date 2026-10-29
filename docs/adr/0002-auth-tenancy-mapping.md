@@ -13,7 +13,7 @@ organization-wide visibility.
 ## Decision
 
 An Agency maps to a Better Auth organization. Agency staff are organization members. Client organizations remain
-first-class RexOps domain rows; client users carry `agencyId`, `clientId`, and a `CLIENT_*` role but are not
+first-class Creative Dock domain rows; client users carry `agencyId`, `clientId`, and a `CLIENT_*` role but are not
 organization members. Every domain access is constrained by the framework-free tenant and record-rule guard.
 Cross-tenant object guesses return 404. Super-admin is the only exemption and all cross-tenant actions are
 audited. Impersonation is read-only.

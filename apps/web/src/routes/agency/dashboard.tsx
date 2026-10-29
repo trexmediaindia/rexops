@@ -1,10 +1,12 @@
 import { Callout, EmptyState, HelpTip, MetricCard, Skeleton, StatusChip } from "@rexops/ui";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, CalendarDays, Clock3, Film, Image as ImageIcon, Plus } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Clock3, Plus } from "lucide-react";
 import { ActivityFeed, type ActivityRow } from "../../components/activity/activity-feed";
 import { AgencyShell } from "../../components/app-shell";
 import { SetupGuide } from "../../components/onboarding/setup-guide";
+import { WorkThumbnail } from "../../components/work-thumb";
+import { goesOutAt, sinceLabel } from "../../lib/client-overview";
 import { useFeatures } from "../../lib/features";
 import { request } from "../../lib/request";
 import type { DeliverableRecord } from "../../lib/types";
@@ -87,12 +89,37 @@ export function AgencyDashboard() {
     activeProjectsByClient.set(name, (activeProjectsByClient.get(name) ?? 0) + 1);
   }
 
+  /*
+   * The strip: where every piece of work in review is sitting, and what goes out this
+   * week. Each count is worked out from the same list the panels below read.
+   */
+  const all = (reviewQueue.data ?? []).filter((item) => item.status !== "ARCHIVED");
+  const withTeam = all.filter((item) =>
+    ["READY_FOR_INTERNAL_REVIEW", "UNDER_INTERNAL_REVIEW", "INTERNAL_APPROVED"].includes(
+      item.status,
+    ),
+  );
+  const withClients = all
+    .filter((item) => item.status === "UNDER_CLIENT_REVIEW")
+    .sort(
+      (a, b) =>
+        new Date(a.submittedAt ?? a.updatedAt).getTime() -
+        new Date(b.submittedAt ?? b.updatedAt).getTime(),
+    );
+  const changes = all.filter((item) => item.status === "REVISION_REQUESTED");
+  const weekStart = new Date();
+  const weekEnd = new Date(weekStart.getTime() + 7 * 86_400_000);
+  const goingOut = all.filter((item) => {
+    const when = goesOutAt(item);
+    return when !== null && !item.publishedAt && when >= weekStart && when < weekEnd;
+  });
+  // The week's real risk: posts with a date that the client hasn't approved yet.
+  const notApproved = goingOut.filter((item) => !["APPROVED", "DELIVERED"].includes(item.status));
+
   const metrics = analytics.data?.metrics;
   const firstName = (workspace.data?.user.name ?? "").split(" ")[0] ?? "";
   const now = new Date();
-  const today = now
-    .toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })
-    .replace(",", " /");
+  const today = now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
   const greeting =
     now.getHours() < 12 ? "Good morning" : now.getHours() < 17 ? "Good afternoon" : "Good evening";
 
@@ -102,19 +129,29 @@ export function AgencyDashboard() {
     <AgencyShell>
       <div className="screen-heading">
         <div className="page-header__text">
-          <span className="rx-eyebrow">{today}</span>
           <h1>
             {greeting}
             {firstName ? `, ${firstName}` : ""}.
           </h1>
           <p>
+            {today} ·{" "}
             {reviewQueue.isPending
-              ? "Checking what needs a decision…"
-              : queue.length
-                ? `${queue.length} deliverable${queue.length === 1 ? "" : "s"} need a decision before the client sees them. Start at the review queue.`
-                : nothingYet
-                  ? "This workspace is empty. The guide below walks you through the first piece of work."
-                  : "Nothing is waiting on a decision right now. This is where anything that needs you will appear."}
+              ? "Checking where the work is…"
+              : nothingYet
+                ? "This workspace is empty. The guide below walks you through the first piece of work."
+                : withTeam.length || notApproved.length
+                  ? [
+                      withTeam.length
+                        ? `${withTeam.length} ${withTeam.length === 1 ? "piece of work is" : "pieces of work are"} waiting on your team`
+                        : "",
+                      notApproved.length
+                        ? `${notApproved.length} ${notApproved.length === 1 ? "post goes" : "posts go"} out this week without the client's approval`
+                        : "",
+                    ]
+                      .filter(Boolean)
+                      .join(", and ")
+                      .concat(".")
+                  : "Nothing is waiting on your team right now."}
           </p>
         </div>
         <div className="page-header__actions">
@@ -128,6 +165,41 @@ export function AgencyDashboard() {
       </div>
 
       <SetupGuide />
+
+      {all.length ? (
+        <section className="overview-strip" aria-label="Where the work is">
+          <div>
+            <span>Waiting on your team</span>
+            <strong data-signal={withTeam.length > 0 || undefined}>{withTeam.length}</strong>
+            <small>{withTeam.length ? "Approve it and send it on" : "Nothing to approve"}</small>
+          </div>
+          <div>
+            <span>Waiting on clients</span>
+            <strong>{withClients.length}</strong>
+            <small>
+              {withClients[0]?.submittedAt
+                ? `Oldest sent ${sinceLabel(withClients[0].submittedAt)}`
+                : "Nothing with clients"}
+            </small>
+          </div>
+          <div>
+            <span>Changes requested</span>
+            <strong>{changes.length}</strong>
+            <small>{changes.length ? "Back with the team" : "None open"}</small>
+          </div>
+          <div>
+            <span>Going out in the next 7 days</span>
+            <strong>{goingOut.length}</strong>
+            <small data-warn={notApproved.length > 0 || undefined}>
+              {notApproved.length
+                ? `${notApproved.length} not approved by the client yet`
+                : goingOut.length
+                  ? "All approved"
+                  : "Nothing scheduled"}
+            </small>
+          </div>
+        </section>
+      ) : null}
 
       {features.data?.analytics ? (
         analytics.isError ? (
@@ -180,7 +252,6 @@ export function AgencyDashboard() {
         <section className="panel activity-panel">
           <div className="panel__heading">
             <div>
-              <span className="rx-eyebrow">Latest first</span>
               <h2>
                 What has happened
                 <HelpTip label="What has happened">
@@ -233,7 +304,6 @@ export function AgencyDashboard() {
         <section className="panel review-panel">
           <div className="panel__heading">
             <div>
-              <span className="rx-eyebrow">Needs a decision</span>
               <h2>
                 Waiting on review
                 <HelpTip label="Waiting on review">
@@ -250,7 +320,7 @@ export function AgencyDashboard() {
               to="/agency/review"
               aria-label="Open the review queue"
             >
-              {String(queue.length).padStart(2, "0")}
+              {queue.length}
             </Link>
           </div>
           {reviewQueue.isPending ? (
@@ -284,14 +354,8 @@ export function AgencyDashboard() {
           ) : (
             queue.slice(0, 4).map((item) => (
               <article className="review-card review-card--compact" key={item.id}>
-                <div
-                  className={
-                    item.contentType === "MOTION"
-                      ? "review-thumb"
-                      : "review-thumb review-thumb--still"
-                  }
-                >
-                  {item.contentType === "MOTION" ? <Film size={22} /> : <ImageIcon size={22} />}
+                <div className="review-thumb">
+                  <WorkThumbnail item={item} />
                 </div>
                 <div className="review-card__body">
                   <StatusChip status={item.status} />
@@ -321,7 +385,6 @@ export function AgencyDashboard() {
         <section className="panel client-rollup">
           <div className="panel__heading">
             <div>
-              <span className="rx-eyebrow">One row per client</span>
               <h2>
                 How each client is doing
                 <HelpTip label="How each client is doing">
