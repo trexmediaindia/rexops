@@ -121,6 +121,34 @@ Both show a temporary password once, for you to pass on. Nothing is emailed.
   Uploaded media is in the `rexops_rexops-media` Docker volume. Turning on your provider's
   server backups covers both.
 
+## Creative Dock landing page
+
+The public early-access page lives in `landing/` and deploys with everything else. It runs on its
+own subdomain (for example `dock.houseoftrex.com`) and keeps the requests people send in the
+`rexops_rexops-landing` Docker volume.
+
+Turn it on once:
+
+1. **DNS:** add an A record for the subdomain pointing at this server. For houseoftrex.com that
+   is in Wix → **Settings → Domains → houseoftrex.com → Manage DNS records → A (Host) → Add
+   record**, with host name `dock` and the server's IP as the value.
+2. **Settings:** on the server, add these to `/opt/rexops/.env.production`:
+
+   ```sh
+   LANDING_ADDRESS=dock.houseoftrex.com
+   LANDING_ADMIN_USER=admin
+   LANDING_ADMIN_PASSWORD=a-long-password-of-your-own
+   ```
+
+3. **Deploy:** merge to `main`, or run the **Deploy** workflow from the Actions tab. Caddy gets
+   the HTTPS certificate for the subdomain on its own.
+
+Then `https://dock.houseoftrex.com` shows the page and `https://dock.houseoftrex.com/admin`
+shows the requests (sign in with the login above). The inbox lets you mark people as
+contacted and download everything as a CSV.
+
+To change the page, edit `landing/public/index.html` and merge. Saved requests are kept.
+
 ## Optional services
 
 Everything works without these. Each needs **your own** account; add the values to

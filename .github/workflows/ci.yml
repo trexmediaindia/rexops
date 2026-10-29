@@ -78,3 +78,4 @@ jobs:
       - run: docker build -f docker/Dockerfile.api -t rexops-api .
       - run: docker build -f docker/Dockerfile.worker -t rexops-worker .
       - run: docker build -f docker/Dockerfile.web -t rexops-web .
+      - run: docker build -f docker/Dockerfile.landing -t rexops-landing .

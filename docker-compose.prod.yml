@@ -102,6 +102,21 @@ services:
     expose:
       - "80"
 
+  landing:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.landing
+    image: rexops-landing:latest
+    restart: unless-stopped
+    # Only its own settings: the app's secrets in .env.production are not passed in.
+    environment:
+      ADMIN_USER: ${LANDING_ADMIN_USER:-admin}
+      ADMIN_PASSWORD: ${LANDING_ADMIN_PASSWORD:-}
+    volumes:
+      - rexops-landing:/data
+    expose:
+      - "3000"
+
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
@@ -113,6 +128,7 @@ services:
       SITE_ADDRESS: ${SITE_ADDRESS:?SITE_ADDRESS is required}
       PUBLIC_ORIGIN: ${PUBLIC_ORIGIN}
       LEGACY_ADDRESS: ${LEGACY_ADDRESS:-http://127.0.0.1:8099}
+      LANDING_ADDRESS: ${LANDING_ADDRESS:-http://127.0.0.1:8098}
     volumes:
       - ./docker/Caddyfile.front:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
@@ -120,10 +136,12 @@ services:
     depends_on:
       - api
       - web
+      - landing
 
 volumes:
   rexops-postgres:
   rexops-redis:
   rexops-media:
+  rexops-landing:
   caddy-data:
   caddy-config:
