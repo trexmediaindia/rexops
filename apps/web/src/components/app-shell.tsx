@@ -38,6 +38,7 @@ import {
   roleLabel,
   useWorkspace,
 } from "../lib/workspace";
+import { BrandMark } from "./brand-mark";
 import { LiveBell } from "./notifications/live-bell";
 import { UploadManager } from "./upload/upload-manager";
 
@@ -261,8 +262,8 @@ export function AgencyShell({ children }: { children: ReactNode }) {
     <div className="app-frame" data-collapsed={collapsed}>
       <aside className="sidebar">
         <div className="wordmark">
-          <span className="wordmark__mark">R</span>
-          <span>RexOps</span>
+          <BrandMark />
+          <span>Creative Dock</span>
           <button
             className="icon-button sidebar__collapse"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -550,9 +551,9 @@ function UserRow({
    between overlapping lists first. Projects and All work still exist as pages. */
 const clientNav = [
   {
-    label: "To review",
+    label: "Overview",
     to: "/client/home",
-    hint: "Work waiting for you to look at and approve",
+    hint: "What's waiting for you, what's going out next, and how your work is going",
     matches: ["/client/home", "/client/review", "/client/projects"],
   },
   {
@@ -598,7 +599,7 @@ export function ClientShell({ children }: { children: ReactNode }) {
     <div className="client-frame">
       <header className="client-bar">
         <div className="wordmark">
-          <span className="wordmark__mark">R</span>
+          <BrandMark />
           <span>{workspace.data?.agency?.name ?? "RexOps"}</span>
         </div>
         <nav aria-label="Client navigation">
@@ -655,8 +656,8 @@ export function AdminShell({ children }: { children: ReactNode }) {
     <div className="admin-frame">
       <aside className="admin-rail">
         <div className="wordmark">
-          <span className="wordmark__mark">R</span>
-          <span>RexOps / platform</span>
+          <BrandMark />
+          <span>Creative Dock / platform</span>
         </div>
         <nav aria-label="Platform administration">
           {adminNav.map((item) => {

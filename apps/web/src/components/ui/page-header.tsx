@@ -58,12 +58,16 @@ export function PageHeader({
       ) : null}
       <div className="screen-heading">
         <div className="page-header__text">
-          {eyebrow ? <span className="rx-eyebrow">{eyebrow}</span> : null}
           <h1>
             {title}
             {help ? <HelpTip label={title}>{help}</HelpTip> : null}
           </h1>
-          <p>{purpose}</p>
+          {/* The scope (a service, a date) leads the grey line rather than sitting above
+              the title as a tracked label. */}
+          <p>
+            {eyebrow ? <span className="page-header__scope">{eyebrow} · </span> : null}
+            {purpose}
+          </p>
         </div>
         <div className="page-header__actions">
           {status}

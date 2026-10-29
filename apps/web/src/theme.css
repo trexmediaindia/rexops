@@ -1,0 +1,727 @@
+/*
+ * Creative Dock — true-black flat.
+ *
+ * Loaded last. The app is a tool people work in every day, so it follows one rule set:
+ * one black ground for page, sidebar and bars; surfaces lifted by lightness, not by
+ * outlines or glows; colour on data, status and the one main action per screen; titles
+ * at app size, not landing-page size; sentence-case labels; tabular figures everywhere.
+ */
+
+:root {
+  --surface: var(--graphite); /* #111 — a card */
+  --raised: var(--slate); /* #1c1c1c — hover, active, nested */
+  --line: #262626; /* the one structural line, about 1.4:1 on a card */
+  --radius-card: 10px;
+  --action: #2563eb; /* the main button: white on it reads at 5.2:1 */
+  --action-hover: #1d4fd8;
+}
+
+/* Figures line up digit for digit wherever they appear. */
+body {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Titles at app size ───────────────────────────────────── */
+.screen-heading h1,
+.client-heading h1 {
+  margin: 0 0 6px;
+  font-size: 1.625rem; /* 26px */
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.screen-heading p,
+.client-heading p {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.screen-heading {
+  margin-bottom: 24px;
+}
+
+/* Small labels: sentence case, readable, grey — never tracked capitals. */
+.rx-eyebrow {
+  color: var(--mist);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+/* ── Surfaces: lightness, not outlines ────────────────────── */
+.panel,
+.rx-card {
+  border-color: transparent;
+  background: var(--surface);
+}
+
+.rx-empty {
+  border-color: var(--line);
+  background: var(--surface);
+}
+
+/* ── Shell ────────────────────────────────────────────────── */
+.sidebar,
+.topbar,
+.client-bar {
+  background: var(--ink);
+}
+
+.sidebar {
+  border-right-color: var(--line);
+}
+
+.topbar,
+.client-bar {
+  border-bottom-color: var(--line);
+}
+
+.nav-label {
+  color: var(--faint);
+}
+
+/* The active page: a neutral pill and the label brightening. No accent on navigation. */
+.nav-item {
+  border-left: 0;
+  border-radius: 8px;
+}
+
+.nav-item[data-active="true"] {
+  color: #ffffff;
+  background: var(--raised);
+}
+
+.nav-item em {
+  border-color: var(--line);
+  font-family: var(--font-body);
+}
+
+.client-bar nav a[data-active="true"] {
+  color: #ffffff;
+  box-shadow: none;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+
+.wordmark__mark {
+  border-color: var(--tungsten);
+  color: var(--tungsten);
+}
+
+/* ── Controls: flat fills, one radius ─────────────────────── */
+.rx-button {
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.rx-button--primary {
+  color: #ffffff;
+  background: var(--action);
+}
+
+.rx-button--primary:hover {
+  background: var(--action-hover);
+}
+
+.rx-button--secondary {
+  border-color: var(--line);
+  background: var(--raised);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--tungsten);
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
+/* ── Phone: a 16px margin at least ────────────────────────── */
+@media (max-width: 850px) {
+  /* On the phone's bottom bar the active tab is the neutral pill, not an underline. */
+  .client-bar nav a[data-active="true"] {
+    text-decoration: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .screen,
+  .client-main {
+    padding-inline: 18px;
+  }
+
+  .screen-heading h1,
+  .client-heading h1 {
+    font-size: 1.375rem; /* 22px */
+  }
+}
+
+/* ── Client dashboard ─────────────────────────────────────── */
+/* Column: 1200px. Main 1fr + rail 340px with a 24px gap: 836 + 24 + 340 = 1200. */
+.client-main {
+  width: min(1200px, calc(100% - 48px));
+  padding-top: 40px;
+}
+
+.overview-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px 32px;
+  margin-bottom: 24px;
+}
+
+.overview-heading p {
+  max-width: 720px;
+}
+
+/* One container split by 1px dividers: label, figure, caption naming what it is against. */
+.overview-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 24px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.overview-strip > div {
+  display: grid;
+  gap: 4px;
+  padding: 18px 20px;
+}
+
+.overview-strip > div + div {
+  border-left: 1px solid var(--line);
+}
+
+.overview-strip span {
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.overview-strip strong {
+  color: var(--paper);
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+/* The one figure that asks for action carries the data hue. */
+.overview-strip strong[data-signal] {
+  color: var(--tungsten);
+}
+
+.overview-strip small {
+  color: var(--faint);
+  font-size: 0.8125rem;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  align-items: start;
+  gap: 24px;
+}
+
+.overview-main {
+  display: grid;
+  gap: 24px;
+}
+
+.overview-panel {
+  padding: 20px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.overview-panel > header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.overview-panel h2,
+.overview-rail h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.overview-panel > header a,
+.overview-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--mist);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.overview-panel > header a:hover,
+.overview-link:hover {
+  color: #ffffff;
+}
+
+.overview-link {
+  margin-top: 12px;
+}
+
+.overview-empty {
+  margin: 0;
+  color: var(--mist);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* The work's own picture, or a plain tile saying what kind of file is coming. */
+.work-thumb {
+  display: grid;
+  overflow: hidden;
+  flex: none;
+  place-items: center;
+  border-radius: 6px;
+  background: var(--raised);
+}
+
+.work-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-thumb span {
+  color: var(--faint);
+  font-size: 0.75rem;
+}
+
+/* Waiting for you: one row per piece of work, oldest first. */
+.waiting-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.waiting-list li + li {
+  border-top: 1px solid var(--line);
+}
+
+.waiting-list a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.waiting-list .work-thumb {
+  width: 56px;
+  height: 56px;
+}
+
+.waiting-list__text {
+  display: grid;
+  flex: 1;
+  gap: 3px;
+  min-width: 0;
+}
+
+.waiting-list__text strong {
+  overflow: hidden;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.waiting-list__text span {
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.waiting-list__action {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: var(--action);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.waiting-list a:hover .waiting-list__action {
+  background: var(--action-hover);
+}
+
+.waiting-list a:hover strong {
+  text-decoration: underline;
+}
+
+/* The next seven days: a column per day, each post as its own picture. */
+.week-strip {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.week-strip > li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  min-height: 150px;
+  padding: 10px 8px;
+  border-radius: 8px;
+  background: var(--ink);
+}
+
+.week-strip > li {
+  border-top: 2px solid transparent;
+}
+
+.week-strip > li[data-today] {
+  border-top-color: var(--tungsten);
+}
+
+.week-strip__day {
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.week-strip__day b {
+  color: var(--paper);
+  font-weight: 600;
+}
+
+.week-strip > li[data-today] .week-strip__day {
+  color: var(--tungsten);
+}
+
+.week-strip__post {
+  display: grid;
+  gap: 3px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.week-strip__post .work-thumb {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 4px;
+}
+
+.week-strip__post[data-done] .work-thumb {
+  opacity: 0.55;
+}
+
+.week-strip__time {
+  color: var(--tungsten);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.week-strip__post[data-done] .week-strip__time {
+  color: var(--faint);
+}
+
+.week-strip__title {
+  overflow: hidden;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.week-strip__where {
+  overflow: hidden;
+  color: var(--faint);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.week-strip__post:hover .week-strip__title {
+  text-decoration: underline;
+}
+
+.week-strip__none {
+  color: #555555;
+}
+
+/* The rail: headings outside their panels, 8px above each. */
+.overview-rail {
+  display: grid;
+  gap: 24px;
+}
+
+.overview-rail > section > h2 {
+  margin-bottom: 8px;
+}
+
+.overview-panel--tight {
+  padding: 16px 18px;
+}
+
+.service-progress {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.service-progress li {
+  display: grid;
+  gap: 4px;
+}
+
+.service-progress li > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.875rem;
+}
+
+.service-progress li > div span {
+  flex: none;
+  color: var(--mist);
+}
+
+.service-progress__kind {
+  color: var(--faint);
+  font-size: 0.8125rem;
+}
+
+.service-progress__track {
+  overflow: hidden;
+  height: 6px;
+  margin-top: 4px;
+  border-radius: 999px;
+  background: var(--raised);
+}
+
+.service-progress__track i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--tungsten);
+}
+
+.ad-glance {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.ad-glance dt {
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+.ad-glance dd {
+  margin: 2px 0 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.approved-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.approved-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  font-size: 0.875rem;
+}
+
+.approved-list li + li {
+  border-top: 1px solid var(--line);
+}
+
+.approved-list strong {
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.approved-list time {
+  flex: none;
+  color: var(--faint);
+}
+
+@media (max-width: 1000px) {
+  .overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .overview-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .overview-strip > div:nth-child(3) {
+    border-left: 0;
+  }
+
+  .overview-strip > div:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 640px) {
+  .client-main {
+    width: 100%;
+    padding-top: 24px;
+  }
+
+  .overview-heading .rx-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .overview-strip strong {
+    font-size: 1.5rem;
+  }
+
+  /* The week becomes a list of the days that have something on them. */
+  .week-strip {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .week-strip > li {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    min-height: 0;
+    align-items: start;
+  }
+
+  .week-strip > li:not(:has(.week-strip__post)) {
+    display: none;
+  }
+
+  .week-strip__post {
+    grid-column: 2;
+    grid-template-columns: 48px minmax(0, 1fr);
+    column-gap: 10px;
+  }
+
+  .week-strip__post .work-thumb {
+    grid-row: span 3;
+    width: 48px;
+    aspect-ratio: 1;
+    margin: 0;
+  }
+
+  .waiting-list__action {
+    padding: 7px 10px;
+  }
+}
+
+/* ── Team dashboard ───────────────────────────────────────── */
+.overview-strip small[data-warn] {
+  color: #ef6a7e; /* the negative colour: a post going out unapproved */
+}
+
+.dashboard-grid {
+  align-items: start;
+}
+
+.panel__heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* The work's own picture fills the review card's thumbnail slot. */
+.review-thumb {
+  padding: 0;
+  background: var(--raised);
+}
+
+.review-thumb .work-thumb {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.queue-count {
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.review-thumb {
+  border: 0;
+}
+
+.brand-mark {
+  flex: none;
+  color: var(--tungsten);
+}
+
+/* ── Calendar ─────────────────────────────────────────────── */
+.cal-chip {
+  font-size: 0.8125rem;
+}
+
+/* The time carries the service's hue: blue for social, teal for creatives, orange for ads. */
+.cal-chip__time {
+  color: var(--svc);
+  font-weight: 600;
+}
+
+.cal-chip[data-done] .cal-chip__time {
+  color: var(--faint);
+}
+
+/* ── Tables: figures right-aligned ────────────────────────── */
+th.num,
+td.num {
+  text-align: right;
+}
+
+/* Team: on a tablet the secondary columns give way and the actions stack. */
+@media (max-width: 1100px) {
+  .team-table .team-table__craft,
+  .team-table .team-table__seen {
+    display: none;
+  }
+
+  .team-table__actions > * {
+    display: flex;
+    justify-content: flex-end;
+    margin-left: auto;
+  }
+
+  .team-table__actions > * + * {
+    margin-top: 6px;
+  }
+}
+
+/* The video player's hidden control labels follow the app's type. */
+.video-js .vjs-control-text {
+  font: 12px var(--font-body);
+}
+
+.video-js.video-js .vjs-control-bar,
+.video-js.video-js .vjs-menu {
+  font-family: var(--font-body);
+  font-size: 12px;
+}

@@ -41,7 +41,6 @@ import { ShareReviewPage } from "./routes/share-review";
 function RouteError({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <main className="not-found">
-      <span className="rx-eyebrow">Error / off slate</span>
       <h1>That screen did not load.</h1>
       <p className="not-found__body">
         Something went wrong rendering this page. Try again — if it keeps happening, the message
@@ -65,7 +64,6 @@ const rootRoute = createRootRoute({
   errorComponent: RouteError,
   notFoundComponent: () => (
     <main className="not-found">
-      <span className="rx-eyebrow">404 / off slate</span>
       <h1>That route is not in this cut.</h1>
       <p className="not-found__body">
         The link may be stale, or the record it pointed at has been archived.

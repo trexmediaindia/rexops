@@ -2,6 +2,7 @@ import { Button } from "@rexops/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { CheckCircle2, Eye, EyeOff, MoveRight, TriangleAlert, Upload, Users } from "lucide-react";
 import { useState } from "react";
+import { BrandMark } from "../components/brand-mark";
 import { authClient } from "../lib/auth-client";
 import { routeForRole } from "../lib/role-route";
 
@@ -74,8 +75,8 @@ export function LoginPage() {
     <main className="login-screen">
       <section className="login-aside">
         <div className="wordmark wordmark--large">
-          <span className="wordmark__mark">R</span>
-          <span>RexOps</span>
+          <BrandMark />
+          <span>Creative Dock</span>
         </div>
         <div className="login-aside__statement">
           <h1>Review and approve your work in one place.</h1>

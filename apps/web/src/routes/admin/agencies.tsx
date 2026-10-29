@@ -114,7 +114,7 @@ export function AdminAgencies() {
                     {agency.name} <small>{agency.slug}</small>
                   </th>
                   <td className="rx-mono">{agency.slug}</td>
-                  <td className="rx-mono">{String(agency.memberCount).padStart(2, "0")}</td>
+                  <td className="rx-mono">{agency.memberCount}</td>
                   <td className="rx-mono">
                     {new Date(agency.createdAt)
                       .toLocaleDateString("en-GB", {

@@ -2,12 +2,13 @@
 
 :root {
   color-scheme: dark;
-  --ink: #030406;
-  --graphite: #0a0c11;
-  --slate: #12161e;
-  --ash: #232a37;
-  --mist: #8e9ab0;
-  --paper: #e8edf5;
+  --ink: #000000; /* true black: sidebar, top bar and page share it */
+  --graphite: #111111; /* a card, one lightness step up */
+  --slate: #1c1c1c; /* hover, active nav, nested */
+  --ash: #262626; /* lines: about 1.4:1 on the card */
+  --mist: #b4b4b4; /* secondary text */
+  --faint: #949494; /* meta; still 4.5:1 on #1c1c1c */
+  --paper: #f2f2f2;
   --tungsten: #3d8bff;
   --tungsten-press: #2a6fe0;
   --blue: #36c6ee;
@@ -31,17 +32,18 @@
   --control-height: 40px;
   --control-height-sm: 32px;
   --control-radius: 6px;
-  --control-bg: #08090d;
-  --control-bg-hover: #0d1016;
-  --control-border: #232a37;
-  --control-border-hover: #364257;
+  --control-bg: #0b0b0b;
+  --control-bg-hover: #111111;
+  --control-border: #3a3a3a;
+  --control-border-hover: #555555;
 
-  --surface-popover: #0d1017;
+  --surface-popover: #111111;
 
   /* Type. Inter for everything you read; Archivo Black for page and section titles. */
   --font-body: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: "Archivo Black", "Inter Variable", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  /* No monospace outside code: figures use Inter's tabular digits instead. */
+  --font-mono: var(--font-body);
 
   font-family: var(--font-body);
   font-feature-settings: "cv11", "ss01";
@@ -61,13 +63,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 66% -20%, rgba(61, 139, 255, 0.055), transparent 30rem),
-    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px), var(--ink);
-  background-size:
-    auto,
-    100% 4px,
-    auto;
+  background: var(--ink);
 }
 
 button,
@@ -227,7 +223,7 @@ textarea:focus-visible {
 
 input::placeholder,
 textarea::placeholder {
-  color: #6d7682;
+  color: var(--faint);
 }
 
 input:disabled,
@@ -242,16 +238,12 @@ textarea:disabled {
 select {
   appearance: none;
   padding-right: 32px;
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--mist) 50%),
-    linear-gradient(135deg, var(--mist) 50%, transparent 50%);
-  background-position:
-    calc(100% - 17px) calc(50% + 1px),
-    calc(100% - 12px) calc(50% + 1px);
-  background-size:
-    5px 5px,
-    5px 5px;
+  /* The chevron, drawn as an image rather than two gradient triangles. */
+  background-color: var(--control-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23b4b4b4' stroke-width='1.5'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
+  background-position: calc(100% - 12px) 50%;
+  background-size: 10px 6px;
   cursor: pointer;
 }
 
@@ -371,12 +363,9 @@ h3 {
 }
 
 .rx-card {
-  background: rgba(12, 14, 26, 0.94);
-  border: 1px solid rgba(58, 64, 73, 0.72);
+  background: rgba(17, 17, 17, 0.94);
+  border: 1px solid var(--line, #262626);
   border-radius: 8px;
-  box-shadow:
-    0 1px 0 rgba(0, 0, 4, 0.4),
-    0 8px 24px -12px rgba(0, 0, 4, 0.5);
 }
 
 .rx-status {
@@ -397,7 +386,6 @@ h3 {
   height: 7px;
   border-radius: 50%;
   background: var(--mist);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mist) 12%, transparent);
 }
 
 .rx-status[data-status*="progress"] .rx-status__dot {
@@ -468,8 +456,8 @@ h3 {
   font-family: var(--font-mono);
   /* Wide tracking makes an eyebrow read a rung larger than it is set. */
   font-size: var(--text-meta);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .rx-empty {
@@ -479,7 +467,7 @@ h3 {
   padding: 42px;
   border: 1px dashed var(--ash);
   border-radius: 8px;
-  background: rgba(12, 14, 26, 0.54);
+  background: rgba(17, 17, 17, 0.54);
 }
 
 .rx-empty__icon {
@@ -487,7 +475,7 @@ h3 {
   width: 38px;
   height: 38px;
   place-items: center;
-  border: 1px solid rgba(58, 64, 73, 0.9);
+  border: 1px solid var(--line, #262626);
   border-radius: 9px;
   margin-bottom: 14px;
   color: var(--mist);
@@ -610,13 +598,13 @@ h3 {
   position: fixed;
   z-index: 120;
   overflow: auto;
-  border: 1px solid #4a525e;
+  border: 1px solid #535353;
   border-radius: 8px;
   padding: 5px;
   background: var(--surface-popover);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 18px 48px -12px rgba(0, 0, 4, 0.7);
+    0 18px 48px -12px rgba(1, 1, 1, 0.7);
   animation: rx-popover-in 110ms ease-out;
 }
 
@@ -681,7 +669,7 @@ h3 {
 }
 
 .rx-select[data-placeholder] > span {
-  color: #6d7682;
+  color: var(--faint);
 }
 
 .rx-select:disabled {
@@ -713,8 +701,8 @@ h3 {
   color: var(--mist);
   font-size: var(--text-micro);
   font-style: normal;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .rx-select__menu [role="option"][data-active] {
@@ -769,7 +757,7 @@ h3 {
 }
 
 .rx-datefield__trigger[data-placeholder] > span {
-  color: #6d7682;
+  color: var(--faint);
 }
 
 .rx-datefield__clear {
@@ -855,7 +843,6 @@ h3 {
 }
 
 .rx-calendar__grid button[data-today] {
-  box-shadow: inset 0 0 0 1px var(--ash);
 }
 
 .rx-calendar__grid button[data-selected] {
@@ -873,7 +860,7 @@ h3 {
   display: flex;
   gap: 6px;
   margin-top: 10px;
-  border-top: 1px solid rgba(58, 64, 73, 0.6);
+  border-top: 1px solid var(--line, #262626);
   padding-top: 10px;
 }
 
@@ -1062,7 +1049,7 @@ h3 {
   display: flex;
   gap: 0.85rem;
   padding: 0.85rem 0.25rem;
-  border-top: 1px solid rgba(58, 64, 73, 0.5);
+  border-top: 1px solid var(--line, #262626);
 }
 
 .rx-steps li:first-child {
@@ -1116,8 +1103,8 @@ h3 {
 .rx-steps__state {
   font-size: var(--text-micro);
   font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   padding: 2px 6px;
   border-radius: 4px;
   border: 1px solid var(--ash);
@@ -1159,7 +1146,7 @@ h3 {
   align-items: flex-start;
   justify-content: space-between;
   padding: 0.9rem 0;
-  border-top: 1px solid rgba(58, 64, 73, 0.45);
+  border-top: 1px solid var(--line, #262626);
 }
 
 .rx-toggle:first-child {
@@ -1271,7 +1258,6 @@ h3 {
 .rx-segmented button[data-active="true"] {
   background: var(--slate);
   color: var(--paper);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .rx-skeleton {
@@ -1284,12 +1270,7 @@ h3 {
   display: block;
   height: 11px;
   border-radius: 4px;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.045),
-    rgba(255, 255, 255, 0.09),
-    rgba(255, 255, 255, 0.045)
-  );
+  background: var(--graphite);
   background-size: 280% 100%;
   animation: rx-skeleton-sweep 1.5s ease-in-out infinite;
 }

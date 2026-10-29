@@ -31,7 +31,6 @@ export function RevisionList({
     <section className="revision-list panel">
       <div className="panel__heading">
         <div>
-          <span className="rx-eyebrow">Revisions from feedback</span>
           <h2>{open} open</h2>
         </div>
         <SquareCheckBig size={17} />

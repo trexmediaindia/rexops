@@ -223,10 +223,18 @@ export function TeamPage() {
               <tr className="data-table__head">
                 <th scope="col">Teammate</th>
                 <th scope="col">Role</th>
-                <th scope="col">Speciality</th>
-                <th scope="col">Open work</th>
-                <th scope="col">Projects</th>
-                <th scope="col">Last signed in</th>
+                <th scope="col" className="team-table__craft">
+                  Speciality
+                </th>
+                <th scope="col" className="num">
+                  Open work
+                </th>
+                <th scope="col" className="num">
+                  Projects
+                </th>
+                <th scope="col" className="team-table__seen">
+                  Last signed in
+                </th>
                 <th scope="col">
                   <span className="sr-only">Actions</span>
                 </th>
@@ -249,8 +257,8 @@ export function TeamPage() {
                     <StatusChip status={member.banned ? "SUSPENDED" : ROLE_LABEL[member.role]} />
                   </td>
                   <td className="team-table__craft">{humanize(member.specialty ?? "GENERAL")}</td>
-                  <td className="rx-mono">{member.openDeliverables}</td>
-                  <td className="rx-mono">{member.projectCount}</td>
+                  <td className="num">{member.openDeliverables}</td>
+                  <td className="num">{member.projectCount}</td>
                   <td className="team-table__seen">{relativeTime(member.lastSeenAt)}</td>
                   <td className="team-table__actions">
                     <button type="button" onClick={() => setManaging(member)}>

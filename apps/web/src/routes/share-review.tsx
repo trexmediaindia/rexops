@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { lazy, Suspense, useRef, useState } from "react";
+import { BrandMark } from "../components/brand-mark";
 import {
   type Anchor,
   type AnnotationTool,
@@ -166,9 +167,8 @@ export function ShareReviewPage() {
     return (
       <main className="share-gate">
         <section>
-          <span className="wordmark__mark">R</span>
+          <BrandMark />
           <LockKeyhole size={24} />
-          <span className="rx-eyebrow">Shared with you for feedback</span>
           <h1>Open the work shared with you</h1>
           <p>
             Someone at a creative agency sent you this link so you can look at a piece of work and
@@ -210,8 +210,8 @@ export function ShareReviewPage() {
     <main className="shared-review">
       <header>
         <div className="wordmark">
-          <span className="wordmark__mark">R</span>
-          <span>RexOps review</span>
+          <BrandMark />
+          <span>Creative Dock review</span>
         </div>
         <div>
           <ShieldCheck size={15} /> Shared link · version {payload.fileVersion.versionNumber}
@@ -235,11 +235,11 @@ export function ShareReviewPage() {
       <div className="shared-review__layout">
         <section className="shared-review__stage">
           <div>
-            <span className="rx-eyebrow">
-              {humanize(payload.deliverable.contentType)} · for your feedback
-            </span>
             <h1>{payload.deliverable.title}</h1>
-            <p>{payload.fileVersion.label || payload.fileVersion.fileName}</p>
+            <p>
+              {humanize(payload.deliverable.contentType)} for your feedback ·{" "}
+              {payload.fileVersion.label || payload.fileVersion.fileName}
+            </p>
           </div>
           {mediumFromFileType(payload.fileVersion.fileType) !== "audio" &&
           mediumFromFileType(payload.fileVersion.fileType) !== "other" ? (
@@ -303,7 +303,6 @@ export function ShareReviewPage() {
         </section>
         <aside className="shared-review__comments">
           <div>
-            <span className="rx-eyebrow">Feedback on this version</span>
             <h2>
               {payload.comments.length} {payload.comments.length === 1 ? "comment" : "comments"}
             </h2>
