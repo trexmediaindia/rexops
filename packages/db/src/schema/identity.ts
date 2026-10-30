@@ -21,6 +21,8 @@ export const agencies = pgTable(
     logoUrl: text("logo_url"),
     brandColor: text("brand_color"),
     betterAuthOrgId: text("better_auth_org_id"),
+    /** Set by the platform admin. A suspended agency's people cannot sign in until restored. */
+    suspendedAt: timestamp("suspended_at", { withTimezone: true }),
     settings: jsonb("settings").$type<Record<string, unknown>>().default({}).notNull(),
     ...timestamps,
     ...softDelete,

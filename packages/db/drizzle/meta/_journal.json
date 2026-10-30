@@ -43,6 +43,13 @@
       "when": 1792182577366,
       "tag": "0005_services_publishing_ad_reports",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793366792622,
+      "tag": "0006_agency_suspension",
+      "breakpoints": true
     }
   ]
 }

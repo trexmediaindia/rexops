@@ -1,9 +1,9 @@
 import { addClientPersonSchema, createClientSchema, updateClientSchema } from "@rexops/validators";
 import { Elysia, t } from "elysia";
 import { authGuard, requirePrincipal } from "../../plugins/auth-guard";
+import { archiveClientAndLock } from "../removal/removal.service";
 import {
   addClientPerson,
-  archiveClient,
   createClient,
   getClient,
   listClientPeople,
@@ -67,7 +67,7 @@ export const clientsRoutes = new Elysia({ prefix: "/api/clients" })
   .post("/:id/archive", ({ params, principal, set }) => {
     const actor = requirePrincipal(principal, set);
     if (!actor) return { error: "UNAUTHORIZED" };
-    return archiveClient(actor, params.id);
+    return archiveClientAndLock(actor, params.id);
   })
   .get("/:id/people", ({ params, principal, set }) => {
     const actor = requirePrincipal(principal, set);

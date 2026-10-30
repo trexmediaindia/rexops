@@ -4,6 +4,7 @@ import { Check, Copy, KeyRound, UserPlus, X } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 import { request } from "../../lib/request";
 import type { ClientRecord } from "../../lib/types";
+import { canManageWorkspace, useWorkspace } from "../../lib/workspace";
 import { FormDialog } from "../ui/form-dialog";
 
 type ClientRole = "CLIENT_OWNER" | "CLIENT_MEMBER";
@@ -14,6 +15,7 @@ type ClientPerson = {
   email: string;
   role: ClientRole;
   banned: boolean | null;
+  banReason?: string | null;
   createdAt: string;
 };
 
@@ -41,6 +43,10 @@ export function ClientPeopleDialog({
   const [added, setAdded] = useState<AddedClientPerson | null>(null);
   const [copied, setCopied] = useState(false);
   const queryKey = ["clients", client.id, "people"];
+  const workspace = useWorkspace();
+  const isAdmin = canManageWorkspace(workspace.data?.user?.role);
+  const [removing, setRemoving] = useState<string | null>(null);
+  const archived = client.status === "ARCHIVED";
 
   const people = useQuery({
     queryKey,
@@ -60,6 +66,25 @@ export function ClientPeopleDialog({
       setAdded(person);
     },
   });
+
+  const setAccess = useMutation({
+    mutationFn: ({ id, banned }: { id: string; banned: boolean }) =>
+      request(`/api/clients/${client.id}/people/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ banned }),
+      }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+  });
+
+  const removePerson = useMutation({
+    mutationFn: (id: string) =>
+      request(`/api/clients/${client.id}/people/${id}`, { method: "DELETE" }),
+    onSuccess: () => {
+      setRemoving(null);
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
+  const actionError = (setAccess.error ?? removePerson.error) as Error | null;
 
   useEffect(() => {
     if (adding) return;
@@ -194,7 +219,55 @@ export function ClientPeopleDialog({
                       <strong>{person.name}</strong>
                       <span className="rx-mono">{person.email}</span>
                     </span>
-                    <em>{person.banned ? "Suspended" : ROLE_LABEL[person.role]}</em>
+                    <em>
+                      {person.banned
+                        ? archived
+                          ? "Locked while archived"
+                          : "Suspended"
+                        : ROLE_LABEL[person.role]}
+                    </em>
+                    {isAdmin ? (
+                      removing === person.id ? (
+                        <span className="client-people__actions">
+                          <span>Remove {person.name.split(" ")[0]}?</span>
+                          <button
+                            type="button"
+                            className="row-action--danger"
+                            disabled={removePerson.isPending}
+                            onClick={() => removePerson.mutate(person.id)}
+                          >
+                            {removePerson.isPending ? "Removing…" : "Yes, remove"}
+                          </button>
+                          <button type="button" onClick={() => setRemoving(null)}>
+                            No
+                          </button>
+                        </span>
+                      ) : (
+                        <span className="client-people__actions">
+                          {archived ? null : (
+                            <button
+                              type="button"
+                              disabled={setAccess.isPending}
+                              onClick={() =>
+                                setAccess.mutate({ id: person.id, banned: !person.banned })
+                              }
+                            >
+                              {person.banned ? "Restore" : "Suspend"}
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            className="row-action--danger"
+                            onClick={() => {
+                              removePerson.reset();
+                              setRemoving(person.id);
+                            }}
+                          >
+                            Remove
+                          </button>
+                        </span>
+                      )
+                    ) : null}
                   </li>
                 ))}
               </ul>
@@ -203,6 +276,17 @@ export function ClientPeopleDialog({
                 Nobody from {client.name} can sign in yet. Add the person who approves work first.
               </p>
             )}
+            {actionError ? (
+              <p className="form-dialog__error" role="alert">
+                {actionError.message}
+              </p>
+            ) : null}
+            {isAdmin && people.data?.length ? (
+              <small className="client-people__note">
+                Suspend signs someone out and keeps them out until you restore them. Remove takes
+                their login away for good; what they wrote stays, under their name.
+              </small>
+            ) : null}
             <footer className="form-dialog__foot">
               <button type="button" className="form-dialog__cancel" onClick={onClose}>
                 Close

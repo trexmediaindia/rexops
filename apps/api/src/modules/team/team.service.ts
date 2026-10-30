@@ -139,7 +139,7 @@ function assertCanAssignRole(principal: Principal, role: string) {
 }
 
 /** Refuses any change that would leave the agency with no active owner. */
-async function assertNotLastOwner(agencyId: string, userId: string) {
+export async function assertNotLastOwner(agencyId: string, userId: string) {
   const [remaining] = await db
     .select({ owners: count() })
     .from(users)
@@ -331,7 +331,7 @@ export async function updateTeamMember(
 /** URL-safe, unambiguous alphabet — this string gets read aloud and retyped. */
 const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
 
-function generatePassword(length = 16) {
+export function generatePassword(length = 16) {
   const bytes = crypto.getRandomValues(new Uint8Array(length));
   return Array.from(bytes, (byte) => ALPHABET[byte % ALPHABET.length]).join("");
 }

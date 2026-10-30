@@ -755,3 +755,150 @@ td.num {
   font-family: var(--font-body);
   font-size: 12px;
 }
+
+/* Typing the name back before a permanent delete. */
+.confirm-dialog__type {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: var(--text-meta);
+  color: var(--mist);
+}
+.confirm-dialog__type b {
+  color: var(--paper);
+  font-weight: 600;
+}
+.confirm-dialog__type input {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--control-radius);
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  font-size: var(--text-body);
+}
+.confirm-dialog__type input:focus-visible {
+  outline: 2px solid var(--tungsten);
+  outline-offset: 1px;
+}
+
+/* A row action that erases something. Red text, never a red block in a list. */
+button.row-action--danger {
+  color: var(--error);
+}
+button.row-action--danger:hover {
+  border-color: var(--error);
+}
+
+/* Suspend / Remove on each client login. */
+.client-people li {
+  flex-wrap: wrap;
+}
+.client-people li > span:first-child {
+  flex: 1 1 180px;
+}
+.client-people li > span.client-people__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  font-size: var(--text-meta);
+  color: var(--mist);
+}
+.client-people__actions button {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--control-radius);
+  background: transparent;
+  color: var(--paper);
+  font: inherit;
+  cursor: pointer;
+}
+.client-people__actions button:hover {
+  border-color: var(--mist);
+}
+.client-people__actions button.row-action--danger {
+  color: var(--error);
+}
+.client-people__actions button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.client-people__note {
+  display: block;
+  margin-top: 10px;
+  color: var(--faint);
+}
+
+/* The quiet red text button that starts a permanent delete. */
+.project-detail__delete,
+.deliverable-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: var(--control-radius);
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-meta);
+  cursor: pointer;
+}
+.project-detail__delete:hover,
+.deliverable-danger:hover {
+  border-color: var(--error);
+}
+
+/* Agencies: a sixth column for Suspend / New owner password / Delete. */
+.admin-table .data-table__head,
+.admin-table .data-table__row {
+  grid-template-columns: 1.4fr 1fr 0.5fr 0.8fr 0.7fr 2.4fr;
+}
+.admin-table .data-table__row button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 5px;
+  padding: 6px 8px;
+  color: var(--tungsten);
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-meta);
+  cursor: pointer;
+}
+.admin-table .data-table__row button:hover,
+.clients-table .data-table__row button.row-action--danger:hover {
+  background: rgba(10, 136, 254, 0.1);
+}
+.admin-table .data-table__row button.row-action--danger,
+.clients-table .data-table__row button.row-action--danger,
+.team-table button.row-action--danger {
+  color: var(--error);
+}
+.admin-table .data-table__row button.row-action--danger:hover,
+.clients-table .data-table__row button.row-action--danger:hover {
+  background: rgba(239, 106, 126, 0.1);
+}
+@media (max-width: 900px) {
+  .admin-table .data-table__head,
+  .admin-table .data-table__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Team: three actions now, so they wrap inside their column instead of pushing the
+   other columns out of line with the header. */
+.team-table .data-table__head,
+.team-table .data-table__row {
+  grid-template-columns:
+    minmax(0, 1.7fr) minmax(0, 0.7fr) minmax(0, 0.6fr) minmax(0, 0.5fr) minmax(0, 0.5fr)
+    minmax(0, 0.65fr) minmax(0, 1.25fr);
+}
+.team-table__actions {
+  flex-wrap: wrap;
+  row-gap: 4px;
+}

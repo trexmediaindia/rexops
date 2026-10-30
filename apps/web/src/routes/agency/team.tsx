@@ -10,7 +10,17 @@ import {
   StatusChip,
 } from "@rexops/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Copy, KeyRound, Search, ShieldCheck, UserPlus, Users, X } from "lucide-react";
+import {
+  Check,
+  Copy,
+  KeyRound,
+  Search,
+  ShieldCheck,
+  Trash2,
+  UserPlus,
+  Users,
+  X,
+} from "lucide-react";
 import { useEffect, useId, useMemo, useState } from "react";
 import { AgencyShell } from "../../components/app-shell";
 import { ConfirmDialog } from "../../components/ui/confirm-dialog";
@@ -25,6 +35,7 @@ import type {
   Specialty,
   TeamMember,
 } from "../../lib/types";
+import { canManageWorkspace, useWorkspace } from "../../lib/workspace";
 
 const ROLE_LABEL: Record<AgencyRole, string> = {
   AGENCY_OWNER: "Owner",
@@ -78,6 +89,9 @@ export function TeamPage() {
   const [query, setQuery] = useState("");
   const [activeOnly, setActiveOnly] = useState(true);
   const [suspending, setSuspending] = useState<TeamMember | null>(null);
+  const [removing, setRemoving] = useState<TeamMember | null>(null);
+  const workspace = useWorkspace();
+  const isAdmin = canManageWorkspace(workspace.data?.user?.role);
   const [inviting, setInviting] = useState(false);
   const [managing, setManaging] = useState<TeamMember | null>(null);
   const [handover, setHandover] = useState<InvitedTeamMember | null>(null);
@@ -101,6 +115,14 @@ export function TeamPage() {
     mutationFn: ({ id, patch }: { id: string; patch: Record<string, unknown> }) =>
       request<TeamMember>(`/api/team/${id}`, { method: "PATCH", body: JSON.stringify(patch) }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["team"] }),
+  });
+
+  const remove = useMutation({
+    mutationFn: (id: string) => request(`/api/team/${id}`, { method: "DELETE" }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["team"] });
+      setRemoving(null);
+    },
   });
 
   const rows = useMemo(() => {
@@ -279,6 +301,19 @@ export function TeamPage() {
                         {member.banned ? "Give access back" : "Suspend access"}
                       </button>
                     )}
+                    {member.id === currentUserId || !isAdmin ? null : (
+                      <button
+                        type="button"
+                        className="row-action--danger"
+                        aria-label={`Remove ${member.name} from the team`}
+                        onClick={() => {
+                          remove.reset();
+                          setRemoving(member);
+                        }}
+                      >
+                        <Trash2 size={14} /> Remove
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -315,6 +350,26 @@ export function TeamPage() {
             );
           }}
           onClose={() => setSuspending(null)}
+        />
+      ) : null}
+
+      {removing ? (
+        <ConfirmDialog
+          title={`Remove ${removing.name} from the team?`}
+          body="Their login is taken away for good and they disappear from the team list. The email address is freed, so you can add them again later as a new login."
+          consequence={
+            removing.openDeliverables
+              ? `They have ${removing.openDeliverables} open deliverable${removing.openDeliverables === 1 ? "" : "s"}, which will need reassigning. Their comments and approvals stay, under their name.`
+              : "Their comments, approvals and past work stay, under their name. To keep them out only for a while, suspend them instead."
+          }
+          confirmLabel={`Remove ${removing.name.split(" ")[0]}`}
+          pendingLabel="Removing…"
+          cancelLabel="Keep them"
+          tone="danger"
+          pending={remove.isPending}
+          error={remove.error ? (remove.error as Error).message : null}
+          onConfirm={() => remove.mutate(removing.id)}
+          onClose={() => setRemoving(null)}
         />
       ) : null}
 
