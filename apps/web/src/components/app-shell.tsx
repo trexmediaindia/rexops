@@ -29,6 +29,7 @@ import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { authClient } from "../lib/auth-client";
 import { type FeatureKey, useFeatures } from "../lib/features";
 import { formatBytes } from "../lib/format";
+import { queryClient } from "../lib/query";
 import { request } from "../lib/request";
 import type { DeliverableRecord, StorageUsage } from "../lib/types";
 import {
@@ -486,6 +487,9 @@ function UserRow({
   async function signOut() {
     setSigningOut(true);
     await authClient.signOut();
+    // Forget everything this person loaded, so the next person to sign in on this
+    // browser never sees their name, workspace or work, even for a moment.
+    queryClient.clear();
     setSigningOut(false);
     setOpen(false);
     await navigate({ to: "/login" });
