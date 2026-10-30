@@ -4,6 +4,7 @@ import { CheckCircle2, Eye, EyeOff, MoveRight, TriangleAlert, Upload, Users } fr
 import { useState } from "react";
 import { BrandMark, BrandWord } from "../components/brand-mark";
 import { authClient } from "../lib/auth-client";
+import { queryClient } from "../lib/query";
 import { routeForRole } from "../lib/role-route";
 
 /**
@@ -63,6 +64,8 @@ export function LoginPage() {
         return;
       }
       const user = result.data?.user as { role?: string } | undefined;
+      // Start from nothing: anything still cached belongs to whoever used this browser last.
+      queryClient.clear();
       await navigate({ to: routeForRole(user?.role) });
     } catch {
       setProblem(signInProblem({ status: 0 }));
