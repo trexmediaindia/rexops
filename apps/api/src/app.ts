@@ -19,6 +19,7 @@ import { healthRoutes } from "./modules/health/health.routes";
 import { liveblocksRoutes } from "./modules/liveblocks/liveblocks.routes";
 import { notificationsRoutes } from "./modules/notifications/notifications.routes";
 import { projectsRoutes } from "./modules/projects/projects.routes";
+import { removalRoutes } from "./modules/removal/removal.routes";
 import { reportsRoutes } from "./modules/reports/reports.routes";
 import { reviewTaskRoutes } from "./modules/reviews/review-task.routes";
 import { reviewsRoutes } from "./modules/reviews/reviews.routes";
@@ -77,6 +78,7 @@ export const app = new Elysia({ name: "rexops-api" })
   .use(notificationsRoutes)
   .use(features["review.wedge"] ? attachmentsRoutes : notFound("/api/attachments"))
   .use(agenciesRoutes)
+  .use(removalRoutes)
   .use(features.analytics ? analyticsRoutes : notFound("/api/analytics"))
   .use(clientsRoutes)
   .use(teamRoutes)

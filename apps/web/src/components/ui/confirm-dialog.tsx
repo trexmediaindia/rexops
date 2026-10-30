@@ -1,5 +1,5 @@
 import { TriangleAlert, X } from "lucide-react";
-import { type ReactNode, useEffect, useId, useRef } from "react";
+import { type ReactNode, useEffect, useId, useRef, useState } from "react";
 
 /**
  * The stop before something that is hard to undo.
@@ -20,6 +20,7 @@ export function ConfirmDialog({
   tone = "warning",
   pending = false,
   error,
+  typeToConfirm,
   onConfirm,
   onClose,
 }: {
@@ -35,11 +36,19 @@ export function ConfirmDialog({
   tone?: "warning" | "danger";
   pending?: boolean;
   error?: string | null;
+  /**
+   * For what cannot be undone: the button stays off until this exact name is typed,
+   * so a permanent delete is never one absent-minded click.
+   */
+  typeToConfirm?: string;
   onConfirm: () => void;
   onClose: () => void;
 }) {
   const headingId = useId();
   const cancelRef = useRef<HTMLButtonElement>(null);
+  const typedId = useId();
+  const [typed, setTyped] = useState("");
+  const typedOk = !typeToConfirm || typed.trim() === typeToConfirm.trim();
 
   useEffect(() => {
     // Focus lands on the way out, not on the destructive button: a stray Enter
@@ -74,6 +83,21 @@ export function ConfirmDialog({
         <p className="confirm-dialog__body">{body}</p>
         {consequence ? <p className="confirm-dialog__consequence">{consequence}</p> : null}
 
+        {typeToConfirm ? (
+          <label className="confirm-dialog__type" htmlFor={typedId}>
+            <span>
+              Type <b>{typeToConfirm}</b> to confirm
+            </span>
+            <input
+              id={typedId}
+              value={typed}
+              onChange={(event) => setTyped(event.target.value)}
+              autoComplete="off"
+              spellCheck={false}
+            />
+          </label>
+        ) : null}
+
         {error ? (
           <p className="form-dialog__error" role="alert">
             {error}
@@ -93,8 +117,8 @@ export function ConfirmDialog({
           <button
             type="button"
             className="confirm-dialog__go"
-            onClick={onConfirm}
-            disabled={pending}
+            onClick={() => typedOk && onConfirm()}
+            disabled={pending || !typedOk}
           >
             {pending ? (pendingLabel ?? `${confirmLabel}…`) : confirmLabel}
           </button>

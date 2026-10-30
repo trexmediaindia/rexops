@@ -1,6 +1,6 @@
 import { Button, Callout, EmptyState, HelpTip, Select, StatusChip, statusLabel } from "@rexops/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useParams } from "@tanstack/react-router";
+import { Link, useNavigate, useParams } from "@tanstack/react-router";
 import {
   Activity,
   CloudUpload,
@@ -28,6 +28,7 @@ import { nextSteps, stageMeaning, type TransitionInfo } from "../../lib/delivera
 import { titleCase } from "../../lib/format";
 import { SERVICES, serviceOf, stepLabel } from "../../lib/services";
 import { enqueueUploads, useUploadStore } from "../../lib/upload-store";
+import { canManageWorkspace, useWorkspace } from "../../lib/workspace";
 
 const apiUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -87,6 +88,7 @@ async function apiFetch<T>(path: string, init?: RequestInit) {
       ...init?.headers,
     },
   });
+  if (response.status === 401) window.location.assign("/login");
   if (!response.ok) {
     const body = (await response.json().catch(() => null)) as { message?: string } | null;
     throw new Error(body?.message ?? `Request failed (${response.status})`);
@@ -170,6 +172,33 @@ export function DeliverableDetailPage() {
       queryClient.invalidateQueries({ queryKey: ["deliverable", deliverableId] });
       queryClient.invalidateQueries({ queryKey: ["deliverables"] });
       queryClient.invalidateQueries({ queryKey: ["work"] });
+    },
+  });
+  const navigate = useNavigate();
+  const workspace = useWorkspace();
+  const isAdmin = canManageWorkspace(workspace.data?.user?.role);
+  const [deleting, setDeleting] = useState(false);
+  const restore = useMutation({
+    mutationFn: () => apiFetch(`/api/deliverables/${deliverableId}/restore`, { method: "POST" }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["deliverable", deliverableId] });
+      queryClient.invalidateQueries({ queryKey: ["deliverables"] });
+      queryClient.invalidateQueries({ queryKey: ["work"] });
+    },
+  });
+  const remove = useMutation({
+    mutationFn: (title: string) =>
+      apiFetch(`/api/deliverables/${deliverableId}`, {
+        method: "DELETE",
+        body: JSON.stringify({ confirm: title }),
+      }),
+    onSuccess: () => {
+      const projectId = deliverable.data?.projectId;
+      queryClient.invalidateQueries({ queryKey: ["deliverables"] });
+      queryClient.invalidateQueries({ queryKey: ["work"] });
+      queryClient.invalidateQueries({ queryKey: ["calendar"] });
+      if (projectId) navigate({ to: "/agency/projects/$projectId", params: { projectId } });
+      else navigate({ to: "/agency/projects" });
     },
   });
   const toggleTask = useMutation({
@@ -343,9 +372,25 @@ export function DeliverableDetailPage() {
           <div className="stage-panel__now">
             <p>{stageMeaning(deliverable.data.status)}</p>
           </div>
-          {otherSteps.length ? (
+          {otherSteps.length || isAdmin ? (
             <div className="stage-panel__moves">
               <ul>
+                {deliverable.data.status === "ARCHIVED" ? (
+                  <li data-weight="primary">
+                    <button
+                      type="button"
+                      disabled={restore.isPending}
+                      onClick={() => restore.mutate()}
+                    >
+                      {restore.isPending ? "Bringing it back…" : "Bring it back"}
+                    </button>
+                    <span>
+                      {restore.isError
+                        ? (restore.error as Error).message
+                        : "Returns it to your team's slate as being worked on, with every version and comment as it was."}
+                    </span>
+                  </li>
+                ) : null}
                 {otherSteps.map((step) => (
                   <li key={step.to} data-weight={step.weight}>
                     <button
@@ -360,6 +405,23 @@ export function DeliverableDetailPage() {
                     <span>{step.result}</span>
                   </li>
                 ))}
+                {isAdmin ? (
+                  <li data-weight="danger">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        remove.reset();
+                        setDeleting(true);
+                      }}
+                    >
+                      Delete it permanently
+                    </button>
+                    <span>
+                      Erases it with every version, file, comment and approval. Archive it instead
+                      if you might need it again.
+                    </span>
+                  </li>
+                ) : null}
               </ul>
             </div>
           ) : null}
@@ -715,6 +777,27 @@ export function DeliverableDetailPage() {
           error={advance.error ? (advance.error as Error).message : null}
           onConfirm={() => advance.mutate(confirming.to, { onSuccess: () => setConfirming(null) })}
           onClose={() => setConfirming(null)}
+        />
+      ) : null}
+
+      {deleting && deliverable.data ? (
+        <ConfirmDialog
+          tone="danger"
+          title="Delete this for good?"
+          body={
+            <>
+              <strong>{deliverable.data.title}</strong>, every version and file of it, and all its
+              comments and approvals will be erased.
+            </>
+          }
+          consequence="This cannot be undone, and the client loses it from their portal too."
+          typeToConfirm={deliverable.data.title}
+          confirmLabel="Delete permanently"
+          pendingLabel="Deleting…"
+          pending={remove.isPending}
+          error={remove.error ? (remove.error as Error).message : null}
+          onConfirm={() => deliverable.data && remove.mutate(deliverable.data.title)}
+          onClose={() => setDeleting(false)}
         />
       ) : null}
 

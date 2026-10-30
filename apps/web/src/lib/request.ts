@@ -30,6 +30,7 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
     },
   });
 
+  if (response.status === 401) signedOut();
   if (!response.ok) {
     throw new RequestError(await errorMessage(response), response.status);
   }
@@ -55,4 +56,15 @@ async function errorMessage(response: Response) {
     // Non-JSON body — fall through to the status line.
   }
   return `Request failed (${response.status})`;
+}
+
+/**
+ * The session is gone: it expired, or the person was suspended, removed, or their
+ * client or agency was archived or suspended. Inside the signed-in app that leaves
+ * nothing to show, so go to the sign-in page rather than a screen of failed loads.
+ */
+function signedOut() {
+  if (typeof window === "undefined") return;
+  if (!/^\/(agency|client|admin)(\/|$)/.test(window.location.pathname)) return;
+  window.location.assign("/login");
 }

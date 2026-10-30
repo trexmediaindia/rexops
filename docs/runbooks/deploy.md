@@ -111,6 +111,39 @@ Sign in with that email and password. From inside the app:
 
 Both show a temporary password once, for you to pass on. Nothing is emailed.
 
+## 6. The platform admin (superuser, once)
+
+The platform admin sits above every agency: it adds, suspends, restores and deletes agencies,
+and sets a new password for an agency owner who is locked out. It belongs to no agency, so it
+needs its own email address. An address that already signs in to an agency can't be reused;
+Gmail's `+` trick gives you a second address that lands in the same inbox.
+
+```sh
+cd /opt/rexops
+sudo docker compose --env-file .env.production -f docker-compose.prod.yml run --rm \
+  -e SUPERUSER_EMAIL="you+admin@gmail.com" \
+  -e SUPERUSER_NAME="Your Name" \
+  -e SUPERUSER_PASSWORD="a long password of your own" \
+  api bun packages/db/src/create-superuser.ts
+```
+
+Leave out `SUPERUSER_PASSWORD` and a temporary one is printed once instead. Signing in with
+this account opens **Agencies**.
+
+## Taking things away
+
+| What | Archive / suspend (undo any time) | Delete for good |
+| --- | --- | --- |
+| Client | **Clients → Archive**: hidden, and everyone at that company is signed out until **Restore** | **Delete** on an archived client, typing its name |
+| Person at a client | **Clients → People → Suspend / Restore** | **Remove**: login gone, their comments stay |
+| Teammate | **Team → Suspend access** | **Remove** |
+| Project | Status **Archived**, then **Restore** | **Delete project**, typing its name |
+| Piece of work | **Archive this deliverable**, then **Bring it back** | **Delete it permanently**, typing its title |
+| Agency (platform admin) | **Suspend / Restore** | **Delete**, typing its name |
+
+Only owners and admins can restore, remove or delete. Every one of these is written to the
+audit log.
+
 ## Day to day
 
 - **Ship a change:** merge it into `main`. CI runs, then Deploy runs automatically.

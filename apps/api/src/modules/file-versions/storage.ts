@@ -5,6 +5,7 @@ import {
   AbortMultipartUploadCommand,
   CompleteMultipartUploadCommand,
   CreateMultipartUploadCommand,
+  DeleteObjectCommand,
   GetObjectCommand,
   ListPartsCommand,
   S3Client,
@@ -29,6 +30,8 @@ export interface ObjectStorage {
   complete(upload: MultipartUpload, parts: CompletedUploadPart[]): Promise<void>;
   abort(upload: MultipartUpload): Promise<void>;
   signDownload(key: string): Promise<string>;
+  /** Removes a stored file. Missing files are not an error. */
+  deleteObject(key: string): Promise<void>;
 }
 
 export class DevelopmentObjectStorage implements ObjectStorage {
@@ -161,6 +164,12 @@ export class DevelopmentObjectStorage implements ObjectStorage {
     return `${this.#baseUrl}/api/dev-uploads/object?key=${encodeURIComponent(key)}&expires=${expiresAt}&token=${token}`;
   }
 
+  async deleteObject(key: string) {
+    const objectPath = this.#safePath("objects", key);
+    await rm(objectPath, { force: true });
+    await rm(`${objectPath}.metadata.json`, { force: true });
+  }
+
   async readObject(key: string) {
     const objectPath = this.#safePath("objects", key);
     const metadata = JSON.parse(await readFile(`${objectPath}.metadata.json`, "utf8")) as {
@@ -261,6 +270,10 @@ export class R2ObjectStorage implements ObjectStorage {
         UploadId: upload.uploadId,
       }),
     );
+  }
+
+  async deleteObject(key: string) {
+    await this.#client.send(new DeleteObjectCommand({ Bucket: this.bucket, Key: key }));
   }
 
   signDownload(key: string) {

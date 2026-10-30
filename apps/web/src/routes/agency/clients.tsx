@@ -1,7 +1,7 @@
 import { Button, Callout, EmptyState, SegmentedControl, Skeleton, StatusChip } from "@rexops/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { Archive, Building2, Plus, Search, Users } from "lucide-react";
+import { Archive, ArchiveRestore, Building2, Plus, Search, Trash2, Users } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AgencyShell } from "../../components/app-shell";
 import { ClientPeopleDialog } from "../../components/clients/client-people-dialog";
@@ -10,7 +10,7 @@ import { FormDialog } from "../../components/ui/form-dialog";
 import { PageHeader } from "../../components/ui/page-header";
 import { request } from "../../lib/request";
 import type { ClientRecord, ProjectRecord } from "../../lib/types";
-import { useWorkspace } from "../../lib/workspace";
+import { canManageWorkspace, useWorkspace } from "../../lib/workspace";
 
 type Scope = "active" | "all";
 
@@ -24,6 +24,8 @@ export function ClientsPage() {
   const [creating, setCreating] = useState(search.new === "1");
   const [archiving, setArchiving] = useState<ClientRecord | null>(null);
   const [peopleFor, setPeopleFor] = useState<ClientRecord | null>(null);
+  const [deleting, setDeleting] = useState<ClientRecord | null>(null);
+  const isAdmin = canManageWorkspace(workspace.data?.user?.role);
 
   const clients = useQuery({
     queryKey: ["clients"],
@@ -48,6 +50,25 @@ export function ClientsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clients"] });
       setArchiving(null);
+    },
+  });
+
+  const restoreClient = useMutation({
+    mutationFn: (id: string) => request(`/api/clients/${id}/restore`, { method: "POST" }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["clients"] }),
+  });
+
+  const deleteClient = useMutation({
+    mutationFn: (client: ClientRecord) =>
+      request(`/api/clients/${client.id}`, {
+        method: "DELETE",
+        body: JSON.stringify({ confirm: client.name }),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({ queryKey: ["deliverables"] });
+      setDeleting(null);
     },
   });
 
@@ -107,8 +128,12 @@ export function ClientsPage() {
               People button on their row; they only ever see their own company's work.
             </p>
             <p>
-              Archiving a client hides it and its projects from these lists. Nothing is deleted and
-              an admin can bring it back.
+              Archiving a client hides it and its projects from these lists and locks the logins of
+              everyone at that company. Nothing is deleted, and Restore brings it all back.
+            </p>
+            <p>
+              To erase a client for good, archive it first, then use Delete on its row under "All".
+              That removes its projects, work, files and logins and cannot be undone.
             </p>
           </>
         }
@@ -246,6 +271,29 @@ export function ClientsPage() {
                         <Archive size={14} /> Archive
                       </button>
                     ) : null}
+                    {client.status === "ARCHIVED" && isAdmin ? (
+                      <button
+                        type="button"
+                        aria-label={`Restore ${client.name}`}
+                        disabled={restoreClient.isPending}
+                        onClick={() => restoreClient.mutate(client.id)}
+                      >
+                        <ArchiveRestore size={14} /> Restore
+                      </button>
+                    ) : null}
+                    {client.status === "ARCHIVED" && isAdmin ? (
+                      <button
+                        type="button"
+                        className="row-action--danger"
+                        aria-label={`Delete ${client.name} permanently`}
+                        onClick={() => {
+                          deleteClient.reset();
+                          setDeleting(client);
+                        }}
+                      >
+                        <Trash2 size={14} /> Delete
+                      </button>
+                    ) : null}
                   </td>
                 </tr>
               ))}
@@ -257,6 +305,12 @@ export function ClientsPage() {
       {archiveClient.isError && !archiving ? (
         <Callout tone="danger" title="That client was not archived">
           {(archiveClient.error as Error).message} Nothing changed.
+        </Callout>
+      ) : null}
+
+      {restoreClient.isError ? (
+        <Callout tone="danger" title="That client was not restored">
+          {(restoreClient.error as Error).message}
         </Callout>
       ) : null}
 
@@ -347,13 +401,36 @@ export function ClientsPage() {
               {(projectCount.get(archiving.id) ?? 0) === 1 ? "" : "s"}.
             </>
           }
-          consequence="Nothing is deleted. Files, comments and approvals stay exactly as they are, and an owner or admin can bring the client back. People from this company lose access to their portal until it is restored."
+          consequence="Nothing is deleted. Files, comments and approvals stay exactly as they are, and an owner or admin can restore the client. Everyone at this company is signed out and can't sign in until it is restored."
           confirmLabel={`Archive ${archiving.name}`}
           pendingLabel="Archiving…"
           pending={archiveClient.isPending}
           error={archiveClient.error ? (archiveClient.error as Error).message : null}
           onConfirm={() => archiveClient.mutate(archiving.id)}
           onClose={() => setArchiving(null)}
+        />
+      ) : null}
+
+      {deleting ? (
+        <ConfirmDialog
+          tone="danger"
+          title="Delete this client for good?"
+          body={
+            <>
+              <strong>{deleting.name}</strong>, its {projectCount.get(deleting.id) ?? 0} project
+              {(projectCount.get(deleting.id) ?? 0) === 1 ? "" : "s"}, every piece of work, file,
+              comment and approval in them, and the logins of everyone at this company will be
+              erased.
+            </>
+          }
+          consequence="This cannot be undone. If you might need any of it again, keep the client archived instead."
+          typeToConfirm={deleting.name}
+          confirmLabel="Delete permanently"
+          pendingLabel="Deleting…"
+          pending={deleteClient.isPending}
+          error={deleteClient.error ? (deleteClient.error as Error).message : null}
+          onConfirm={() => deleteClient.mutate(deleting)}
+          onClose={() => setDeleting(null)}
         />
       ) : null}
     </AgencyShell>

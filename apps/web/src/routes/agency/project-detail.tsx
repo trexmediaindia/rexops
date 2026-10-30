@@ -1,15 +1,27 @@
 import { Button, Callout, EmptyState, SaveState, Select, Skeleton, StatusChip } from "@rexops/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useParams } from "@tanstack/react-router";
-import { ArrowUpRight, CalendarDays, Check, ExternalLink, Layers, Plus, Undo2 } from "lucide-react";
+import { Link, useNavigate, useParams } from "@tanstack/react-router";
+import {
+  ArchiveRestore,
+  ArrowUpRight,
+  CalendarDays,
+  Check,
+  ExternalLink,
+  Layers,
+  Plus,
+  Trash2,
+  Undo2,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { AdReports } from "../../components/ad-reports";
 import { AgencyShell } from "../../components/app-shell";
+import { ConfirmDialog } from "../../components/ui/confirm-dialog";
 import { type DialogField, FormDialog } from "../../components/ui/form-dialog";
 import { PageHeader } from "../../components/ui/page-header";
 import { request } from "../../lib/request";
 import { SERVICES, serviceOf, serviceStepIndex, stepLabel } from "../../lib/services";
 import type { ClientRecord, DeliverableRecord, ProjectRecord } from "../../lib/types";
+import { canManageWorkspace, useWorkspace } from "../../lib/workspace";
 
 /* The picker used to list the raw enum lowercased, so "waiting_for_client" and
    "archived" sat side by side with nothing saying what choosing one does. */
@@ -129,6 +141,23 @@ export function ProjectDetailPage() {
   const undoPublished = useMutation({
     mutationFn: (id: string) => request(`/api/deliverables/${id}/published`, { method: "DELETE" }),
     onSuccess: invalidate,
+  });
+
+  const navigate = useNavigate();
+  const workspace = useWorkspace();
+  const isAdmin = canManageWorkspace(workspace.data?.user?.role);
+  const [deleting, setDeleting] = useState(false);
+  const deleteProject = useMutation({
+    mutationFn: (name: string) =>
+      request(`/api/projects/${projectId}`, {
+        method: "DELETE",
+        body: JSON.stringify({ confirm: name }),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      invalidate();
+      navigate({ to: "/agency/projects" });
+    },
   });
 
   const setStatus = useMutation({
@@ -418,8 +447,51 @@ export function ProjectDetailPage() {
             error={setStatus.error ? (setStatus.error as Error).message : null}
             savedLabel="Status saved"
           />
+          {project.data?.status === "ARCHIVED" ? (
+            <Button
+              variant="secondary"
+              disabled={setStatus.isPending}
+              onClick={() => setStatus.mutate("ACTIVE")}
+            >
+              <ArchiveRestore size={14} /> Restore
+            </Button>
+          ) : null}
+          {isAdmin && project.data ? (
+            <button
+              type="button"
+              className="row-action--danger project-detail__delete"
+              onClick={() => {
+                deleteProject.reset();
+                setDeleting(true);
+              }}
+            >
+              <Trash2 size={14} /> Delete project
+            </button>
+          ) : null}
         </span>
       </div>
+
+      {deleting && project.data ? (
+        <ConfirmDialog
+          tone="danger"
+          title="Delete this project for good?"
+          body={
+            <>
+              <strong>{project.data.name}</strong> and its {rows.length} piece
+              {rows.length === 1 ? "" : "s"} of work, with every file, comment and approval in them,
+              will be erased.
+            </>
+          }
+          consequence="This cannot be undone. To put it away but keep everything, set the status to Archived instead."
+          typeToConfirm={project.data.name}
+          confirmLabel="Delete permanently"
+          pendingLabel="Deleting…"
+          pending={deleteProject.isPending}
+          error={deleteProject.error ? (deleteProject.error as Error).message : null}
+          onConfirm={() => project.data && deleteProject.mutate(project.data.name)}
+          onClose={() => setDeleting(false)}
+        />
+      ) : null}
 
       {creating ? (
         <FormDialog

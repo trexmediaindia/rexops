@@ -1,7 +1,8 @@
 import { createAgencySchema, updateAgencySchema } from "@rexops/validators";
 import { Elysia, t } from "elysia";
 import { authGuard, requirePrincipal } from "../../plugins/auth-guard";
-import { createAgency, getAgency, listAgencies, updateAgency } from "./agencies.service";
+import { createAgencyWithOwner } from "../removal/removal.service";
+import { getAgency, listAgencies, updateAgency } from "./agencies.service";
 
 export const agenciesRoutes = new Elysia({ prefix: "/api/agencies" })
   .use(authGuard)
@@ -15,7 +16,7 @@ export const agenciesRoutes = new Elysia({ prefix: "/api/agencies" })
     async ({ body, principal, set }) => {
       const actor = requirePrincipal(principal, set);
       if (!actor) return { error: "UNAUTHORIZED" };
-      return createAgency(actor, createAgencySchema.parse(body));
+      return createAgencyWithOwner(actor, createAgencySchema.parse(body));
     },
     {
       body: t.Object({

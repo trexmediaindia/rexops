@@ -100,12 +100,6 @@ export async function updateClient(principal: Principal, id: string, input: Upda
   return client;
 }
 
-export async function archiveClient(principal: Principal, id: string) {
-  return updateClient(principal, id, {
-    status: "ARCHIVED",
-  });
-}
-
 export type ClientUser = typeof users.$inferSelect;
 
 /** People at a client company who can sign in to the client portal. Agency-side only. */
@@ -119,10 +113,17 @@ export async function listClientPeople(principal: Principal, clientId: string) {
       email: users.email,
       role: users.role,
       banned: users.banned,
+      banReason: users.banReason,
       createdAt: users.createdAt,
     })
     .from(users)
-    .where(and(eq(users.agencyId, client.agencyId), eq(users.clientId, client.id)))
+    .where(
+      and(
+        eq(users.agencyId, client.agencyId),
+        eq(users.clientId, client.id),
+        isNull(users.deletedAt),
+      ),
+    )
     .orderBy(asc(users.createdAt));
 }
 

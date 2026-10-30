@@ -1,7 +1,7 @@
 import { auth } from "@rexops/auth";
 import { DEFAULT_PERMISSION_FLAGS, type PermissionFlags } from "@rexops/config";
 import type { Principal } from "@rexops/core";
-import { db, users } from "@rexops/db";
+import { agencies, db, users } from "@rexops/db";
 import { eq } from "drizzle-orm";
 import { Elysia } from "elysia";
 
@@ -25,6 +25,22 @@ export async function principalFromRequest(request: Request): Promise<Principal 
 
   const [user] = await db.select().from(users).where(eq(users.id, session.user.id)).limit(1);
   if (!user) return null;
+  const impersonating = Boolean(
+    (session.session as { impersonatedBy?: string | null }).impersonatedBy,
+  );
+  // Suspended, removed, or in a suspended agency: the session no longer counts. The
+  // platform admin can still look in by impersonating, which is how support works.
+  if (!impersonating) {
+    if (user.banned || user.deletedAt) return null;
+    if (user.agencyId && user.role !== "SUPER_ADMIN") {
+      const [agency] = await db
+        .select({ suspendedAt: agencies.suspendedAt, deletedAt: agencies.deletedAt })
+        .from(agencies)
+        .where(eq(agencies.id, user.agencyId))
+        .limit(1);
+      if (!agency || agency.suspendedAt || agency.deletedAt) return null;
+    }
+  }
 
   return {
     userId: user.id,
@@ -36,7 +52,7 @@ export async function principalFromRequest(request: Request): Promise<Principal 
       ...DEFAULT_PERMISSION_FLAGS,
       ...(user.permissions as Partial<PermissionFlags>),
     },
-    impersonating: Boolean((session.session as { impersonatedBy?: string | null }).impersonatedBy),
+    impersonating,
   };
 }
 
